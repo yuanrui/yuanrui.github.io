@@ -101,7 +101,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Test/" style="font-size: 10px;">Test</a>
+						<a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/编程笔记/" style="font-size: 10px;">编程笔记</a>
 					</div>
 				</section>
 				
@@ -191,6 +191,7 @@
       
         <p>在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。<br>查询Google之后找到解决方案如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public ContentResult GetResult()</span><br><span class="line">&#123;</span><br><span class="line">    var obj = new object();</span><br><span class="line">    var serializer = new JavaScriptSerializer &#123; MaxJsonLength = Int32.MaxValue, RecursionLimit = 3 &#125;;</span><br><span class="line">    </span><br><span class="line">    var jsonResult = new ContentResult()</span><br><span class="line">    &#123;</span><br><span class="line">        Content = serializer.Serialize(obj),</span><br><span class="line">        ContentType = &quot;application/json&quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    return jsonResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外还可以通过自定义JsonReuslt的方式解决这个异常, 具体做法参考这个链接：<a href="https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/" target="_blank" rel="external">https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/</a></p>
 
       
     </div>
@@ -198,7 +199,15 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程笔记/">编程笔记</a></li></ul>
+	</div>
+
       
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Mvc/">Mvc</a>
+	</div>
+
 
       
       <div class="clearfix"></div>
