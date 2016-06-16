@@ -101,7 +101,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/编程笔记/" style="font-size: 10px;">编程笔记</a>
+						<a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Oracle-Sql-开发笔记/" style="font-size: 10px;">Oracle - Sql - 开发笔记</a> <a href="/tags/开发笔记/" style="font-size: 10px;">开发笔记</a> <a href="/tags/资料文档/" style="font-size: 10px;">资料文档</a>
 					</div>
 				</section>
 				
@@ -163,6 +163,68 @@
 
       <div class="body-wrap">
   
+    <article id="post-Oracle-exp-imp-empdp-impdp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/16/Oracle-exp-imp-empdp-impdp/" class="article-date">
+  	<time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished">2016-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/16/Oracle-exp-imp-empdp-impdp/">Oracle中的导入导出</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。<br>如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。</p>
+<h3 id="exp相关参数"><a href="#exp相关参数" class="headerlink" title="exp相关参数"></a>exp相关参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;exp help=y</span><br><span class="line"></span><br><span class="line">Export: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:02:16 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 EXP 命令和您的用户名/口令, 导出</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: EXP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 您也可以通过输入跟有各种参数的 EXP 命令来控制导出</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  EXP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: EXP SCOTT/TIGER GRANTS=Y TABLES=(EMP,DEPT,MGR)</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)         关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL        导出整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        OWNER        所有者用户名列表</span><br><span class="line">FILE     输出文件 (EXPDAT.DMP)  TABLES     表名列表</span><br><span class="line">COMPRESS  导入到一个区 (Y)   RECORDLENGTH   IO 记录的长度</span><br><span class="line">GRANTS    导出权限 (Y)          INCTYPE     增量导出类型</span><br><span class="line">INDEXES   导出索引 (Y)         RECORD       跟踪增量导出 (Y)</span><br><span class="line">DIRECT    直接路径 (N)         TRIGGERS     导出触发器 (Y)</span><br><span class="line">LOG      屏幕输出的日志文件    STATISTICS    分析对象 (ESTIMATE)</span><br><span class="line">ROWS      导出数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">CONSISTENT 交叉表的一致性 (N)   CONSTRAINTS  导出的约束条件 (Y)</span><br><span class="line"></span><br><span class="line">OBJECT_CONSISTENT    只在对象导出期间设置为只读的事务处理 (N)</span><br><span class="line">FEEDBACK             每 x 行显示进度 (0)</span><br><span class="line">FILESIZE             每个转储文件的最大大小</span><br><span class="line">FLASHBACK_SCN        用于将会话快照设置回以前状态的 SCN</span><br><span class="line">FLASHBACK_TIME       用于获取最接近指定时间的 SCN 的时间</span><br><span class="line">QUERY                用于导出表的子集的 select 子句</span><br><span class="line">RESUMABLE            遇到与空格相关的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME       用于标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT    RESUMABLE 的等待时间</span><br><span class="line">TTS_FULL_CHECK       对 TTS 执行完整或部分相关性检查</span><br><span class="line">TABLESPACES          要导出的表空间列表</span><br><span class="line">TRANSPORT_TABLESPACE 导出可传输的表空间元数据 (N)</span><br><span class="line">TEMPLATE             调用 iAS 模式导出的模板名</span><br><span class="line"></span><br><span class="line">成功终止导出, 没有出现警告。</span><br></pre></td></tr></table></figure>
+<h3 id="imp相关参数"><a href="#imp相关参数" class="headerlink" title="imp相关参数"></a>imp相关参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;imp help=y</span><br><span class="line"></span><br><span class="line">Import: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:22:54 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 IMP 命令和您的用户名/口令, 导入</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: IMP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 可以通过输入 IMP 命令和各种参数来控制导入</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  IMP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: IMP SCOTT/TIGER IGNORE=Y TABLES=(EMP,DEPT) FULL=N</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)        关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL       导入整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        FROMUSER    所有者用户名列表</span><br><span class="line">FILE     输入文件 (EXPDAT.DMP)  TOUSER     用户名列表</span><br><span class="line">SHOW     只列出文件内容 (N)     TABLES      表名列表</span><br><span class="line">IGNORE   忽略创建错误 (N)    RECORDLENGTH  IO 记录的长度</span><br><span class="line">GRANTS   导入权限 (Y)          INCTYPE     增量导入类型</span><br><span class="line">INDEXES   导入索引 (Y)         COMMIT       提交数组插入 (N)</span><br><span class="line">ROWS     导入数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">LOG     屏幕输出的日志文件    CONSTRAINTS    导入限制 (Y)</span><br><span class="line">DESTROY                覆盖表空间数据文件 (N)</span><br><span class="line">INDEXFILE              将表/索引信息写入指定的文件</span><br><span class="line">SKIP_UNUSABLE_INDEXES  跳过不可用索引的维护 (N)</span><br><span class="line">FEEDBACK               每 x 行显示进度 (0)</span><br><span class="line">TOID_NOVALIDATE        跳过指定类型 ID 的验证</span><br><span class="line">FILESIZE               每个转储文件的最大大小</span><br><span class="line">STATISTICS             始终导入预计算的统计信息</span><br><span class="line">RESUMABLE              在遇到有关空间的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME         用来标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT      RESUMABLE 的等待时间</span><br><span class="line">COMPILE                编译过程, 程序包和函数 (Y)</span><br><span class="line">STREAMS_CONFIGURATION  导入流的一般元数据 (Y)</span><br><span class="line">STREAMS_INSTANTIATION  导入流实例化元数据 (N)</span><br><span class="line">DATA_ONLY              仅导入数据 (N)</span><br><span class="line"></span><br><span class="line">下列关键字仅用于可传输的表空间</span><br><span class="line">TRANSPORT_TABLESPACE 导入可传输的表空间元数据 (N)</span><br><span class="line">TABLESPACES 将要传输到数据库的表空间</span><br><span class="line">DATAFILES 将要传输到数据库的数据文件</span><br><span class="line">TTS_OWNERS 拥有可传输表空间集中数据的用户</span><br><span class="line"></span><br><span class="line">成功终止导入, 没有出现警告。</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Sql-开发笔记/">Oracle - Sql - 开发笔记</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Oracle/">Oracle</a><a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Resolve-string-exceeds-maxJsonLength" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -200,7 +262,7 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程笔记/">编程笔记</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发笔记/">开发笔记</a></li></ul>
 	</div>
 
       
@@ -226,10 +288,10 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-How-to-use-hexo" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/05/13/hello-world/" class="article-date">
+      <a href="/2016/05/13/How-to-use-hexo/" class="article-date">
   	<time datetime="2016-05-13T05:39:00.000Z" itemprop="datePublished">2016-05-13</time>
 </a>
     </div>
@@ -243,7 +305,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/05/13/hello-world/">你好吗</a>
+      <a class="article-title" href="/2016/05/13/How-to-use-hexo/">如何使用Hexo</a>
     </h1>
   
 
@@ -252,15 +314,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<p>用new命令创建文章时，会将中间空格替换为横杠-,上述命令最终生成文件名为：”My-New-Post.md”. 创建时可以不用包含双引号，生成的文件取的最后一个单词，例如：hexo new how to use google，命令生成的文件为：google.md.<br>创建时最好使用英文，英文相对中文来说生成的Url更友好些。<br>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Clean"><a href="#Clean" class="headerlink" title="Clean"></a>Clean</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+<p>clean命令用于清除publish文件中已经生成的文件和清除缓存文件。</p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+<p>参考：<br><a href="http://www.jianshu.com/p/ba76165ca84d" target="_blank" rel="external">http://www.jianshu.com/p/ba76165ca84d</a></p>
 
       
     </div>
@@ -269,12 +334,12 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/资料文档/">资料文档</a></li></ul>
 	</div>
 
       
 	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/首页/">首页</a>
+	<a class="article-category-link" href="/categories/Hexo/">Hexo</a>
 	</div>
 
 

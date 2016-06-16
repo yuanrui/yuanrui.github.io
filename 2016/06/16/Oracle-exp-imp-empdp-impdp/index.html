@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Oracle中的导入导出 | Yuan Rui`s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。
+exp相关参数123456789101112131415161718192021222324252627282930">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle中的导入导出">
+<meta property="og:url" content="http://yoursite.com/2016/06/16/Oracle-exp-imp-empdp-impdp/index.html">
+<meta property="og:site_name" content="Yuan Rui`s Blog">
+<meta property="og:description" content="需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。
+exp相关参数123456789101112131415161718192021222324252627282930">
+<meta property="og:updated_time" content="2016-06-16T02:28:11.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle中的导入导出">
+<meta name="twitter:description" content="需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。
+exp相关参数123456789101112131415161718192021222324252627282930">
+  
+    <link rel="alternative" href="/atom.xml" title="Yuan Rui`s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="null" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Yuan Rui</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						<li>Links</li>
+						
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="http://github.com/yuanrui" title="github">github</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Markdown/" style="font-size: 10px;">Markdown</a> <a href="/tags/Oracle-Sql-开发笔记/" style="font-size: 10px;">Oracle - Sql - 开发笔记</a> <a href="/tags/开发笔记/" style="font-size: 10px;">开发笔记</a> <a href="/tags/资料文档/" style="font-size: 10px;">资料文档</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="https://about.me/yuanrui">My Single Page</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Yuan Rui</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="null" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Yuan Rui</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="http://github.com/yuanrui" title="github">github</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-Oracle-exp-imp-empdp-impdp" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/16/Oracle-exp-imp-empdp-impdp/" class="article-date">
+  	<time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished">2016-06-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Oracle中的导入导出
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Oracle-Sql-开发笔记/">Oracle - Sql - 开发笔记</a></li></ul>
+	</div>
+
+        
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Oracle/">Oracle</a><a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+	</div>
+
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。<br>如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。</p>
+<h3 id="exp相关参数"><a href="#exp相关参数" class="headerlink" title="exp相关参数"></a>exp相关参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;exp help=y</span><br><span class="line"></span><br><span class="line">Export: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:02:16 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 EXP 命令和您的用户名/口令, 导出</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: EXP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 您也可以通过输入跟有各种参数的 EXP 命令来控制导出</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  EXP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: EXP SCOTT/TIGER GRANTS=Y TABLES=(EMP,DEPT,MGR)</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)         关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL        导出整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        OWNER        所有者用户名列表</span><br><span class="line">FILE     输出文件 (EXPDAT.DMP)  TABLES     表名列表</span><br><span class="line">COMPRESS  导入到一个区 (Y)   RECORDLENGTH   IO 记录的长度</span><br><span class="line">GRANTS    导出权限 (Y)          INCTYPE     增量导出类型</span><br><span class="line">INDEXES   导出索引 (Y)         RECORD       跟踪增量导出 (Y)</span><br><span class="line">DIRECT    直接路径 (N)         TRIGGERS     导出触发器 (Y)</span><br><span class="line">LOG      屏幕输出的日志文件    STATISTICS    分析对象 (ESTIMATE)</span><br><span class="line">ROWS      导出数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">CONSISTENT 交叉表的一致性 (N)   CONSTRAINTS  导出的约束条件 (Y)</span><br><span class="line"></span><br><span class="line">OBJECT_CONSISTENT    只在对象导出期间设置为只读的事务处理 (N)</span><br><span class="line">FEEDBACK             每 x 行显示进度 (0)</span><br><span class="line">FILESIZE             每个转储文件的最大大小</span><br><span class="line">FLASHBACK_SCN        用于将会话快照设置回以前状态的 SCN</span><br><span class="line">FLASHBACK_TIME       用于获取最接近指定时间的 SCN 的时间</span><br><span class="line">QUERY                用于导出表的子集的 select 子句</span><br><span class="line">RESUMABLE            遇到与空格相关的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME       用于标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT    RESUMABLE 的等待时间</span><br><span class="line">TTS_FULL_CHECK       对 TTS 执行完整或部分相关性检查</span><br><span class="line">TABLESPACES          要导出的表空间列表</span><br><span class="line">TRANSPORT_TABLESPACE 导出可传输的表空间元数据 (N)</span><br><span class="line">TEMPLATE             调用 iAS 模式导出的模板名</span><br><span class="line"></span><br><span class="line">成功终止导出, 没有出现警告。</span><br></pre></td></tr></table></figure>
+<h3 id="imp相关参数"><a href="#imp相关参数" class="headerlink" title="imp相关参数"></a>imp相关参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;imp help=y</span><br><span class="line"></span><br><span class="line">Import: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:22:54 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 IMP 命令和您的用户名/口令, 导入</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: IMP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 可以通过输入 IMP 命令和各种参数来控制导入</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  IMP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: IMP SCOTT/TIGER IGNORE=Y TABLES=(EMP,DEPT) FULL=N</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)        关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL       导入整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        FROMUSER    所有者用户名列表</span><br><span class="line">FILE     输入文件 (EXPDAT.DMP)  TOUSER     用户名列表</span><br><span class="line">SHOW     只列出文件内容 (N)     TABLES      表名列表</span><br><span class="line">IGNORE   忽略创建错误 (N)    RECORDLENGTH  IO 记录的长度</span><br><span class="line">GRANTS   导入权限 (Y)          INCTYPE     增量导入类型</span><br><span class="line">INDEXES   导入索引 (Y)         COMMIT       提交数组插入 (N)</span><br><span class="line">ROWS     导入数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">LOG     屏幕输出的日志文件    CONSTRAINTS    导入限制 (Y)</span><br><span class="line">DESTROY                覆盖表空间数据文件 (N)</span><br><span class="line">INDEXFILE              将表/索引信息写入指定的文件</span><br><span class="line">SKIP_UNUSABLE_INDEXES  跳过不可用索引的维护 (N)</span><br><span class="line">FEEDBACK               每 x 行显示进度 (0)</span><br><span class="line">TOID_NOVALIDATE        跳过指定类型 ID 的验证</span><br><span class="line">FILESIZE               每个转储文件的最大大小</span><br><span class="line">STATISTICS             始终导入预计算的统计信息</span><br><span class="line">RESUMABLE              在遇到有关空间的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME         用来标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT      RESUMABLE 的等待时间</span><br><span class="line">COMPILE                编译过程, 程序包和函数 (Y)</span><br><span class="line">STREAMS_CONFIGURATION  导入流的一般元数据 (Y)</span><br><span class="line">STREAMS_INSTANTIATION  导入流实例化元数据 (N)</span><br><span class="line">DATA_ONLY              仅导入数据 (N)</span><br><span class="line"></span><br><span class="line">下列关键字仅用于可传输的表空间</span><br><span class="line">TRANSPORT_TABLESPACE 导入可传输的表空间元数据 (N)</span><br><span class="line">TABLESPACES 将要传输到数据库的表空间</span><br><span class="line">DATAFILES 将要传输到数据库的数据文件</span><br><span class="line">TTS_OWNERS 拥有可传输表空间集中数据的用户</span><br><span class="line"></span><br><span class="line">成功终止导入, 没有出现警告。</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/05/18/Resolve-string-exceeds-maxJsonLength/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Yuan Rui
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
