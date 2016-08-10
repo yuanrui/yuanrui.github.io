@@ -163,6 +163,68 @@
 
       <div class="body-wrap">
   
+    <article id="post-AspNet-js-css-version" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/10/AspNet-js-css-version/" class="article-date">
+  	<time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/10/AspNet-js-css-version/">为Asp.Net Mvc项目的Js和Css添加版本号处理</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在项目开发部署过程中，经常会修改样式和脚本文件。在部署时经常会因为浏览器缓存的原因造成加载的样式和执行的脚本还是以前的版本。<br>解决浏览器缓存最常用的办法是，在服务器端渲染生成资源链接时，加上一个版本号，用于刷新客户端缓存。这个版本号只在第一次请求时重新加载资源文件，在后续的请求中从浏览器缓存中获取文件。<br>版本号相对来说是固定的，不是随机生成的。随机生成的版本号会造成每次加载页面时都会去服务器端请求数据，这不是我们想要的效果。<br>生成版本号的方式有几种：<br>1、从配置文件中读取版本号<br>2、计算当前文件的hash值，用hash值作为版本号<br>3、使用程序集（DLL）发布时间作为版本号<br>第1种，发布部署时可以灵活控制，但是也容易忘记修改版本号，导致版本还是使用的以前的版本。也许可以通过自动发布的方式，自动修改版本号（没有尝试过）。<br>第2种，如果使用计算hash值的方式来处理，文件每次请求时都会去计算hash值。每次请求都计算hash有点消耗资源，改进办法是将路径和计算后的值放大缓存中，先判断hash值是否存在，不存在则计算并加入到缓存中。<br>第3种，可以将版本值的计算设计为静态类，并在静态类的静态构造方法中初始化静态变量，静态构造方法只需执行一次。每次发布替换DLL后，静态类会重新初始化。相比1、2种方式，灵活而不失简便。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public static class VersionUtils</span><br><span class="line">&#123;</span><br><span class="line">    public readonly static DateTime VersionDate;</span><br><span class="line"></span><br><span class="line">    public readonly static Int32 VersionNumber;</span><br><span class="line"></span><br><span class="line">    static VersionUtils()</span><br><span class="line">    &#123;</span><br><span class="line">        VersionDate = System.IO.File.GetLastWriteTime(typeof(VersionUtils).Assembly.Location);</span><br><span class="line">        VersionNumber = Int32.Parse(VersionDate.ToString(&quot;yyyyMMddHHmm&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static class HtmlHelperExtension</span><br><span class="line">&#123;</span><br><span class="line">    public static MvcHtmlString Script(this HtmlHelper html, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return VersionedContent(html, &quot;&lt;script src=\&quot;&#123;0&#125;\&quot; type=\&quot;text/javascript\&quot;&gt;&lt;/script&gt;&quot;, contentPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static MvcHtmlString Style(this HtmlHelper html, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return VersionedContent(html, &quot;&lt;link href=\&quot;&#123;0&#125;\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot;&gt;&quot;, contentPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static MvcHtmlString VersionedContent(this HtmlHelper html, string template, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        contentPath = UrlHelper.GenerateContentUrl(contentPath, html.ViewContext.HttpContext) + &quot;?v=&quot; + VersionUtils.VersionNumber;</span><br><span class="line">        return MvcHtmlString.Create(string.Format(template, contentPath));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static class UrlHelperExtension</span><br><span class="line">&#123;</span><br><span class="line">    public static string ContentVersioned(this UrlHelper urlHelper, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return String.Format(&quot;&#123;0&#125;?v=&#123;1&#125;&quot;, urlHelper.Content(contentPath), VersionUtils.VersionNumber);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href=&quot;@Url.ContentVersioned(&quot;~/Content/Site.css&quot;)&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;</span><br><span class="line">@Html.Style(&quot;~/Content/bootstrap.css&quot;);</span><br><span class="line">@Html.Script(&quot;~/Scripts/angular.js&quot;);</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发笔记/">开发笔记</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/Mvc/">Mvc</a><a class="article-category-link" href="/categories/Mvc/Net/">.Net</a><a class="article-category-link" href="/categories/Mvc/Net/Asp-Net/">Asp.Net</a>
+	</div>
+
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Oracle-useful-sql" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
