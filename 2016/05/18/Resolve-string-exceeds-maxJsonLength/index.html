@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。查询Google之后找到解决方案如下：
 12345678910111213public ContentResult GetResult()&amp;#123;    var obj = new object();">
-<meta property="og:updated_time" content="2016-06-22T03:48:47.489Z">
+<meta property="og:updated_time" content="2016-10-14T06:26:53.174Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常">
 <meta name="twitter:description" content="在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。查询Google之后找到解决方案如下：
@@ -92,13 +92,6 @@
 </header>
 	<div class="article-content">
 		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			
-		
-		</div>
-		
 		<p>在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。<br>查询Google之后找到解决方案如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public ContentResult GetResult()</span><br><span class="line">&#123;</span><br><span class="line">    var obj = new object();</span><br><span class="line">    var serializer = new JavaScriptSerializer &#123; MaxJsonLength = Int32.MaxValue, RecursionLimit = 3 &#125;;</span><br><span class="line">    </span><br><span class="line">    var jsonResult = new ContentResult()</span><br><span class="line">    &#123;</span><br><span class="line">        Content = serializer.Serialize(obj),</span><br><span class="line">        ContentType = &quot;application/json&quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    return jsonResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>另外还可以通过自定义JsonReuslt的方式解决这个异常, 具体做法参考这个链接：<a href="https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/" target="_blank" rel="external">https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/</a></p>
@@ -160,13 +153,6 @@
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- 
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -345,8 +331,6 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
