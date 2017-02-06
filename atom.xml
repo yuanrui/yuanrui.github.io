@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yuanrui.github.io/"/>
-  <updated>2016-11-02T02:11:48.280Z</updated>
+  <updated>2017-02-06T06:24:55.150Z</updated>
   <id>http://yuanrui.github.io/</id>
   
   <author>
@@ -14,6 +14,161 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Oracle学习笔记</title>
+    <link href="http://yuanrui.github.io/2016/11/25/Oracle-learning/"/>
+    <id>http://yuanrui.github.io/2016/11/25/Oracle-learning/</id>
+    <published>2016-11-25T02:17:55.000Z</published>
+    <updated>2017-02-06T06:24:55.150Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码123456</span><br><span class="line">create user test identified by 123456;</span><br></pre></td></tr></table></figure></p>
+<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码test</span><br><span class="line">alter user test identified by test;</span><br></pre></td></tr></table></figure></p>
+<p>为用户指定默认表空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--默认表空间test_DB 临时表空间test_temp</span><br><span class="line">alter user test</span><br><span class="line">default tablespace test_DB</span><br><span class="line">temporary tablespace test_temp;</span><br></pre></td></tr></table></figure></p>
+<p>授予用户权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">grant </span><br><span class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</span><br><span class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</span><br><span class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</span><br><span class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</span><br><span class="line">　　to test;</span><br><span class="line">grant resource, dba to test;</span><br></pre></td></tr></table></figure></p>
+<p>回收权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">revoke resource, dba from test;</span><br></pre></td></tr></table></figure></p>
+<h3 id="表空间管理"><a href="#表空间管理" class="headerlink" title="表空间管理"></a>表空间管理</h3><p>表空间大小与数据块大小(db_block_size)有关</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">数据块大小</th>
+<th style="text-align:left">表空间文件最大值M</th>
+<th>表空间文件最大值G</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4k</td>
+<td style="text-align:left">16383M</td>
+<td>16G</td>
+</tr>
+<tr>
+<td style="text-align:left">8k</td>
+<td style="text-align:left">32767M</td>
+<td>32G</td>
+</tr>
+<tr>
+<td style="text-align:left">16k</td>
+<td style="text-align:left">65535M</td>
+<td>64G</td>
+</tr>
+<tr>
+<td style="text-align:left">32k</td>
+<td style="text-align:left">131072M</td>
+<td>128G</td>
+</tr>
+<tr>
+<td style="text-align:left">64k</td>
+<td style="text-align:left">262144M</td>
+<td>256G</td>
+</tr>
+</tbody>
+</table>
+<p>数据块是4k的数据库，单个表空间数据文件的限制是小于16G，而不是小于等于16G。</p>
+<p>查询数据块大小大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show parameter db_block_size</span><br></pre></td></tr></table></figure></p>
+<p>查询表空间使用情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SELECT UPPER(F.TABLESPACE_NAME) AS &quot;表空间名称&quot;,</span><br><span class="line">       ROUND(D.AVAILB_BYTES,2) AS &quot;表空间大小(G)&quot;,</span><br><span class="line">       ROUND(D.MAX_BYTES,2) AS &quot;最终表空间大小(G)&quot;,</span><br><span class="line">       ROUND((D.AVAILB_BYTES - F.USED_BYTES),2) AS &quot;已使用空间(G)&quot;,</span><br><span class="line">       TO_CHAR(ROUND((D.AVAILB_BYTES - F.USED_BYTES) / D.AVAILB_BYTES * 100, 2), &apos;999.99&apos;) AS &quot;使用比&quot;,</span><br><span class="line">       ROUND(F.USED_BYTES, 6) AS &quot;空闲空间(G)&quot;,</span><br><span class="line">       F.MAX_BYTES AS &quot;最大块(M)&quot;</span><br><span class="line">FROM</span><br><span class="line">  ( SELECT TABLESPACE_NAME,</span><br><span class="line">           ROUND(SUM(BYTES) / (1024 * 1024 * 1024), 6) USED_BYTES,</span><br><span class="line">           ROUND(MAX(BYTES) / (1024 * 1024 * 1024), 6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_FREE_SPACE</span><br><span class="line">   GROUP BY TABLESPACE_NAME) F,</span><br><span class="line">  (SELECT DD.TABLESPACE_NAME,</span><br><span class="line">          ROUND(SUM(DD.BYTES) / (1024 * 1024 * 1024), 6) AVAILB_BYTES,</span><br><span class="line">          ROUND(SUM(DECODE(DD.MAXBYTES, 0, DD.BYTES, DD.MAXBYTES))/(1024*1024*1024),6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_DATA_FILES DD</span><br><span class="line">   GROUP BY DD.TABLESPACE_NAME) D</span><br><span class="line">WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME</span><br><span class="line">ORDER BY 4 DESC</span><br></pre></td></tr></table></figure></p>
+<p>查询表空间文件地址、是否自动增长、数据文件最大值、自动增长值(8k block)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select TABLESPACE_NAME,FILE_NAME,AUTOEXTENSIBLE,MAXBYTES / 1024 / 1024 / 1024,INCREMENT_BY*8192/1024/1024 from dba_data_files</span><br></pre></td></tr></table></figure></p>
+<p>增加表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">add datafile &apos;D:\ORADB\test_DB_2.DBF&apos; size 32M</span><br><span class="line">AUTOEXTEND ON</span><br><span class="line">NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure></p>
+<p>调整数据文件大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</span><br><span class="line">RESIZE 320M;</span><br></pre></td></tr></table></figure></p>
+<p>删除数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">drop datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</span><br></pre></td></tr></table></figure></p>
+<p>移动表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--1.将表空间离线</span><br><span class="line">alter tablespace test_DB offline normal;</span><br><span class="line">--2.移动数据文件目录</span><br><span class="line">--3.重命名表空间文件</span><br><span class="line">alter database rename file &apos;D:\ORADB\test_DB.DBF&apos; to &apos;D:\Oracle\Data\test_DB.DBF&apos;;</span><br><span class="line">--4.表空间联机</span><br><span class="line">alter tablespace test_DB online;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;用户相关&quot;&gt;&lt;a href=&quot;#用户相关&quot; class=&quot;headerlink&quot; title=&quot;用户相关&quot;&gt;&lt;/a&gt;用户相关&lt;/h3&gt;&lt;p&gt;创建用户&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;
+    
+    </summary>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/categories/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/categories/Oracle/Sql/"/>
+    
+    
+      <category term="开发笔记" scheme="http://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/tags/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/tags/Sql/"/>
+    
+      <category term="读书笔记" scheme="http://yuanrui.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Oracle常用提示</title>
+    <link href="http://yuanrui.github.io/2016/11/22/Oracle-useful-hints/"/>
+    <id>http://yuanrui.github.io/2016/11/22/Oracle-useful-hints/</id>
+    <published>2016-11-22T01:55:22.000Z</published>
+    <updated>2017-02-06T03:53:51.307Z</updated>
+    
+    <content type="html"><![CDATA[<p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="external">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line"> from (</span><br><span class="line">select /*+ first_rows(25) */</span><br><span class="line">  your_columns,</span><br><span class="line">  row_number() </span><br><span class="line">  over (order by something unique)rn</span><br><span class="line"> from your_tables )</span><br><span class="line">where rn between :n and :m </span><br><span class="line">order by rn;</span><br></pre></td></tr></table></figure></p>
+<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;取前N条分页数据提示&lt;br&gt;采用row_number进行高效分页&lt;br&gt;参考：&lt;a href=&quot;http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html&quot; target
+    
+    </summary>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/categories/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/categories/Oracle/Sql/"/>
+    
+    
+      <category term="开发笔记" scheme="http://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/tags/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/tags/Sql/"/>
+    
+      <category term="读书笔记" scheme="http://yuanrui.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Javascript常用验证函数收集</title>
+    <link href="http://yuanrui.github.io/2016/11/21/Javascript-common-validation-function/"/>
+    <id>http://yuanrui.github.io/2016/11/21/Javascript-common-validation-function/</id>
+    <published>2016-11-21T02:40:00.000Z</published>
+    <updated>2016-11-21T02:48:58.539Z</updated>
+    
+    <content type="html"><![CDATA[<p>字符串是否为空或为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return value == null || /\S/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>邮箱地址格式验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address</span><br><span class="line">	///^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`&#123;|&#125;~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?)*$/</span><br><span class="line"></span><br><span class="line">	//form 163</span><br><span class="line">	return !/^[._-]?(?:[a-z0-9]+[._-]?)+[a-z0-9]?@[a-z0-9](?:[.-]?[a-z0-9]+)*$/i.test(value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>车辆号牌格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;6&#125;$)|(^[A-Z]&#123;2&#125;[A-Z0-9]&#123;2&#125;[A-Z0-9\u4E00-\u9FA5]&#123;1&#125;[A-Z0-9]&#123;4&#125;$)|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;5&#125;[挂学警军港澳]&#123;1&#125;$)|(^[A-Z]&#123;2&#125;[0-9]&#123;5&#125;$)|(^(08|38)&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警军港澳]&#123;1&#125;$)/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>手机号码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var length = value.length;</span><br><span class="line">	var re = /^(((13[0-9]&#123;1&#125;)|(15[0-9]&#123;1&#125;)|(18[0-9]&#123;1&#125;))+\d&#123;8&#125;)$/;</span><br><span class="line">	return (length == 11 &amp;&amp; re.test(value));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>计算字符串长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var utfStr = value.match(/[^\x00-\xff]/ig);</span><br><span class="line">	return value.length + (utfStr == null ? 0 : utfStr.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;字符串是否为空或为空格&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/sp
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>C#中的异步杂记</title>
+    <link href="http://yuanrui.github.io/2016/11/17/Csharp-async-notes/"/>
+    <id>http://yuanrui.github.io/2016/11/17/Csharp-async-notes/</id>
+    <published>2016-11-17T04:00:00.000Z</published>
+    <updated>2016-11-21T03:05:32.314Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="异步方式1-异步委托"><a href="#异步方式1-异步委托" class="headerlink" title="异步方式1 异步委托"></a>异步方式1 异步委托</h3><pre><code>
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;异步方式1-异步委托&quot;&gt;&lt;a href=&quot;#异步方式1-异步委托&quot; class=&quot;headerlink&quot; title=&quot;异步方式1 异步委托&quot;&gt;&lt;/a&gt;异步方式1 异步委托&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;
+&lt;/code&gt;&lt;/pre&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>解决Asp.Net Session退出造成Ajax请求无响应的Bug</title>
@@ -45,41 +200,6 @@
     
     
       <category term="开发笔记" scheme="http://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Oracle学习笔记</title>
-    <link href="http://yuanrui.github.io/2016/10/25/Oracle-learning/"/>
-    <id>http://yuanrui.github.io/2016/10/25/Oracle-learning/</id>
-    <published>2016-10-25T07:37:33.000Z</published>
-    <updated>2016-10-25T08:32:12.694Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码123456</span><br><span class="line">create user test identified by 123456;</span><br></pre></td></tr></table></figure></p>
-<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码test</span><br><span class="line">alter user test identified by test;</span><br></pre></td></tr></table></figure></p>
-<p>为用户指定默认表空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--默认表空间test_DB 临时表空间test_temp</span><br><span class="line">alter user test</span><br><span class="line">default tablespace test_DB</span><br><span class="line">temporary tablespace test_temp;</span><br></pre></td></tr></table></figure></p>
-<p>授予用户权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">grant </span><br><span class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</span><br><span class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</span><br><span class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</span><br><span class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</span><br><span class="line">　　to test;</span><br><span class="line">grant resource, dba to test;</span><br></pre></td></tr></table></figure></p>
-<p>回收权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">revoke resource, dba from test;</span><br></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;用户相关&quot;&gt;&lt;a href=&quot;#用户相关&quot; class=&quot;headerlink&quot; title=&quot;用户相关&quot;&gt;&lt;/a&gt;用户相关&lt;/h3&gt;&lt;p&gt;创建用户&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;
-    
-    </summary>
-    
-      <category term="Oracle" scheme="http://yuanrui.github.io/categories/Oracle/"/>
-    
-      <category term="Sql" scheme="http://yuanrui.github.io/categories/Oracle/Sql/"/>
-    
-    
-      <category term="开发笔记" scheme="http://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
-    
-      <category term="Oracle" scheme="http://yuanrui.github.io/tags/Oracle/"/>
-    
-      <category term="Sql" scheme="http://yuanrui.github.io/tags/Sql/"/>
-    
-      <category term="读书笔记" scheme="http://yuanrui.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
