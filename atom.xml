@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yuanrui.github.io/"/>
-  <updated>2017-02-06T06:40:35.510Z</updated>
+  <updated>2017-02-08T02:59:11.906Z</updated>
   <id>http://yuanrui.github.io/</id>
   
   <author>
@@ -14,6 +14,78 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Oracle学习笔记-CRUD</title>
+    <link href="http://yuanrui.github.io/2017/02/08/Oracle-learning-CRUD/"/>
+    <id>http://yuanrui.github.io/2017/02/08/Oracle-learning-CRUD/</id>
+    <published>2017-02-08T02:39:00.000Z</published>
+    <updated>2017-02-08T02:59:11.906Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="Update-statement"><a href="#Update-statement" class="headerlink" title="Update statement"></a>Update statement</h3><p>假设有如下表(T_SCORE_LEVEL)</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">SCORE</th>
+<th>LEVEL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">60</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">70</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">75</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">65</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">95</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">82</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>需要更新LEVEL字段，更新规则:<br>Score大于等于90小于等于100，Level=1;<br>Score大于等于80小于等于90，Level=2;<br>Score大于等于70小于等于80，Level=3;<br>Score大于等于60小于等于70，Level=4;<br>Score小于60，Level=5;<br>请写出对应的sql</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UPDATE T_SCORE_LEVEL</span><br><span class="line">SET LEVEL = (</span><br><span class="line">	CASE </span><br><span class="line">		WHEN SCORE &gt;= 90 AND SCORE &lt;= 100 THEN 1</span><br><span class="line">		WHEN SCORE &gt;= 80 AND SCORE &lt; 90 THEN 2</span><br><span class="line">		WHEN SCORE &gt;= 70 AND SCORE &lt; 80 THEN 3</span><br><span class="line">		WHEN SCORE &gt;= 60 AND SCORE &lt; 70 THEN 4</span><br><span class="line">		WHEN SCORE &lt; 60 THEN 5</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">COMMIT</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Update-statement&quot;&gt;&lt;a href=&quot;#Update-statement&quot; class=&quot;headerlink&quot; title=&quot;Update statement&quot;&gt;&lt;/a&gt;Update statement&lt;/h3&gt;&lt;p&gt;假设有如下表(T_SCORE
+    
+    </summary>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/categories/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/categories/Oracle/Sql/"/>
+    
+    
+      <category term="开发笔记" scheme="http://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/"/>
+    
+      <category term="Oracle" scheme="http://yuanrui.github.io/tags/Oracle/"/>
+    
+      <category term="Sql" scheme="http://yuanrui.github.io/tags/Sql/"/>
+    
+  </entry>
   
   <entry>
     <title>Oracle学习笔记</title>
