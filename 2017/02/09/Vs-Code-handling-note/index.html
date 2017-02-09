@@ -4,149 +4,31 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Oracle学习笔记-CRUD | 棠城夜雨</title>
+    <title>VS Code 上手杂记 | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
     
 
     
-    <meta name="description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+    <meta name="description" content="最近在把玩.net core, 顺便学习下用VS Code开发。记录下开发步骤1、安装.net core sdk. 地址:https://www.microsoft.com/net/download/core2、下载并安装VS Code, 地址:https://code.visualstudio.com/3、验证dotnet安装完.net core sdk后，在命令行中用dotnet -versi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Oracle学习笔记-CRUD">
-<meta property="og:url" content="http://yuanrui.github.io/2017/02/08/Oracle-learning-CRUD/index.html">
+<meta property="og:title" content="VS Code 上手杂记">
+<meta property="og:url" content="http://yuanrui.github.io/2017/02/09/Vs-Code-handling-note/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
-<meta property="og:updated_time" content="2017-02-08T02:59:11.906Z">
+<meta property="og:description" content="最近在把玩.net core, 顺便学习下用VS Code开发。记录下开发步骤1、安装.net core sdk. 地址:https://www.microsoft.com/net/download/core2、下载并安装VS Code, 地址:https://code.visualstudio.com/3、验证dotnet安装完.net core sdk后，在命令行中用dotnet -versi">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22683546/550e8700-ed53-11e6-95e6-5fb53147826a.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22685417/319175e6-ed5b-11e6-9cd0-3fa1b016f07e.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22685747/81ee7a4c-ed5c-11e6-92ef-c37f3ccba1d2.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22776610/429d51fc-eeeb-11e6-9729-55af72b860ea.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22685590/ddd9b8f4-ed5b-11e6-992f-07ac2eb914d2.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22685825/c9f3c996-ed5c-11e6-9ac7-17d7eaec219b.png">
+<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/22776454/ab1f08f2-eeea-11e6-9450-8b7c2e0b56f4.png">
+<meta property="og:updated_time" content="2017-02-09T09:24:55.637Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Oracle学习笔记-CRUD">
-<meta name="twitter:description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+<meta name="twitter:title" content="VS Code 上手杂记">
+<meta name="twitter:description" content="最近在把玩.net core, 顺便学习下用VS Code开发。记录下开发步骤1、安装.net core sdk. 地址:https://www.microsoft.com/net/download/core2、下载并安装VS Code, 地址:https://code.visualstudio.com/3、验证dotnet安装完.net core sdk后，在命令行中用dotnet -versi">
+<meta name="twitter:image" content="https://cloud.githubusercontent.com/assets/3859838/22683546/550e8700-ed53-11e6-95e6-5fb53147826a.png">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -206,85 +88,27 @@ LEVEL
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/02/08/Oracle-learning-CRUD/" title="Oracle学习笔记-CRUD" itemprop="url">Oracle学习笔记-CRUD</a>
+      <a href="/2017/02/09/Vs-Code-handling-note/" title="VS Code 上手杂记" itemprop="url">VS Code 上手杂记</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-02-08T02:39:00.000Z" itemprop="datePublished"> Published 2017-02-08</time>
+    <time datetime="2017-02-09T09:22:00.000Z" itemprop="datePublished"> Published 2017-02-09</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-statement"><span class="toc-number">1.</span> <span class="toc-text">Update statement</span></a></li></ol>
-		
-		</div>
-		
-		<h3 id="Update-statement"><a href="#Update-statement" class="headerlink" title="Update statement"></a>Update statement</h3><p>假设有如下表(T_SCORE_LEVEL)</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">ID</th>
-<th style="text-align:left">SCORE</th>
-<th>LEVEL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1</td>
-<td style="text-align:left">60</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:left">2</td>
-<td style="text-align:left">70</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:left">3</td>
-<td style="text-align:left">75</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:left">4</td>
-<td style="text-align:left">65</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:left">5</td>
-<td style="text-align:left">95</td>
-<td>0</td>
-</tr>
-<tr>
-<td style="text-align:left">6</td>
-<td style="text-align:left">82</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>需要更新LEVEL字段，更新规则:<br>Score大于等于90小于等于100，Level=1;<br>Score大于等于80小于等于90，Level=2;<br>Score大于等于70小于等于80，Level=3;<br>Score大于等于60小于等于70，Level=4;<br>Score小于60，Level=5;<br>请写出对应的sql</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UPDATE T_SCORE_LEVEL</span><br><span class="line">SET LEVEL = (</span><br><span class="line">	CASE </span><br><span class="line">		WHEN SCORE &gt;= 90 AND SCORE &lt;= 100 THEN 1</span><br><span class="line">		WHEN SCORE &gt;= 80 AND SCORE &lt; 90 THEN 2</span><br><span class="line">		WHEN SCORE &gt;= 70 AND SCORE &lt; 80 THEN 3</span><br><span class="line">		WHEN SCORE &gt;= 60 AND SCORE &lt; 70 THEN 4</span><br><span class="line">		WHEN SCORE &lt; 60 THEN 5</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">COMMIT</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+		<p>最近在把玩.net core, 顺便学习下用VS Code开发。<br>记录下开发步骤<br>1、安装.net core sdk. 地址:<a href="https://www.microsoft.com/net/download/core" target="_blank" rel="external">https://www.microsoft.com/net/download/core</a><br>2、下载并安装VS Code, 地址:<a href="https://code.visualstudio.com/" target="_blank" rel="external">https://code.visualstudio.com/</a><br>3、验证dotnet<br>安装完.net core sdk后，在命令行中用dotnet -version进行验证<br><img src="https://cloud.githubusercontent.com/assets/3859838/22683546/550e8700-ed53-11e6-95e6-5fb53147826a.png" alt="netcore-version"><br>正常情况下会显示对应的版本号<br>4、创建dotnet项目<br>使用dotnet new -t Console命令创建控制台项目<br><img src="https://cloud.githubusercontent.com/assets/3859838/22685417/319175e6-ed5b-11e6-9cd0-3fa1b016f07e.png" alt="create project"><br>创建完成后，对应目录会出现生成的Program.cs和project.json文件<br>同时执行dotnet restore命令<br><img src="https://cloud.githubusercontent.com/assets/3859838/22685747/81ee7a4c-ed5c-11e6-92ef-c37f3ccba1d2.png" alt="dotnet restore"><br>5、调试项目<br><strong>备注</strong>：如果是第一使用VS Code调试代码，还需要下载OmniSharp和.NET Core Debugger，注意观看控制台中的提示和右下角的Downloading packages. 下载安装完成后才可进行后续调试。提示：下载过程中不要关闭VS Code.<br><img src="https://cloud.githubusercontent.com/assets/3859838/22776610/429d51fc-eeeb-11e6-9729-55af72b860ea.png" alt="vs code debug error"></p>
+<p>使用Ctrl+Shift+D进行调试项目，会发现默认没有配置<br><img src="https://cloud.githubusercontent.com/assets/3859838/22685590/ddd9b8f4-ed5b-11e6-992f-07ac2eb914d2.png" alt="debug project"><br>选择.NET Core创建配置，创建完成后还需要对配置进行修改。eg.”program”: “${workspaceRoot}/bin/Debug/netcoreapp1.1/Test.dll”,<br><img src="https://cloud.githubusercontent.com/assets/3859838/22685825/c9f3c996-ed5c-11e6-9ac7-17d7eaec219b.png" alt="change config"><br>修改完成相关配置后，可进行调试，出现经典的Hello World!<br><img src="https://cloud.githubusercontent.com/assets/3859838/22776454/ab1f08f2-eeea-11e6-9450-8b7c2e0b56f4.png" alt="hello world"></p>
+<p>done!</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
-  </div>
 
 </div>
 
@@ -292,7 +116,7 @@ LEVEL
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/2017/02/08/Oracle-learning-CRUD/" data-title="Oracle学习笔记-CRUD | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2017/02/09/Vs-Code-handling-note/" data-title="VS Code 上手杂记 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -305,19 +129,11 @@ LEVEL
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/02/09/Vs-Code-handling-note/" title="VS Code 上手杂记">
-  <strong>上一篇：</strong><br/>
-  <span>
-  VS Code 上手杂记</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/11/25/Oracle-learning/"  title="Oracle学习笔记">
+<a href="/2017/02/08/Oracle-learning-CRUD/"  title="Oracle学习笔记-CRUD">
  <strong>下一篇：</strong><br/> 
- <span>Oracle学习笔记
+ <span>Oracle学习笔记-CRUD
 </span>
 </a>
 </div>
@@ -328,13 +144,6 @@ LEVEL
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Update-statement"><span class="toc-number">1.</span> <span class="toc-text">Update statement</span></a></li></ol>
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -513,8 +322,6 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });

@@ -47,7 +47,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +63,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -81,6 +81,68 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/06/22/EntLib5-Logging-no-log-reason/" title="EntLib5日志组件无法记录日志的可能原因" itemprop="url">EntLib5日志组件无法记录日志的可能原因</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-22T03:45:06.000Z" itemprop="datePublished"> Published 2016-06-22</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>使用EntLib的Log组件记录日志时，经常有这样的需求，需要将日志记录到数据库中方便查询。但实际使用时经常会遇到网络问题或数据库端异常等原因，导致无法准确定位问题所在。出现这种情况时，需要将日志记录到本地文件中进行排查。<br>EntLib中的Log组件，使用监听器（Listener）的方式对日志进行分类记录。使用Listener时有顺序要求，假设有两个Listener，Database Trace Listener用于将日志记录到数据库中，Rolling Flat File Trace Listener将日志写入到文件中。<br>如果前一个Database Trace Listener不起作用或者执行过程中出现异常，后一个的Rolling Flat File Trace Listener也将不会执行。</p>
+<p>假设你使用了自定义分类，还有一种可能原因是没有配置categorySources的子节点。<br>eg. 在记录日志时指定的分类为Program, 则必须在配置节点中添加如下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;categorySources&gt;</span><br><span class="line">	&lt;add switchValue=&quot;All&quot; name=&quot;Program&quot;&gt;</span><br><span class="line">		&lt;listeners&gt;</span><br><span class="line">			&lt;add name=&quot;Formatted EventLog TraceListener&quot;/&gt;</span><br><span class="line">			&lt;add name=&quot;Rolling Flat File Trace Listener&quot;/&gt;</span><br><span class="line">		&lt;/listeners&gt;</span><br><span class="line">	&lt;/add&gt;</span><br><span class="line">&lt;/categorySources&gt;</span><br></pre></td></tr></table></figure></p>
+<p>LogEntry类用于封装传递需要记录的日志信息。LogEntry包含一个类型为IDictionary<string, object="">的属性ExtendedProperties.使用时需要注意的是，字典的类型Value类型为object, 但建议往其中写入值时最好保存为string类型。因为每个Lintener都需要指定一个格式化器（Formatter），可以Formatter中指定显示内容，在显示ExtendedProperties中的Value值时可能不支持对应的object转换为string.</string,></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/06/16/Oracle-exp-imp-empdp-impdp/" title="Oracle中的导入导出" itemprop="url">Oracle中的导入导出</a>
   </h1>
   <p class="article-author">By
@@ -88,7 +150,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> 发表于 2016-06-16</time>
+    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> Published 2016-06-16</time>
     
   </p>
 </header>
@@ -152,7 +214,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> 发表于 2016-05-18</time>
+    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> Published 2016-05-18</time>
     
   </p>
 </header>
@@ -214,7 +276,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-13T05:39:00.000Z" itemprop="datePublished"> 发表于 2016-05-13</time>
+    <time datetime="2016-05-13T05:39:00.000Z" itemprop="datePublished"> Published 2016-05-13</time>
     
   </p>
 </header>
@@ -287,7 +349,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-11T08:42:34.000Z" itemprop="datePublished"> 发表于 2016-05-11</time>
+    <time datetime="2016-05-11T08:42:34.000Z" itemprop="datePublished"> Published 2016-05-11</time>
     
   </p>
 </header>
@@ -336,7 +398,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-01-01T03:47:32.000Z" itemprop="datePublished"> 发表于 2016-01-01</time>
+    <time datetime="2016-01-01T03:47:32.000Z" itemprop="datePublished"> Published 2016-01-01</time>
     
   </p>
 </header>
@@ -384,15 +446,15 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -402,7 +464,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -439,7 +501,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -471,7 +533,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -484,7 +546,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -612,7 +674,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
