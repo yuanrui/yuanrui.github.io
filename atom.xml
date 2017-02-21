@@ -113,7 +113,7 @@
     <link href="http://yuanrui.github.io/2016/11/25/Oracle-learning/"/>
     <id>http://yuanrui.github.io/2016/11/25/Oracle-learning/</id>
     <published>2016-11-25T02:17:55.000Z</published>
-    <updated>2017-02-06T06:40:35.510Z</updated>
+    <updated>2017-02-21T03:10:28.941Z</updated>
     
     <content type="html"><![CDATA[<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码123456</span><br><span class="line">create user test identified by 123456;</span><br></pre></td></tr></table></figure></p>
 <p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码test</span><br><span class="line">alter user test identified by test;</span><br></pre></td></tr></table></figure></p>
@@ -166,6 +166,7 @@
 <p>设置已存在数据文件为自动增长并设置最大值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</span><br><span class="line">AUTOEXTEND ON NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure></p>
 <p>删除数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">drop datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</span><br></pre></td></tr></table></figure></p>
 <p>移动表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--1.将表空间离线</span><br><span class="line">alter tablespace test_DB offline normal;</span><br><span class="line">--2.移动数据文件目录</span><br><span class="line">--3.重命名表空间文件</span><br><span class="line">alter database rename file &apos;D:\ORADB\test_DB.DBF&apos; to &apos;D:\Oracle\Data\test_DB.DBF&apos;;</span><br><span class="line">--4.表空间联机</span><br><span class="line">alter tablespace test_DB online;</span><br></pre></td></tr></table></figure></p>
+<p>查看表空间或索引占用的存储空间大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select segment_name, segment_type, sum(bytes)/1024/1024 MB</span><br><span class="line">from user_segments  </span><br><span class="line">group by segment_name, segment_type</span><br><span class="line">order by 3 desc</span><br></pre></td></tr></table></figure></p>
 ]]></content>
     
     <summary type="html">
