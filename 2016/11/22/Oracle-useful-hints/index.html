@@ -12,6 +12,7 @@
 
     
     <meta name="description" content="取前N条分页数据提示采用row_number进行高效分页参考：http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html示例123456789select * from (select /*+ first_rows(25) */  your_columns,  row_number()   ov">
+<meta name="keywords" content="开发笔记,Oracle,Sql,读书笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle常用提示">
 <meta property="og:url" content="http://yuanrui.github.io/2016/11/22/Oracle-useful-hints/index.html">
@@ -93,8 +94,8 @@
 </header>
 	<div class="article-content">
 		
-		<p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="external">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line"> from (</span><br><span class="line">select /*+ first_rows(25) */</span><br><span class="line">  your_columns,</span><br><span class="line">  row_number() </span><br><span class="line">  over (order by something unique)rn</span><br><span class="line"> from your_tables )</span><br><span class="line">where rn between :n and :m </span><br><span class="line">order by rn;</span><br></pre></td></tr></table></figure></p>
-<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</span><br></pre></td></tr></table></figure></p>
+		<p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="external">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">select *</div><div class="line"> from (</div><div class="line">select /*+ first_rows(25) */</div><div class="line">  your_columns,</div><div class="line">  row_number() </div><div class="line">  over (order by something unique)rn</div><div class="line"> from your_tables )</div><div class="line">where rn between :n and :m </div><div class="line">order by rn;</div></pre></td></tr></table></figure></p>
+<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -131,18 +132,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/11/25/Oracle-learning/" title="Oracle学习笔记">
+ <a href="/2016/11/21/Javascript-common-validation-function/" title="Javascript常用验证函数收集">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle学习笔记</span>
+  Javascript常用验证函数收集</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/11/21/Javascript-common-validation-function/"  title="Javascript常用验证函数收集">
+<a href="/2016/11/25/Oracle-learning/"  title="Oracle学习笔记">
  <strong>下一篇：</strong><br/> 
- <span>Javascript常用验证函数收集
+ <span>Oracle学习笔记
 </span>
 </a>
 </div>
@@ -174,11 +175,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -227,11 +228,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>

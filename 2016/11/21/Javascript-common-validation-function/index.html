@@ -11,19 +11,17 @@
     
 
     
-    <meta name="description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125;
-邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
+    <meta name="description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125; 邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
+<meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript常用验证函数收集">
 <meta property="og:url" content="http://yuanrui.github.io/2016/11/21/Javascript-common-validation-function/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125;
-邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
+<meta property="og:description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125; 邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
 <meta property="og:updated_time" content="2016-11-21T02:48:58.539Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript常用验证函数收集">
-<meta name="twitter:description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125;
-邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
+<meta name="twitter:description" content="字符串是否为空或为空格123function (value) &amp;#123;	return value == null || /\S/.test(value);&amp;#125; 邮箱地址格式验证1234567function (value) &amp;#123;	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address	/">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -96,11 +94,11 @@
 </header>
 	<div class="article-content">
 		
-		<p>字符串是否为空或为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return value == null || /\S/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>邮箱地址格式验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address</span><br><span class="line">	///^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`&#123;|&#125;~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?)*$/</span><br><span class="line"></span><br><span class="line">	//form 163</span><br><span class="line">	return !/^[._-]?(?:[a-z0-9]+[._-]?)+[a-z0-9]?@[a-z0-9](?:[.-]?[a-z0-9]+)*$/i.test(value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>车辆号牌格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;6&#125;$)|(^[A-Z]&#123;2&#125;[A-Z0-9]&#123;2&#125;[A-Z0-9\u4E00-\u9FA5]&#123;1&#125;[A-Z0-9]&#123;4&#125;$)|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;5&#125;[挂学警军港澳]&#123;1&#125;$)|(^[A-Z]&#123;2&#125;[0-9]&#123;5&#125;$)|(^(08|38)&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警军港澳]&#123;1&#125;$)/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>手机号码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var length = value.length;</span><br><span class="line">	var re = /^(((13[0-9]&#123;1&#125;)|(15[0-9]&#123;1&#125;)|(18[0-9]&#123;1&#125;))+\d&#123;8&#125;)$/;</span><br><span class="line">	return (length == 11 &amp;&amp; re.test(value));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>计算字符串长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var utfStr = value.match(/[^\x00-\xff]/ig);</span><br><span class="line">	return value.length + (utfStr == null ? 0 : utfStr.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+		<p>字符串是否为空或为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	return value == null || /\S/.test(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>邮箱地址格式验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address</div><div class="line">	///^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`&#123;|&#125;~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?)*$/</div><div class="line"></div><div class="line">	//form 163</div><div class="line">	return !/^[._-]?(?:[a-z0-9]+[._-]?)+[a-z0-9]?@[a-z0-9](?:[.-]?[a-z0-9]+)*$/i.test(value)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>车辆号牌格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	return /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;6&#125;$)|(^[A-Z]&#123;2&#125;[A-Z0-9]&#123;2&#125;[A-Z0-9\u4E00-\u9FA5]&#123;1&#125;[A-Z0-9]&#123;4&#125;$)|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;5&#125;[挂学警军港澳]&#123;1&#125;$)|(^[A-Z]&#123;2&#125;[0-9]&#123;5&#125;$)|(^(08|38)&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警军港澳]&#123;1&#125;$)/.test(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>手机号码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	var length = value.length;</div><div class="line">	var re = /^(((13[0-9]&#123;1&#125;)|(15[0-9]&#123;1&#125;)|(18[0-9]&#123;1&#125;))+\d&#123;8&#125;)$/;</div><div class="line">	return (length == 11 &amp;&amp; re.test(value));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>计算字符串长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	var utfStr = value.match(/[^\x00-\xff]/ig);</div><div class="line">	return value.length + (utfStr == null ? 0 : utfStr.length);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -127,18 +125,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示">
+ <a href="/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/" title="解决Asp.Net Session退出造成Ajax请求无响应的Bug">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle常用提示</span>
+  解决Asp.Net Session退出造成Ajax请求无响应的Bug</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/"  title="解决Asp.Net Session退出造成Ajax请求无响应的Bug">
+<a href="/2016/11/22/Oracle-useful-hints/"  title="Oracle常用提示">
  <strong>下一篇：</strong><br/> 
- <span>解决Asp.Net Session退出造成Ajax请求无响应的Bug
+ <span>Oracle常用提示
 </span>
 </a>
 </div>
@@ -170,11 +168,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -223,11 +221,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>

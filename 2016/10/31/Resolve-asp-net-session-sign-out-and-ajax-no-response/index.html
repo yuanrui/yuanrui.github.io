@@ -12,6 +12,7 @@
 
     
     <meta name="description" content="问题描述在一般的Web后台管理系统的使用过程中，大多都是在单窗口中操作，用户所有的操作都在同一个标签页面中。有时候会出现这种情况：1、用户将当前页面的Url在新的标签页中打开；2、在新的标签页面中注销当前登陆账户。3、再返回当前页面进行操作（假设界面上的CRUD操作都是通过Ajax请求处理），这个时候的任何Ajax操作都不会返回正确的结果，如果不刷新页面，页面不会重定向到登陆页面；解决问题的办法很">
+<meta name="keywords" content="开发笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="解决Asp.Net Session退出造成Ajax请求无响应的Bug">
 <meta property="og:url" content="http://yuanrui.github.io/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/index.html">
@@ -102,8 +103,8 @@
 		
 		<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>在一般的Web后台管理系统的使用过程中，大多都是在单窗口中操作，用户所有的操作都在同一个标签页面中。<br>有时候会出现这种情况：<br>1、用户将当前页面的Url在新的标签页中打开；<br>2、在新的标签页面中注销当前登陆账户。<br>3、再返回当前页面进行操作（假设界面上的CRUD操作都是通过Ajax请求处理），这个时候的任何Ajax操作都不会返回正确的结果，如果不刷新页面，页面不会重定向到登陆页面；<br>解决问题的办法很简单，让用户刷新下页面就行。但是有时候用户是不知道需要刷新的。特别是打开后台管理系统，长期不操作界面，造成服务器端Session过期，需要用户重新登陆系统。<br>对于追求后台管理系统傻瓜式操作的追求来说，刷新页面并不是我们想要的结果。</p>
 <h3 id="Ajax调用处理过程"><a href="#Ajax调用处理过程" class="headerlink" title="Ajax调用处理过程"></a>Ajax调用处理过程</h3><p>浏览器发起Ajax请求后，正常情况下调用目标地址相关方法并返回结果。服务器端的Session过期或失效后，Ajax请求的地址将会被重定向到登陆页面，返回的结果是登陆页面的html。</p>
-<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>搞清楚Ajax调用处理过程后，解决问题的主要关键在于，如何判别返回的结果是不是登陆页面。如果返回的结果是登陆页面，则将window.location设置为登陆页的地址，否则不做处理。<br>一个简单的解决方案是在登陆页中添加一个特殊的Header. 同时在母版页中使用Jquery注册ajaxComplete事件，捕获之前设置的Header, 如果存在跳转到登陆页面，不存在则不做处理。<br>登陆页相关代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[HttpGet, AllowAnonymous]</span><br><span class="line">public ActionResult Login(string ReturnUrl)</span><br><span class="line">&#123;</span><br><span class="line">	this.HttpContext.Response.AddHeader(&quot;__LoginUrl&quot;, &quot;/Home/Login&quot;);</span><br><span class="line">	ViewBag.ReturnUrl = ReturnUrl;</span><br><span class="line">	</span><br><span class="line">	return View();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>母版页(_Layout.cshtml)中的Js事件处理<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=<span class="string">"https://code.jquery.com/jquery-1.12.4.min.js"</span> type=<span class="string">"text/javascript"</span>&gt;&lt;/script&gt;</span><br><span class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</span><br><span class="line">$(<span class="built_in">document</span>).ajaxComplete(<span class="function"><span class="keyword">function</span>(<span class="params">event, jqxhr, settings</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (jqxhr.status == <span class="number">200</span>) &#123;</span><br><span class="line">		<span class="keyword">var</span> loginPageUrl = jqxhr.getResponseHeader(<span class="string">"__LoginUrl"</span>);</span><br><span class="line">		<span class="keyword">if</span>(loginPageUrl &amp;&amp; loginPageUrl !== <span class="string">""</span>)&#123;</span><br><span class="line">			<span class="built_in">window</span>.location.replace(loginPageUrl);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>搞清楚Ajax调用处理过程后，解决问题的主要关键在于，如何判别返回的结果是不是登陆页面。如果返回的结果是登陆页面，则将window.location设置为登陆页的地址，否则不做处理。<br>一个简单的解决方案是在登陆页中添加一个特殊的Header. 同时在母版页中使用Jquery注册ajaxComplete事件，捕获之前设置的Header, 如果存在跳转到登陆页面，不存在则不做处理。<br>登陆页相关代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[HttpGet, AllowAnonymous]</div><div class="line">public ActionResult Login(string ReturnUrl)</div><div class="line">&#123;</div><div class="line">	this.HttpContext.Response.AddHeader(&quot;__LoginUrl&quot;, &quot;/Home/Login&quot;);</div><div class="line">	ViewBag.ReturnUrl = ReturnUrl;</div><div class="line">	</div><div class="line">	return View();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>母版页(_Layout.cshtml)中的Js事件处理<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;script src=<span class="string">"https://code.jquery.com/jquery-1.12.4.min.js"</span> type=<span class="string">"text/javascript"</span>&gt;&lt;/script&gt;</div><div class="line">&lt;script type=<span class="string">"text/javascript"</span>&gt;</div><div class="line">$(<span class="built_in">document</span>).ajaxComplete(<span class="function"><span class="keyword">function</span>(<span class="params">event, jqxhr, settings</span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span> (jqxhr.status == <span class="number">200</span>) &#123;</div><div class="line">		<span class="keyword">var</span> loginPageUrl = jqxhr.getResponseHeader(<span class="string">"__LoginUrl"</span>);</div><div class="line">		<span class="keyword">if</span>(loginPageUrl &amp;&amp; loginPageUrl !== <span class="string">""</span>)&#123;</div><div class="line">			<span class="built_in">window</span>.location.replace(loginPageUrl);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span>;</div><div class="line">	&#125;</div><div class="line">&#125;);</div><div class="line">&lt;/script&gt;</div></pre></td></tr></table></figure></p>
 <p>之前考虑过，使用ajaxError事件来处理跳转。因为实际使用过程中Ajax传输的数据大多都是Json，重定向到登陆页后，将Html转化为Json时会抛异常同时触发ajaxError事件。使用ajaxError对于ajaxComplete来说，只有Ajax有异常的情况下才处理，不用处理判断每次Ajax请求，相对效率高一点。<br>由于我们项目的弹窗表单都是采用的Ajax Get请求加载的，返回的是Html，不会触发ajaxError事件。权衡之后，还是使用ajaxComplete.</p>
 <p>顺便说一下，这里也可以用Cookie来替代Header, 具体处理方式类似这里不再复述。唯一需要注意的是，如何控制Cookie过期的问题。</p>
 <p>参考链接：<a href="http://stackoverflow.com/questions/199099/how-to-manage-a-redirect-request-after-a-jquery-ajax-call" target="_blank" rel="external">http://stackoverflow.com/questions/199099/how-to-manage-a-redirect-request-after-a-jquery-ajax-call</a></p>
@@ -143,18 +144,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/11/21/Javascript-common-validation-function/" title="Javascript常用验证函数收集">
+ <a href="/2016/10/18/Resolve-asp-net-config-error/" title="解决Asp.Net配置异常杂记">
   <strong>上一篇：</strong><br/>
   <span>
-  Javascript常用验证函数收集</span>
+  解决Asp.Net配置异常杂记</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/10/18/Resolve-asp-net-config-error/"  title="解决Asp.Net配置异常杂记">
+<a href="/2016/11/21/Javascript-common-validation-function/"  title="Javascript常用验证函数收集">
  <strong>下一篇：</strong><br/> 
- <span>解决Asp.Net配置异常杂记
+ <span>Javascript常用验证函数收集
 </span>
 </a>
 </div>
@@ -193,11 +194,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -246,11 +247,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>

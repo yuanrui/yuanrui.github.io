@@ -11,142 +11,17 @@
     
 
     
-    <meta name="description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+    <meta name="description" content="Update statement假设有如下表(T_SCORE_LEVEL)    ID SCORE LEVEL     1 60 0   2 70 0   3 75 0   4 65 0   5 95 0   6 82 0    需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+<meta name="keywords" content="开发笔记,Oracle,Sql">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle学习笔记-CRUD">
 <meta property="og:url" content="http://yuanrui.github.io/2017/02/08/Oracle-learning-CRUD/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+<meta property="og:description" content="Update statement假设有如下表(T_SCORE_LEVEL)    ID SCORE LEVEL     1 60 0   2 70 0   3 75 0   4 65 0   5 95 0   6 82 0    需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
 <meta property="og:updated_time" content="2017-02-08T02:59:11.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle学习笔记-CRUD">
-<meta name="twitter:description" content="Update statement假设有如下表(T_SCORE_LEVEL)
-
-
-
-ID
-SCORE
-LEVEL
-
-
-
-
-1
-60
-0
-
-
-2
-70
-0
-
-
-3
-75
-0
-
-
-4
-65
-0
-
-
-5
-95
-0
-
-
-6
-82
-0
-
-
-
-需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
+<meta name="twitter:description" content="Update statement假设有如下表(T_SCORE_LEVEL)    ID SCORE LEVEL     1 60 0   2 70 0   3 75 0   4 65 0   5 95 0   6 82 0    需要更新LEVEL字段，更新规则:Score大于等于90小于等于100，Level=1;Score大于等于80小于等于90，Level=2;Score大于等于70小于等于">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -269,7 +144,7 @@ LEVEL
 </tbody>
 </table>
 <p>需要更新LEVEL字段，更新规则:<br>Score大于等于90小于等于100，Level=1;<br>Score大于等于80小于等于90，Level=2;<br>Score大于等于70小于等于80，Level=3;<br>Score大于等于60小于等于70，Level=4;<br>Score小于60，Level=5;<br>请写出对应的sql</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">UPDATE T_SCORE_LEVEL</span><br><span class="line">SET LEVEL = (</span><br><span class="line">	CASE </span><br><span class="line">		WHEN SCORE &gt;= 90 AND SCORE &lt;= 100 THEN 1</span><br><span class="line">		WHEN SCORE &gt;= 80 AND SCORE &lt; 90 THEN 2</span><br><span class="line">		WHEN SCORE &gt;= 70 AND SCORE &lt; 80 THEN 3</span><br><span class="line">		WHEN SCORE &gt;= 60 AND SCORE &lt; 70 THEN 4</span><br><span class="line">		WHEN SCORE &lt; 60 THEN 5</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">COMMIT</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">UPDATE T_SCORE_LEVEL</div><div class="line">SET LEVEL = (</div><div class="line">	CASE </div><div class="line">		WHEN SCORE &gt;= 90 AND SCORE &lt;= 100 THEN 1</div><div class="line">		WHEN SCORE &gt;= 80 AND SCORE &lt; 90 THEN 2</div><div class="line">		WHEN SCORE &gt;= 70 AND SCORE &lt; 80 THEN 3</div><div class="line">		WHEN SCORE &gt;= 60 AND SCORE &lt; 70 THEN 4</div><div class="line">		WHEN SCORE &lt; 60 THEN 5</div><div class="line">);</div><div class="line"></div><div class="line">COMMIT</div><div class="line">/</div></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -306,18 +181,18 @@ LEVEL
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/02/09/Vs-Code-handling-note/" title="VS Code 上手杂记">
+ <a href="/2016/11/25/Oracle-learning/" title="Oracle学习笔记">
   <strong>上一篇：</strong><br/>
   <span>
-  VS Code 上手杂记</span>
+  Oracle学习笔记</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/11/25/Oracle-learning/"  title="Oracle学习笔记">
+<a href="/2017/02/09/Vs-Code-handling-note/"  title="VS Code 上手杂记">
  <strong>下一篇：</strong><br/> 
- <span>Oracle学习笔记
+ <span>VS Code 上手杂记
 </span>
 </a>
 </div>
@@ -356,11 +231,11 @@ LEVEL
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -409,11 +284,11 @@ LEVEL
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>

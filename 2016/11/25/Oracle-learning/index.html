@@ -11,22 +11,17 @@
     
 
     
-    <meta name="description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456;
-修改用户密码12--用户名test 密码testalter user test identified by test;
-为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
+    <meta name="description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456; 修改用户密码12--用户名test 密码testalter user test identified by test; 为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
+<meta name="keywords" content="开发笔记,Oracle,Sql,读书笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle学习笔记">
 <meta property="og:url" content="http://yuanrui.github.io/2016/11/25/Oracle-learning/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456;
-修改用户密码12--用户名test 密码testalter user test identified by test;
-为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
+<meta property="og:description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456; 修改用户密码12--用户名test 密码testalter user test identified by test; 为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
 <meta property="og:updated_time" content="2017-02-21T03:10:28.941Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle学习笔记">
-<meta name="twitter:description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456;
-修改用户密码12--用户名test 密码testalter user test identified by test;
-为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
+<meta name="twitter:description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456; 修改用户密码12--用户名test 密码testalter user test identified by test; 为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablesp">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -106,11 +101,11 @@
 		
 		</div>
 		
-		<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码123456</span><br><span class="line">create user test identified by 123456;</span><br></pre></td></tr></table></figure></p>
-<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码test</span><br><span class="line">alter user test identified by test;</span><br></pre></td></tr></table></figure></p>
-<p>为用户指定默认表空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--默认表空间test_DB 临时表空间test_temp</span><br><span class="line">alter user test</span><br><span class="line">default tablespace test_DB</span><br><span class="line">temporary tablespace test_temp;</span><br></pre></td></tr></table></figure></p>
-<p>授予用户权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">grant </span><br><span class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</span><br><span class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</span><br><span class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</span><br><span class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</span><br><span class="line">　　to test;</span><br><span class="line">grant resource, dba to test;</span><br></pre></td></tr></table></figure></p>
-<p>回收权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">revoke resource, dba from test;</span><br></pre></td></tr></table></figure></p>
+		<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--用户名test 密码123456</div><div class="line">create user test identified by 123456;</div></pre></td></tr></table></figure></p>
+<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--用户名test 密码test</div><div class="line">alter user test identified by test;</div></pre></td></tr></table></figure></p>
+<p>为用户指定默认表空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">--默认表空间test_DB 临时表空间test_temp</div><div class="line">alter user test</div><div class="line">default tablespace test_DB</div><div class="line">temporary tablespace test_temp;</div></pre></td></tr></table></figure></p>
+<p>授予用户权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">grant </div><div class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</div><div class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</div><div class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</div><div class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</div><div class="line">　　to test;</div><div class="line">grant resource, dba to test;</div></pre></td></tr></table></figure></p>
+<p>回收权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">revoke resource, dba from test;</div></pre></td></tr></table></figure></p>
 <h3 id="表空间管理"><a href="#表空间管理" class="headerlink" title="表空间管理"></a>表空间管理</h3><p>表空间大小与数据块大小(db_block_size)有关</p>
 <table>
 <thead>
@@ -149,15 +144,15 @@
 </tbody>
 </table>
 <p>数据块是4k的数据库，单个表空间数据文件的限制是小于16G，而不是小于等于16G。</p>
-<p>查询数据块大小大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show parameter db_block_size</span><br></pre></td></tr></table></figure></p>
-<p>查询表空间使用情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SELECT UPPER(F.TABLESPACE_NAME) AS &quot;表空间名称&quot;,</span><br><span class="line">       ROUND(D.AVAILB_BYTES,2) AS &quot;表空间大小(G)&quot;,</span><br><span class="line">       ROUND(D.MAX_BYTES,2) AS &quot;最终表空间大小(G)&quot;,</span><br><span class="line">       ROUND((D.AVAILB_BYTES - F.USED_BYTES),2) AS &quot;已使用空间(G)&quot;,</span><br><span class="line">       TO_CHAR(ROUND((D.AVAILB_BYTES - F.USED_BYTES) / D.AVAILB_BYTES * 100, 2), &apos;999.99&apos;) AS &quot;使用比&quot;,</span><br><span class="line">       ROUND(F.USED_BYTES, 6) AS &quot;空闲空间(G)&quot;,</span><br><span class="line">       F.MAX_BYTES AS &quot;最大块(M)&quot;</span><br><span class="line">FROM</span><br><span class="line">  ( SELECT TABLESPACE_NAME,</span><br><span class="line">           ROUND(SUM(BYTES) / (1024 * 1024 * 1024), 6) USED_BYTES,</span><br><span class="line">           ROUND(MAX(BYTES) / (1024 * 1024 * 1024), 6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_FREE_SPACE</span><br><span class="line">   GROUP BY TABLESPACE_NAME) F,</span><br><span class="line">  (SELECT DD.TABLESPACE_NAME,</span><br><span class="line">          ROUND(SUM(DD.BYTES) / (1024 * 1024 * 1024), 6) AVAILB_BYTES,</span><br><span class="line">          ROUND(SUM(DECODE(DD.MAXBYTES, 0, DD.BYTES, DD.MAXBYTES))/(1024*1024*1024),6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_DATA_FILES DD</span><br><span class="line">   GROUP BY DD.TABLESPACE_NAME) D</span><br><span class="line">WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME</span><br><span class="line">ORDER BY 4 DESC</span><br></pre></td></tr></table></figure></p>
-<p>查询表空间文件地址、是否自动增长、数据文件最大值、自动增长值(8k block)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select TABLESPACE_NAME,FILE_NAME,AUTOEXTENSIBLE,MAXBYTES / 1024 / 1024 / 1024,INCREMENT_BY*8192/1024/1024 from dba_data_files</span><br></pre></td></tr></table></figure></p>
-<p>增加表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">add datafile &apos;D:\ORADB\test_DB_2.DBF&apos; size 32M</span><br><span class="line">AUTOEXTEND ON</span><br><span class="line">NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure></p>
-<p>调整数据文件大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</span><br><span class="line">RESIZE 64M;</span><br></pre></td></tr></table></figure></p>
-<p>设置已存在数据文件为自动增长并设置最大值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</span><br><span class="line">AUTOEXTEND ON NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure></p>
-<p>删除数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">drop datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</span><br></pre></td></tr></table></figure></p>
-<p>移动表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--1.将表空间离线</span><br><span class="line">alter tablespace test_DB offline normal;</span><br><span class="line">--2.移动数据文件目录</span><br><span class="line">--3.重命名表空间文件</span><br><span class="line">alter database rename file &apos;D:\ORADB\test_DB.DBF&apos; to &apos;D:\Oracle\Data\test_DB.DBF&apos;;</span><br><span class="line">--4.表空间联机</span><br><span class="line">alter tablespace test_DB online;</span><br></pre></td></tr></table></figure></p>
-<p>查看表空间或索引占用的存储空间大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select segment_name, segment_type, sum(bytes)/1024/1024 MB</span><br><span class="line">from user_segments  </span><br><span class="line">group by segment_name, segment_type</span><br><span class="line">order by 3 desc</span><br></pre></td></tr></table></figure></p>
+<p>查询数据块大小大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show parameter db_block_size</div></pre></td></tr></table></figure></p>
+<p>查询表空间使用情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">SELECT UPPER(F.TABLESPACE_NAME) AS &quot;表空间名称&quot;,</div><div class="line">       ROUND(D.AVAILB_BYTES,2) AS &quot;表空间大小(G)&quot;,</div><div class="line">       ROUND(D.MAX_BYTES,2) AS &quot;最终表空间大小(G)&quot;,</div><div class="line">       ROUND((D.AVAILB_BYTES - F.USED_BYTES),2) AS &quot;已使用空间(G)&quot;,</div><div class="line">       TO_CHAR(ROUND((D.AVAILB_BYTES - F.USED_BYTES) / D.AVAILB_BYTES * 100, 2), &apos;999.99&apos;) AS &quot;使用比&quot;,</div><div class="line">       ROUND(F.USED_BYTES, 6) AS &quot;空闲空间(G)&quot;,</div><div class="line">       F.MAX_BYTES AS &quot;最大块(M)&quot;</div><div class="line">FROM</div><div class="line">  ( SELECT TABLESPACE_NAME,</div><div class="line">           ROUND(SUM(BYTES) / (1024 * 1024 * 1024), 6) USED_BYTES,</div><div class="line">           ROUND(MAX(BYTES) / (1024 * 1024 * 1024), 6) MAX_BYTES</div><div class="line">   FROM SYS.DBA_FREE_SPACE</div><div class="line">   GROUP BY TABLESPACE_NAME) F,</div><div class="line">  (SELECT DD.TABLESPACE_NAME,</div><div class="line">          ROUND(SUM(DD.BYTES) / (1024 * 1024 * 1024), 6) AVAILB_BYTES,</div><div class="line">          ROUND(SUM(DECODE(DD.MAXBYTES, 0, DD.BYTES, DD.MAXBYTES))/(1024*1024*1024),6) MAX_BYTES</div><div class="line">   FROM SYS.DBA_DATA_FILES DD</div><div class="line">   GROUP BY DD.TABLESPACE_NAME) D</div><div class="line">WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME</div><div class="line">ORDER BY 4 DESC</div></pre></td></tr></table></figure></p>
+<p>查询表空间文件地址、是否自动增长、数据文件最大值、自动增长值(8k block)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select TABLESPACE_NAME,FILE_NAME,AUTOEXTENSIBLE,MAXBYTES / 1024 / 1024 / 1024,INCREMENT_BY*8192/1024/1024 from dba_data_files</div></pre></td></tr></table></figure></p>
+<p>增加表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">alter tablespace test_DB</div><div class="line">add datafile &apos;D:\ORADB\test_DB_2.DBF&apos; size 32M</div><div class="line">AUTOEXTEND ON</div><div class="line">NEXT 32M MAXSIZE 32767M;</div></pre></td></tr></table></figure></p>
+<p>调整数据文件大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</div><div class="line">RESIZE 64M;</div></pre></td></tr></table></figure></p>
+<p>设置已存在数据文件为自动增长并设置最大值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</div><div class="line">AUTOEXTEND ON NEXT 32M MAXSIZE 32767M;</div></pre></td></tr></table></figure></p>
+<p>删除数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter tablespace test_DB</div><div class="line">drop datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</div></pre></td></tr></table></figure></p>
+<p>移动表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">--1.将表空间离线</div><div class="line">alter tablespace test_DB offline normal;</div><div class="line">--2.移动数据文件目录</div><div class="line">--3.重命名表空间文件</div><div class="line">alter database rename file &apos;D:\ORADB\test_DB.DBF&apos; to &apos;D:\Oracle\Data\test_DB.DBF&apos;;</div><div class="line">--4.表空间联机</div><div class="line">alter tablespace test_DB online;</div></pre></td></tr></table></figure></p>
+<p>查看表空间或索引占用的存储空间大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select segment_name, segment_type, sum(bytes)/1024/1024 MB</div><div class="line">from user_segments  </div><div class="line">group by segment_name, segment_type</div><div class="line">order by 3 desc</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -194,18 +189,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/02/08/Oracle-learning-CRUD/" title="Oracle学习笔记-CRUD">
+ <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle学习笔记-CRUD</span>
+  Oracle常用提示</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/11/22/Oracle-useful-hints/"  title="Oracle常用提示">
+<a href="/2017/02/08/Oracle-learning-CRUD/"  title="Oracle学习笔记-CRUD">
  <strong>下一篇：</strong><br/> 
- <span>Oracle常用提示
+ <span>Oracle学习笔记-CRUD
 </span>
 </a>
 </div>
@@ -244,11 +239,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -297,11 +292,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>

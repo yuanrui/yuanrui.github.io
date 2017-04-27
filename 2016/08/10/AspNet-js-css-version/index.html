@@ -12,6 +12,7 @@
 
     
     <meta name="description" content="为什么需要版本号处理在项目开发部署过程中，经常会修改样式和脚本文件。在部署时经常会因为浏览器缓存的原因造成加载的样式和执行的脚本还是以前的版本。解决浏览器缓存最常用的办法是，在服务器端渲染生成资源链接时，加上一个版本号，用于刷新客户端缓存。这个版本号只在第一次请求时重新加载资源文件，在后续的请求中从浏览器缓存中获取文件。版本号相对来说是固定的，不是随机生成的。随机生成的版本号会造成每次加载页面时都">
+<meta name="keywords" content="开发笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="为Asp.Net Mvc项目的Js和Css添加版本号处理">
 <meta property="og:url" content="http://yuanrui.github.io/2016/08/10/AspNet-js-css-version/index.html">
@@ -101,8 +102,8 @@
 		</div>
 		
 		<h3 id="为什么需要版本号处理"><a href="#为什么需要版本号处理" class="headerlink" title="为什么需要版本号处理"></a>为什么需要版本号处理</h3><p>在项目开发部署过程中，经常会修改样式和脚本文件。在部署时经常会因为浏览器缓存的原因造成加载的样式和执行的脚本还是以前的版本。<br>解决浏览器缓存最常用的办法是，在服务器端渲染生成资源链接时，加上一个版本号，用于刷新客户端缓存。这个版本号只在第一次请求时重新加载资源文件，在后续的请求中从浏览器缓存中获取文件。<br>版本号相对来说是固定的，不是随机生成的。随机生成的版本号会造成每次加载页面时都会去服务器端请求数据，这不是我们想要的效果。</p>
-<h3 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h3><p>生成版本号的方式有几种：<br>1、从配置文件中读取版本号<br>2、计算当前文件的hash值，用hash值作为版本号<br>3、使用程序集（DLL）发布时间作为版本号<br>第1种，发布部署时可以灵活控制，但是也容易忘记修改版本号，导致版本还是使用的以前的版本。也许可以通过自动发布的方式，自动修改版本号（没有尝试过）。<br>第2种，如果使用计算hash值的方式来处理，文件每次请求时都会去计算hash值。每次请求都计算hash有点消耗资源，改进办法是将路径和计算后的值放大缓存中，先判断hash值是否存在，不存在则计算并加入到缓存中。<br>第3种，可以将版本值的计算设计为静态类，并在静态类的静态构造方法中初始化静态变量，静态构造方法只需执行一次。每次发布替换DLL后，静态类会重新初始化。相比1、2种方式，灵活而不失简便。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public static class VersionUtils</span><br><span class="line">&#123;</span><br><span class="line">    public readonly static DateTime VersionDate;</span><br><span class="line"></span><br><span class="line">    public readonly static Int32 VersionNumber;</span><br><span class="line"></span><br><span class="line">    static VersionUtils()</span><br><span class="line">    &#123;</span><br><span class="line">        VersionDate = System.IO.File.GetLastWriteTime(typeof(VersionUtils).Assembly.Location);</span><br><span class="line">        VersionNumber = Int32.Parse(VersionDate.ToString(&quot;yyyyMMddHHmm&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static class HtmlHelperExtension</span><br><span class="line">&#123;</span><br><span class="line">    public static MvcHtmlString Script(this HtmlHelper html, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return VersionedContent(html, &quot;&lt;script src=\&quot;&#123;0&#125;\&quot; type=\&quot;text/javascript\&quot;&gt;&lt;/script&gt;&quot;, contentPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static MvcHtmlString Style(this HtmlHelper html, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return VersionedContent(html, &quot;&lt;link href=\&quot;&#123;0&#125;\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot;&gt;&quot;, contentPath);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static MvcHtmlString VersionedContent(this HtmlHelper html, string template, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        contentPath = UrlHelper.GenerateContentUrl(contentPath, html.ViewContext.HttpContext) + &quot;?v=&quot; + VersionUtils.VersionNumber;</span><br><span class="line">        return MvcHtmlString.Create(string.Format(template, contentPath));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static class UrlHelperExtension</span><br><span class="line">&#123;</span><br><span class="line">    public static string ContentVersioned(this UrlHelper urlHelper, string contentPath)</span><br><span class="line">    &#123;</span><br><span class="line">        return String.Format(&quot;&#123;0&#125;?v=&#123;1&#125;&quot;, urlHelper.Content(contentPath), VersionUtils.VersionNumber);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;link href=&quot;@Url.ContentVersioned(&quot;~/Content/Site.css&quot;)&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;</span><br><span class="line">@Html.Style(&quot;~/Content/bootstrap.css&quot;);</span><br><span class="line">@Html.Script(&quot;~/Scripts/angular.js&quot;);</span><br></pre></td></tr></table></figure>  
+<h3 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h3><p>生成版本号的方式有几种：<br>1、从配置文件中读取版本号<br>2、计算当前文件的hash值，用hash值作为版本号<br>3、使用程序集（DLL）发布时间作为版本号<br>第1种，发布部署时可以灵活控制，但是也容易忘记修改版本号，导致版本还是使用的以前的版本。也许可以通过自动发布的方式，自动修改版本号（没有尝试过）。<br>第2种，如果使用计算hash值的方式来处理，文件每次请求时都会去计算hash值。每次请求都计算hash有点消耗资源，改进办法是将路径和计算后的值放大缓存中，先判断hash值是否存在，不存在则计算并加入到缓存中。<br>第3种，可以将版本值的计算设计为静态类，并在静态类的静态构造方法中初始化静态变量，静态构造方法只需执行一次。每次发布替换DLL后，静态类会重新初始化。相比1、2种方式，灵活而不失简便。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">public static class VersionUtils</div><div class="line">&#123;</div><div class="line">    public readonly static DateTime VersionDate;</div><div class="line"></div><div class="line">    public readonly static Int32 VersionNumber;</div><div class="line"></div><div class="line">    static VersionUtils()</div><div class="line">    &#123;</div><div class="line">        VersionDate = System.IO.File.GetLastWriteTime(typeof(VersionUtils).Assembly.Location);</div><div class="line">        VersionNumber = Int32.Parse(VersionDate.ToString(&quot;yyyyMMddHHmm&quot;));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class HtmlHelperExtension</div><div class="line">&#123;</div><div class="line">    public static MvcHtmlString Script(this HtmlHelper html, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return VersionedContent(html, &quot;&lt;script src=\&quot;&#123;0&#125;\&quot; type=\&quot;text/javascript\&quot;&gt;&lt;/script&gt;&quot;, contentPath);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static MvcHtmlString Style(this HtmlHelper html, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return VersionedContent(html, &quot;&lt;link href=\&quot;&#123;0&#125;\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot;&gt;&quot;, contentPath);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static MvcHtmlString VersionedContent(this HtmlHelper html, string template, string contentPath)</div><div class="line">    &#123;</div><div class="line">        contentPath = UrlHelper.GenerateContentUrl(contentPath, html.ViewContext.HttpContext) + &quot;?v=&quot; + VersionUtils.VersionNumber;</div><div class="line">        return MvcHtmlString.Create(string.Format(template, contentPath));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class UrlHelperExtension</div><div class="line">&#123;</div><div class="line">    public static string ContentVersioned(this UrlHelper urlHelper, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return String.Format(&quot;&#123;0&#125;?v=&#123;1&#125;&quot;, urlHelper.Content(contentPath), VersionUtils.VersionNumber);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;link href=&quot;@Url.ContentVersioned(&quot;~/Content/Site.css&quot;)&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;</div><div class="line">@Html.Style(&quot;~/Content/bootstrap.css&quot;);</div><div class="line">@Html.Script(&quot;~/Scripts/angular.js&quot;);</div></pre></td></tr></table></figure>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -138,18 +139,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/19/Oracle-useful-sql-part-2/" title="Oracle常用sql(第二部分)">
+ <a href="/2016/07/20/Oracle-useful-sql-part-1/" title="Oracle常用sql(第一部分)">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle常用sql(第二部分)</span>
+  Oracle常用sql(第一部分)</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2016/07/20/Oracle-useful-sql-part-1/"  title="Oracle常用sql(第一部分)">
+<a href="/2016/08/19/Oracle-useful-sql-part-2/"  title="Oracle常用sql(第二部分)">
  <strong>下一篇：</strong><br/> 
- <span>Oracle常用sql(第一部分)
+ <span>Oracle常用sql(第二部分)
 </span>
 </a>
 </div>
@@ -188,11 +189,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -241,11 +242,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>
