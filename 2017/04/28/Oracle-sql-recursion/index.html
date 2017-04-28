@@ -11,17 +11,17 @@
     
 
     
-    <meta name="description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否未派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
+    <meta name="description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
 <meta name="keywords" content="开发笔记,Oracle,Sql,读书笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle Sql递归">
 <meta property="og:url" content="http://yuanrui.github.io/2017/04/28/Oracle-sql-recursion/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否未派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
-<meta property="og:updated_time" content="2017-04-28T09:59:00.303Z">
+<meta property="og:description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
+<meta property="og:updated_time" content="2017-04-28T10:00:10.980Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle Sql递归">
-<meta name="twitter:description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否未派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
+<meta name="twitter:description" content="最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户Sql如下12345678select count(*) from T_SYS_ACCOUNTwhere name in (  select name   from T_SYS_ACCOUNT  start with id = :currentId  connect by nocycle">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,13 +88,13 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> 發表於 2017-04-28</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否未派生用户<br>Sql如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">select count(*) from T_SYS_ACCOUNT</div><div class="line">where name in (</div><div class="line">  select name </div><div class="line">  from T_SYS_ACCOUNT</div><div class="line">  start with id = :currentId</div><div class="line">  connect by nocycle prior UPPER(name) = UPPER(created_by)</div><div class="line">)</div><div class="line">and id = :targetId</div></pre></td></tr></table></figure></p>
+		<p>最近在做一个用户需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户<br>Sql如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">select count(*) from T_SYS_ACCOUNT</div><div class="line">where name in (</div><div class="line">  select name </div><div class="line">  from T_SYS_ACCOUNT</div><div class="line">  start with id = :currentId</div><div class="line">  connect by nocycle prior UPPER(name) = UPPER(created_by)</div><div class="line">)</div><div class="line">and id = :targetId</div></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -144,15 +144,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -162,7 +162,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
@@ -199,7 +199,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
@@ -231,7 +231,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -244,7 +244,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
 </aside>
@@ -447,7 +447,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
