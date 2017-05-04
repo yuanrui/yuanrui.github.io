@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>C#字符串转换为DateTime | 棠城夜雨</title>
+    <title>C#特定格式字符串转换为DateTime | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
@@ -14,13 +14,13 @@
     <meta name="description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
 <meta name="keywords" content=".Net,开发笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C#字符串转换为DateTime">
-<meta property="og:url" content="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-to-datetime/index.html">
+<meta property="og:title" content="C#特定格式字符串转换为DateTime">
+<meta property="og:url" content="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-exact-to-datetime/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
-<meta property="og:updated_time" content="2017-05-04T06:46:05.968Z">
+<meta property="og:updated_time" content="2017-05-04T06:49:05.891Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C#字符串转换为DateTime">
+<meta name="twitter:title" content="C#特定格式字符串转换为DateTime">
 <meta name="twitter:description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
 
     
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/05/04/CSharp-string-parse-to-datetime/" title="C#字符串转换为DateTime" itemprop="url">C#字符串转换为DateTime</a>
+      <a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/" title="C#特定格式字符串转换为DateTime" itemprop="url">C#特定格式字符串转换为DateTime</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> 发表于 2017-05-04</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
     
   </p>
 </header>
@@ -120,7 +120,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-to-datetime/" data-title="C#字符串转换为DateTime | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-exact-to-datetime/" data-title="C#特定格式字符串转换为DateTime | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -147,15 +147,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -165,7 +165,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -202,7 +202,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -238,7 +238,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -251,7 +251,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -454,7 +454,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
