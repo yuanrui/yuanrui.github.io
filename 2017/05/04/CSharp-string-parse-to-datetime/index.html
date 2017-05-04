@@ -4,24 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Oracle常用提示 | 棠城夜雨</title>
+    <title>C#字符串转换为DateTime | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
     
 
     
-    <meta name="description" content="取前N条分页数据提示采用row_number进行高效分页参考：http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html示例123456789select * from (select /*+ first_rows(25) */  your_columns,  row_number()   ov">
-<meta name="keywords" content="开发笔记,Oracle,Sql,读书笔记">
+    <meta name="description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
+<meta name="keywords" content=".Net,开发笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Oracle常用提示">
-<meta property="og:url" content="http://yuanrui.github.io/2016/11/22/Oracle-useful-hints/index.html">
+<meta property="og:title" content="C#字符串转换为DateTime">
+<meta property="og:url" content="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-to-datetime/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="取前N条分页数据提示采用row_number进行高效分页参考：http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html示例123456789select * from (select /*+ first_rows(25) */  your_columns,  row_number()   ov">
-<meta property="og:updated_time" content="2017-02-06T03:53:51.307Z">
+<meta property="og:description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
+<meta property="og:updated_time" content="2017-05-04T06:46:05.968Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Oracle常用提示">
-<meta name="twitter:description" content="取前N条分页数据提示采用row_number进行高效分页参考：http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html示例123456789select * from (select /*+ first_rows(25) */  your_columns,  row_number()   ov">
+<meta name="twitter:title" content="C#字符串转换为DateTime">
+<meta name="twitter:description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -81,21 +81,23 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示" itemprop="url">Oracle常用提示</a>
+      <a href="/2017/05/04/CSharp-string-parse-to-datetime/" title="C#字符串转换为DateTime" itemprop="url">C#字符串转换为DateTime</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> Published 2016-11-22</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="external">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">select *</div><div class="line"> from (</div><div class="line">select /*+ first_rows(25) */</div><div class="line">  your_columns,</div><div class="line">  row_number() </div><div class="line">  over (order by something unique)rn</div><div class="line"> from your_tables )</div><div class="line">where rn between :n and :m </div><div class="line">order by rn;</div></pre></td></tr></table></figure></p>
-<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</div></pre></td></tr></table></figure></p>
+		<p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">DateTime time;</div><div class="line"></div><div class="line">if (input.Length &gt; 13)</div><div class="line">&#123;</div><div class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</div><div class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</div><div class="line">		+ input.Substring(10, 2);</div><div class="line"></div><div class="line">	time = DateTime.Parse(timeInput);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</div></pre></td></tr></table></figure></p>
+<p>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153999&quot;;</div><div class="line">var date = DateTime.ParseExact(input</div><div class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</div><div class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</div></pre></td></tr></table></figure></p>
+<p>将毫秒的每种可能格式列举出来，方法有点笨，这也不失为一种解决办法。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -103,13 +105,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -118,7 +120,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/2016/11/22/Oracle-useful-hints/" data-title="Oracle常用提示 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-to-datetime/" data-title="C#字符串转换为DateTime | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -132,21 +134,13 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/11/21/Javascript-common-validation-function/" title="Javascript常用验证函数收集">
+ <a href="/2017/04/28/Oracle-sql-recursion/" title="Oracle Sql递归">
   <strong>上一篇：</strong><br/>
   <span>
-  Javascript常用验证函数收集</span>
+  Oracle Sql递归</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2016/11/25/Oracle-learning/"  title="Oracle学习笔记">
- <strong>下一篇：</strong><br/> 
- <span>Oracle学习笔记
-</span>
-</a>
-</div>
 
 </nav>
 
