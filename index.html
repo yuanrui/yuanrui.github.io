@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -78,6 +78,74 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/05/08/Asp.net-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4" itemprop="url">Asp.Net Mvc 3升级到Mvc 4</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本文的前提是安装了Asp.Net Mvc 3.0 RTM, 同时未安装Mvc 4.0<br>新建一个Empty Mvc3项目, 创建HomeController控制器，并创建Index视图<br>使用nuget安装如下package:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Install-Package Microsoft.AspNet.Razor -Version 2.0.30506</div><div class="line">Install-Package Microsoft.AspNet.WebPages -Version 2.0.30506</div><div class="line">Install-Package Microsoft.AspNet.Mvc -Version 4.0.40804</div><div class="line">Install-Package Microsoft.AspNet.Mvc.zh-Hans -Version 4.0.40804</div></pre></td></tr></table></figure></p>
+<p>使用nuget完成安装dll后,需要修改根目录中的Web.config和Views文件夹中的Web.config<br>打开根目录中的Web.config,将System.Web.Helpers的版本修改为2.0.0.0, 将System.Web.Mvc的版本修改为4.0.0.1,将System.Web.WebPages的版本修改为2.0.0.0 </p>
+<p><system.web>中的最终配置如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</div><div class="line">  &lt;assemblies&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">  &lt;/assemblies&gt;</div><div class="line">&lt;/compilation&gt;</div></pre></td></tr></table></figure></system.web></p>
+<p>在<runtime>节点中添加如下配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.Helpers&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.WebPages&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">&lt;/assemblyBinding&gt;</div></pre></td></tr></table></figure></runtime></p>
+<p>打开Views文件夹中的Web.config,将原先的configSections节点项中Razor版本修改为2.0.0.0, 同时将这个文件中的Mvc版本修改为4.0.0.1 </p>
+<p>根目录中的Web.config最终内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;!--</div><div class="line">  有关如何配置 ASP.NET 应用程序的详细信息，请访问</div><div class="line">  http://go.microsoft.com/fwlink/?LinkId=152368</div><div class="line">  --&gt;</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;appSettings&gt;</div><div class="line">    &lt;add key=&quot;ClientValidationEnabled&quot; value=&quot;true&quot;/&gt; </div><div class="line">    &lt;add key=&quot;UnobtrusiveJavaScriptEnabled&quot; value=&quot;true&quot;/&gt; </div><div class="line">  &lt;/appSettings&gt;</div><div class="line">    </div><div class="line">  &lt;system.web&gt;</div><div class="line">    &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</div><div class="line">      &lt;assemblies&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">      &lt;/assemblies&gt;</div><div class="line">    &lt;/compilation&gt;</div><div class="line"></div><div class="line">    &lt;authentication mode=&quot;Forms&quot;&gt;</div><div class="line">      &lt;forms loginUrl=&quot;~/Account/LogOn&quot; timeout=&quot;2880&quot;/&gt;</div><div class="line">    &lt;/authentication&gt;</div><div class="line"></div><div class="line">    &lt;pages&gt;</div><div class="line">      &lt;namespaces&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Helpers&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Routing&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.WebPages&quot;/&gt;</div><div class="line">      &lt;/namespaces&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web&gt;</div><div class="line"></div><div class="line">  &lt;system.webServer&gt;</div><div class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot;/&gt;</div><div class="line">    &lt;modules runAllManagedModulesForAllRequests=&quot;true&quot;/&gt;</div><div class="line">  &lt;/system.webServer&gt;</div><div class="line"></div><div class="line">  &lt;runtime&gt;</div><div class="line">    &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</div><div class="line">      &lt;dependentAssembly&gt;</div><div class="line">        &lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">        &lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</div><div class="line">      &lt;/dependentAssembly&gt;</div><div class="line">    &lt;/assemblyBinding&gt;</div><div class="line">  &lt;/runtime&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
+<p>Views文件夹中的Web.config中的最终内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;configSections&gt;</div><div class="line">    &lt;sectionGroup name=&quot;system.web.webPages.razor&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</div><div class="line">      &lt;section name=&quot;host&quot; type=&quot;System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</div><div class="line">      &lt;section name=&quot;pages&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorPagesSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</div><div class="line">    &lt;/sectionGroup&gt;</div><div class="line">  &lt;/configSections&gt;</div><div class="line"></div><div class="line">  &lt;system.web.webPages.razor&gt;</div><div class="line">    &lt;host factoryType=&quot;System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;</div><div class="line">    &lt;pages pageBaseType=&quot;System.Web.Mvc.WebViewPage&quot;&gt;</div><div class="line">      &lt;namespaces&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Routing&quot; /&gt;</div><div class="line">      &lt;/namespaces&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web.webPages.razor&gt;</div><div class="line"></div><div class="line">  &lt;appSettings&gt;</div><div class="line">    &lt;add key=&quot;webpages:Enabled&quot; value=&quot;false&quot; /&gt;</div><div class="line">  &lt;/appSettings&gt;</div><div class="line"></div><div class="line">  &lt;system.web&gt;</div><div class="line">    &lt;httpHandlers&gt;</div><div class="line">      &lt;add path=&quot;*&quot; verb=&quot;*&quot; type=&quot;System.Web.HttpNotFoundHandler&quot;/&gt;</div><div class="line">    &lt;/httpHandlers&gt;</div><div class="line"></div><div class="line">    &lt;!--</div><div class="line">        在视图页面中启用请求验证将导致验证在</div><div class="line">        控制器已对输入进行处理后发生。默认情况下，</div><div class="line">        MVC 在控制器处理输入前执行请求验证。</div><div class="line">        若要更改此行为，请对控制器或操作</div><div class="line">        应用 ValidateInputAttribute。</div><div class="line">    --&gt;</div><div class="line">    &lt;pages</div><div class="line">        validateRequest=&quot;false&quot;</div><div class="line">        pageParserFilterType=&quot;System.Web.Mvc.ViewTypeParserFilter, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</div><div class="line">        pageBaseType=&quot;System.Web.Mvc.ViewPage, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</div><div class="line">        userControlBaseType=&quot;System.Web.Mvc.ViewUserControl, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</div><div class="line">      &lt;controls&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; namespace=&quot;System.Web.Mvc&quot; tagPrefix=&quot;mvc&quot; /&gt;</div><div class="line">      &lt;/controls&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web&gt;</div><div class="line"></div><div class="line">  &lt;system.webServer&gt;</div><div class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot; /&gt;</div><div class="line"></div><div class="line">    &lt;handlers&gt;</div><div class="line">      &lt;remove name=&quot;BlockViewHandler&quot;/&gt;</div><div class="line">      &lt;add name=&quot;BlockViewHandler&quot; path=&quot;*&quot; verb=&quot;*&quot; preCondition=&quot;integratedMode&quot; type=&quot;System.Web.HttpNotFoundHandler&quot; /&gt;</div><div class="line">    &lt;/handlers&gt;</div><div class="line">  &lt;/system.webServer&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
+<p>重新编译后运行，自动跳转到/Home/Index</p>
+<p>Mvc漏洞安全公告:<a href="https://technet.microsoft.com/zh-cn/library/security/ms14-059" target="_blank" rel="external">https://technet.microsoft.com/zh-cn/library/security/ms14-059</a><br>Mvc4发布说明:<a href="https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes" target="_blank" rel="external">https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes</a><br>Mvc4安装包:<a href="https://www.microsoft.com/zh-CN/download/details.aspx?id=30683" target="_blank" rel="external">https://www.microsoft.com/zh-CN/download/details.aspx?id=30683</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Asp-Net/">Asp.Net</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4" itemprop="url">Asp.Net Mvc 3升级到Mvc 4</a>
   </h1>
   <p class="article-author">By
@@ -85,7 +153,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> Published 2017-05-08</time>
+    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-08</time>
     
   </p>
 </header>
@@ -153,7 +221,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> 发表于 2017-05-04</time>
     
   </p>
 </header>
@@ -216,7 +284,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> 发表于 2017-04-28</time>
     
   </p>
 </header>
@@ -412,7 +480,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-02-09T09:22:00.000Z" itemprop="datePublished"> Published 2017-02-09</time>
+    <time datetime="2017-02-09T09:22:00.000Z" itemprop="datePublished"> 发表于 2017-02-09</time>
     
   </p>
 </header>
@@ -464,7 +532,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-02-08T02:39:00.000Z" itemprop="datePublished"> Published 2017-02-08</time>
+    <time datetime="2017-02-08T02:39:00.000Z" itemprop="datePublished"> 发表于 2017-02-08</time>
     
   </p>
 </header>
@@ -567,7 +635,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-25T02:17:55.000Z" itemprop="datePublished"> Published 2016-11-25</time>
+    <time datetime="2016-11-25T02:17:55.000Z" itemprop="datePublished"> 发表于 2016-11-25</time>
     
   </p>
 </header>
@@ -678,7 +746,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> Published 2016-11-22</time>
+    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> 发表于 2016-11-22</time>
     
   </p>
 </header>
@@ -739,7 +807,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> Published 2016-11-21</time>
+    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> 发表于 2016-11-21</time>
     
   </p>
 </header>
@@ -793,7 +861,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> Published 2016-10-31</time>
+    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> 发表于 2016-10-31</time>
     
   </p>
 </header>
@@ -846,72 +914,21 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/10/18/Resolve-asp-net-config-error/" title="解决Asp.Net配置异常杂记" itemprop="url">解决Asp.Net配置异常杂记</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> Published 2016-10-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="相关配置数据无效，节点被锁定"><a href="#相关配置数据无效，节点被锁定" class="headerlink" title="相关配置数据无效，节点被锁定"></a>相关配置数据无效，节点被锁定</h3><p>问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error<br>无法访问请求的页面，因为该页的相关配置数据无效。”<br>配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny”)，或者是通过包含 overrideMode=”Deny” 或旧有的 allowOverride=”false” 的位置标记明确设置的。<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508346/56305450-960b-11e6-9539-c99aa0f24650.png" alt="错误描述 0x80070021"></p>
-<p>解决办法<br>1、在控制面板中打开”程序和功能”；<br>2、在程序和功能中，打开”启用或关闭Windows功能”；<br>3、选择”Internet Infomation Services” -&gt; “应用程序开发功能”；<br>4、排除”CGI”选项<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508410/b80f7cdc-960b-11e6-8ff1-c5fc82f10807.png" alt="Windows功能选项"><br>参考链接：<a href="http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock" target="_blank" rel="external">http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -921,7 +938,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -933,7 +950,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>2</sup></a></li>
 		  
 		
 		  
@@ -962,11 +979,11 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>13</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>14</sup></a></li>
 			
 		
 			
@@ -982,11 +999,11 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -1002,7 +1019,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -1015,7 +1032,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -1143,7 +1160,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
