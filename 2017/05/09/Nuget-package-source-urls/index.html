@@ -4,27 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>解决Asp.Net配置异常杂记 | 棠城夜雨</title>
+    <title>Nuget程序包数据源 | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
     
 
     
-    <meta name="description" content="相关配置数据无效，节点被锁定问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error无法访问请求的页面，因为该页的相关配置数据无效。”配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny">
-<meta name="keywords">
+    <meta name="description" content="公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。地址如下:12345https://www.nuget.org/api/v2/http://go.microsoft.com/fwlink/?LinkID=230477http://packages.nu">
+<meta name="keywords" content="开发笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决Asp.Net配置异常杂记">
-<meta property="og:url" content="http://yuanrui.github.io/2016/10/18/Resolve-asp-net-config-error/index.html">
+<meta property="og:title" content="Nuget程序包数据源">
+<meta property="og:url" content="http://yuanrui.github.io/2017/05/09/Nuget-package-source-urls/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="相关配置数据无效，节点被锁定问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error无法访问请求的页面，因为该页的相关配置数据无效。”配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny">
-<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/19508346/56305450-960b-11e6-9539-c99aa0f24650.png">
-<meta property="og:image" content="https://cloud.githubusercontent.com/assets/3859838/19508410/b80f7cdc-960b-11e6-8ff1-c5fc82f10807.png">
-<meta property="og:updated_time" content="2016-10-19T07:06:28.847Z">
+<meta property="og:description" content="公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。地址如下:12345https://www.nuget.org/api/v2/http://go.microsoft.com/fwlink/?LinkID=230477http://packages.nu">
+<meta property="og:updated_time" content="2017-05-09T01:48:26.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解决Asp.Net配置异常杂记">
-<meta name="twitter:description" content="相关配置数据无效，节点被锁定问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error无法访问请求的页面，因为该页的相关配置数据无效。”配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny">
-<meta name="twitter:image" content="https://cloud.githubusercontent.com/assets/3859838/19508346/56305450-960b-11e6-9539-c99aa0f24650.png">
+<meta name="twitter:title" content="Nuget程序包数据源">
+<meta name="twitter:description" content="公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。地址如下:12345https://www.nuget.org/api/v2/http://go.microsoft.com/fwlink/?LinkID=230477http://packages.nu">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -84,33 +81,36 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/10/18/Resolve-asp-net-config-error/" title="解决Asp.Net配置异常杂记" itemprop="url">解决Asp.Net配置异常杂记</a>
+      <a href="/2017/05/09/Nuget-package-source-urls/" title="Nuget程序包数据源" itemprop="url">Nuget程序包数据源</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> Published 2016-10-18</time>
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> Published 2017-05-09</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关配置数据无效，节点被锁定"><span class="toc-number">1.</span> <span class="toc-text">相关配置数据无效，节点被锁定</span></a></li></ol>
-		
-		</div>
-		
-		<h3 id="相关配置数据无效，节点被锁定"><a href="#相关配置数据无效，节点被锁定" class="headerlink" title="相关配置数据无效，节点被锁定"></a>相关配置数据无效，节点被锁定</h3><p>问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error<br>无法访问请求的页面，因为该页的相关配置数据无效。”<br>配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny”)，或者是通过包含 overrideMode=”Deny” 或旧有的 allowOverride=”false” 的位置标记明确设置的。<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508346/56305450-960b-11e6-9539-c99aa0f24650.png" alt="错误描述 0x80070021"></p>
-<p>解决办法<br>1、在控制面板中打开”程序和功能”；<br>2、在程序和功能中，打开”启用或关闭Windows功能”；<br>3、选择”Internet Infomation Services” -&gt; “应用程序开发功能”；<br>4、排除”CGI”选项<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508410/b80f7cdc-960b-11e6-8ff1-c5fc82f10807.png" alt="Windows功能选项"><br>参考链接：<a href="http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock" target="_blank" rel="external">http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock</a></p>
+		<p>公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6<br>记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。<br>地址如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">https://www.nuget.org/api/v2/</div><div class="line">http://go.microsoft.com/fwlink/?LinkID=230477</div><div class="line">http://packages.nuget.org/v1/FeedService.svc/</div><div class="line">http://go.microsoft.com/fwlink/?LinkID=206669</div><div class="line">http://myget.org/F/myfeed</div></pre></td></tr></table></figure></p>
+<p>来源: <a href="http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010" target="_blank" rel="external">http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
 
 </div>
 
@@ -118,7 +118,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/2016/10/18/Resolve-asp-net-config-error/" data-title="解决Asp.Net配置异常杂记 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2017/05/09/Nuget-package-source-urls/" data-title="Nuget程序包数据源 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -132,21 +132,13 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/08/19/Oracle-useful-sql-part-2/" title="Oracle常用sql(第二部分)">
+ <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle常用sql(第二部分)</span>
+  Asp.Net Mvc 3升级到Mvc 4</span>
 </a>
 </div>
 
-
-<div class="next">
-<a href="/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/"  title="解决Asp.Net Session退出造成Ajax请求无响应的Bug">
- <strong>下一篇：</strong><br/> 
- <span>解决Asp.Net Session退出造成Ajax请求无响应的Bug
-</span>
-</a>
-</div>
 
 </nav>
 
@@ -154,13 +146,6 @@
 
 </div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#相关配置数据无效，节点被锁定"><span class="toc-number">1.</span> <span class="toc-text">相关配置数据无效，节点被锁定</span></a></li></ol>
- 
-  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -351,8 +336,6 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });

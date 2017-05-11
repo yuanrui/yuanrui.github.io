@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/05/09/Nuget-package-source-urls/" title="Nuget程序包数据源" itemprop="url">Nuget程序包数据源</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> Published 2017-05-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6<br>记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。<br>地址如下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">https://www.nuget.org/api/v2/</div><div class="line">http://go.microsoft.com/fwlink/?LinkID=230477</div><div class="line">http://packages.nuget.org/v1/FeedService.svc/</div><div class="line">http://go.microsoft.com/fwlink/?LinkID=206669</div><div class="line">http://myget.org/F/myfeed</div></pre></td></tr></table></figure></p>
+<p>来源: <a href="http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010" target="_blank" rel="external">http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4" itemprop="url">Asp.Net Mvc 3升级到Mvc 4</a>
   </h1>
   <p class="article-author">By
@@ -118,7 +179,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Asp-Net/">Asp.Net</a>
+  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -846,57 +907,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/10/18/Resolve-asp-net-config-error/" title="解决Asp.Net配置异常杂记" itemprop="url">解决Asp.Net配置异常杂记</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> Published 2016-10-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="相关配置数据无效，节点被锁定"><a href="#相关配置数据无效，节点被锁定" class="headerlink" title="相关配置数据无效，节点被锁定"></a>相关配置数据无效，节点被锁定</h3><p>问题描述：在Win10 x64位 IIS 10环境中，部署Asp.Net Mvc 3站点时，报“HTTP 错误 500.19 - Internal Server Error<br>无法访问请求的页面，因为该页的相关配置数据无效。”<br>配置错误：不能在此路径中使用此配置节。如果在父级别上锁定了该节，便会出现这种情况。锁定是默认设置的(overrideModeDefault=”Deny”)，或者是通过包含 overrideMode=”Deny” 或旧有的 allowOverride=”false” 的位置标记明确设置的。<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508346/56305450-960b-11e6-9539-c99aa0f24650.png" alt="错误描述 0x80070021"></p>
-<p>解决办法<br>1、在控制面板中打开”程序和功能”；<br>2、在程序和功能中，打开”启用或关闭Windows功能”；<br>3、选择”Internet Infomation Services” -&gt; “应用程序开发功能”；<br>4、排除”CGI”选项<br><img src="https://cloud.githubusercontent.com/assets/3859838/19508410/b80f7cdc-960b-11e6-8ff1-c5fc82f10807.png" alt="Windows功能选项"><br>参考链接：<a href="http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock" target="_blank" rel="external">http://stackoverflow.com/questions/9794985/iis-this-configuration-section-cannot-be-used-at-this-path-configuration-lock</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -925,11 +935,11 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -966,7 +976,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>13</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>14</sup></a></li>
 			
 		
 			
@@ -986,11 +996,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
