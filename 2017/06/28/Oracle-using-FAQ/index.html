@@ -1,27 +1,27 @@
 
-  
-    <!DOCTYPE HTML>
+ <!DOCTYPE HTML>
 <html >
 <head>
   <meta charset="UTF-8">
   
-    <title>棠城夜雨</title>
+    <title>Oracle使用过程中的常见问题 | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
     
 
     
-    <meta name="description" content="TODO忙懒不想写自我介绍">
-<meta property="og:type" content="website">
-<meta property="og:title" content="棠城夜雨">
-<meta property="og:url" content="http://yuanrui.github.io/about/index.html">
+    <meta name="description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
+<meta name="keywords" content="开发笔记,Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle使用过程中的常见问题">
+<meta property="og:url" content="http://yuanrui.github.io/2017/06/28/Oracle-using-FAQ/index.html">
 <meta property="og:site_name" content="棠城夜雨">
-<meta property="og:description" content="TODO忙懒不想写自我介绍">
-<meta property="og:updated_time" content="2016-10-14T05:36:27.493Z">
+<meta property="og:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
+<meta property="og:updated_time" content="2017-06-28T07:28:08.754Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="棠城夜雨">
-<meta name="twitter:description" content="TODO忙懒不想写自我介绍">
+<meta name="twitter:title" content="Oracle使用过程中的常见问题">
+<meta name="twitter:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
 
     
     <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
@@ -36,9 +36,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-      <body>
-        <header>
-          
+  <body>
+    <header>
+      
 <div>
 		
 			<div id="imglogo">
@@ -73,33 +73,45 @@
 				</ul>
 			</nav>			
 </div>
-        </header>
-        <div id="container">
-          <div id="main" class="page" itemscope itemprop="blogPost">
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
   
 	<article itemprop="articleBody"> 
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/about/index.html" title="" itemprop="url"></a>
+      <a href="/2017/06/28/Oracle-using-FAQ/" title="Oracle使用过程中的常见问题" itemprop="url">Oracle使用过程中的常见问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-27T07:01:10.704Z" itemprop="datePublished"> Published 2017-04-27</time>
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>TODO<br>忙<br>懒<br>不想写自我介绍</p>
+		<p>Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示<br>A:需要执行命令: set serverout on;</p>
+<p>Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytes<br>A:serverout的size默认为2000，需要修改size, 命令: set serveroutput on size 1000000;</p>
+<p>Q:在Windows中登陆sqlplus时报:ORA-12560: TNS: 协议适配器错误<br>A:检查Oracle Net Manager中相关配置:监听程序和服务命名。测试服务命名的数据库连接是否可用。检查监听服务是否开启。<br>如果以上参数均正常，那么用sqlplus登陆的时候带上用户名、密码和服务名试试。eg:sqlplus scott/123456@local_instance ,这里的local_instance就是在Net Manager创建的服务命名。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
 
 </div>
 
@@ -107,7 +119,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/about/index.html" data-title="棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2017/06/28/Oracle-using-FAQ/" data-title="Oracle使用过程中的常见问题 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -118,11 +130,141 @@
    	       
 	</article>
 	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/05/09/Nuget-package-source-urls/" title="Nuget程序包数据源">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Nuget程序包数据源</span>
+</a>
+</div>
+
+
+</nav>
+
 	
 
 </div>  
-        </div>
-        <footer><div id="footer" >
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>8</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>15</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
 	
 	
 	<div class="social-font" class="clearfix">
@@ -151,7 +293,7 @@
 		</p>
 </div>
 </footer>
-        <script src="/js/jquery-2.0.3.min.js"></script>
+    <script src="/js/jquery-2.0.3.min.js"></script>
 <script src="/js/jquery.imagesloaded.min.js"></script>
 <script src="/js/gallery.js"></script>
 <script src="/js/jquery.qrcode-0.12.0.min.js"></script>
@@ -197,6 +339,32 @@ $(document).ready(function(){
       o.css('display', 'none');
         
     }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
   });
 });
 </script>
@@ -309,6 +477,5 @@ $(document).ready(function(){
 
 <!-- Tiny_search End -->
 
-      </body>
-     </html>
-     
+  </body>
+</html>
