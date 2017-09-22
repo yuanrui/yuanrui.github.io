@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -78,6 +78,60 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/11/21/Javascript-common-validation-function/" title="Javascript常用验证函数收集" itemprop="url">Javascript常用验证函数收集</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> Published 2016-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>字符串是否为空或为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	return value == null || /\S/.test(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>邮箱地址格式验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address</div><div class="line">	///^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`&#123;|&#125;~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?)*$/</div><div class="line"></div><div class="line">	//form 163</div><div class="line">	return !/^[._-]?(?:[a-z0-9]+[._-]?)+[a-z0-9]?@[a-z0-9](?:[.-]?[a-z0-9]+)*$/i.test(value)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>车辆号牌格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	return /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;6&#125;$)|(^[A-Z]&#123;2&#125;[A-Z0-9]&#123;2&#125;[A-Z0-9\u4E00-\u9FA5]&#123;1&#125;[A-Z0-9]&#123;4&#125;$)|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;5&#125;[挂学警军港澳]&#123;1&#125;$)|(^[A-Z]&#123;2&#125;[0-9]&#123;5&#125;$)|(^(08|38)&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警军港澳]&#123;1&#125;$)/.test(value);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>手机号码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	var length = value.length;</div><div class="line">	var re = /^(((13[0-9]&#123;1&#125;)|(15[0-9]&#123;1&#125;)|(18[0-9]&#123;1&#125;))+\d&#123;8&#125;)$/;</div><div class="line">	return (length == 11 &amp;&amp; re.test(value));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>计算字符串长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">function (value) &#123;</div><div class="line">	var utfStr = value.match(/[^\x00-\xff]/ig);</div><div class="line">	return value.length + (utfStr == null ? 0 : utfStr.length);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/" title="解决Asp.Net Session退出造成Ajax请求无响应的Bug" itemprop="url">解决Asp.Net Session退出造成Ajax请求无响应的Bug</a>
   </h1>
   <p class="article-author">By
@@ -85,7 +139,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> 發表於 2016-10-31</time>
+    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> Published 2016-10-31</time>
     
   </p>
 </header>
@@ -151,7 +205,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> 發表於 2016-10-18</time>
+    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> Published 2016-10-18</time>
     
   </p>
 </header>
@@ -202,7 +256,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-19T07:50:00.000Z" itemprop="datePublished"> 發表於 2016-08-19</time>
+    <time datetime="2016-08-19T07:50:00.000Z" itemprop="datePublished"> Published 2016-08-19</time>
     
   </p>
 </header>
@@ -232,7 +286,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -267,7 +321,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished"> 發表於 2016-08-10</time>
+    <time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished"> Published 2016-08-10</time>
     
   </p>
 </header>
@@ -328,7 +382,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-20T03:44:13.000Z" itemprop="datePublished"> 發表於 2016-07-20</time>
+    <time datetime="2016-07-20T03:44:13.000Z" itemprop="datePublished"> Published 2016-07-20</time>
     
   </p>
 </header>
@@ -370,7 +424,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -405,7 +459,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-22T03:45:06.000Z" itemprop="datePublished"> 發表於 2016-06-22</time>
+    <time datetime="2016-06-22T03:45:06.000Z" itemprop="datePublished"> Published 2016-06-22</time>
     
   </p>
 </header>
@@ -469,7 +523,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> 發表於 2016-06-16</time>
+    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> Published 2016-06-16</time>
     
   </p>
 </header>
@@ -498,7 +552,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -533,7 +587,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> 發表於 2016-05-18</time>
+    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> Published 2016-05-18</time>
     
   </p>
 </header>
@@ -595,7 +649,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-13T05:39:00.000Z" itemprop="datePublished"> 發表於 2016-05-13</time>
+    <time datetime="2016-05-13T05:39:00.000Z" itemprop="datePublished"> Published 2016-05-13</time>
     
   </p>
 </header>
@@ -656,70 +710,21 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/05/11/C-Learning/" title="C# Learning" itemprop="url">C# Learning</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-05-11T08:42:34.000Z" itemprop="datePublished"> 發表於 2016-05-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -729,7 +734,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分類</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -741,11 +746,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -757,7 +762,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>8</sup></a></li>
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>9</sup></a></li>
 		  
 		
 		  
@@ -770,15 +775,15 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>15</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>16</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>8</sup></a></li>
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>9</sup></a></li>
 			
 		
 			
@@ -790,7 +795,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
@@ -798,7 +803,7 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -810,7 +815,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -823,7 +828,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -951,7 +956,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
