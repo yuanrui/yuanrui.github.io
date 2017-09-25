@@ -18,7 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2017/06/28/Oracle-using-FAQ/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
-<meta property="og:updated_time" content="2017-06-29T09:13:49.323Z">
+<meta property="og:updated_time" content="2017-09-25T01:47:46.759Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle使用过程中的常见问题">
 <meta name="twitter:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,7 +88,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
     
   </p>
 </header>
@@ -98,6 +98,7 @@
 <p>Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytes<br>A:serverout的size默认为2000，需要修改size, 命令: set serveroutput on size 1000000;</p>
 <p>Q:在Windows中登陆sqlplus时报:ORA-12560: TNS: 协议适配器错误<br>A:检查Oracle Net Manager中相关配置:监听程序和服务命名。测试服务命名的数据库连接是否可用。检查监听服务是否开启。<br>如果以上参数均正常，那么用sqlplus登陆的时候带上用户名、密码和服务名试试。eg:sqlplus scott/123456@local_instance ,这里的local_instance就是在Net Manager创建的服务命名。</p>
 <p>Q:Oracle与表相关的视图DBA<em>,All</em>,USER<em>开头的视图含义<br>A:DBA</em>开头的视图显示当前数据库所有表的信息，ALL<em>开头的视图显示当前用户可以访问的所有视图，USER</em>开头的视图只显示属于当前用户的视图。</p>
+<p>Q:在Windows安装Oracle Grid Infrastructure时报”PRCI-1113 : 目录 E:\app\11.2.0\grid 不存在”的错误提示。<br>A:打开目录C:\Program Files\Oracle\Inventory\ContentsXML删除inventory.xml文件。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -155,15 +156,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -173,7 +174,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -214,7 +215,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -234,11 +235,11 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
@@ -254,7 +255,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -267,7 +268,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -470,7 +471,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
