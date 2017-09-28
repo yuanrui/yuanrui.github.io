@@ -286,7 +286,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -424,7 +424,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -470,6 +470,8 @@
 <p>LogEntry类用于封装传递需要记录的日志信息。LogEntry包含一个类型为IDictionary<string, object="">的属性ExtendedProperties.使用时需要注意的是，字典的类型Value类型为object, 但建议往其中写入值时最好保存为string类型。因为每个Lintener都需要指定一个格式化器（Formatter），可以Formatter中指定显示内容，在显示ExtendedProperties中的Value值时可能不支持对应的object转换为string.</string,></p>
 <p>20170505 Update<br>在项目中引入Database Trace Listener时，也有可能造成无法记录日志</p>
 <p><add name="Database Trace Listener" type="Microsoft.Practices.EnterpriseLibrary.Logging.Database.FormattedDatabaseTraceListener, Microsoft.Practices.EnterpriseLibrary.Logging.Database" listenerdatatype="Microsoft.Practices.EnterpriseLibrary.Logging.Database.Configuration.FormattedDatabaseTraceListenerData, Microsoft.Practices.EnterpriseLibrary.Logging.Database" databaseinstancename="DefaultConnectionString" writelogstoredprocname="Write_Log" addcategorystoredprocname="Add_Log_Category" formatter="Json Log Formatter" traceoutputoptions="LogicalOperationStack, DateTime, Timestamp, ProcessId, ThreadId, Callstack"><br>可能原因是：Microsoft.Practices.EnterpriseLibrary.Logging.Database.dll没拷贝到对应的bin或程序根目录中，导致引用查找Microsoft.Practices.EnterpriseLibrary.Logging.Database.Configuration.FormattedDatabaseTraceListenerData时抛出异常: A configuration error has occurred. </add></p>
+<p>20170928 Update<br>在使用Database Trace Listener时内部调用的存储过程出错也会造成无日志的bug. 这个bug有点难排查，如果存储过程调用失败，Windows事件记录中也没有相关记录。<br>排查记录过程：发现日志表T_SYS_LOG_INFO多了一个字段，而存储过程Write_Log中内容是这样的：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">--Oracle存储过程</div><div class="line">create or replace procedure Write_Log(</div><div class="line">  EventID INTEGER,</div><div class="line">  Priority INTEGER,</div><div class="line">  Severity NVARCHAR2,</div><div class="line">  Title NVARCHAR2,</div><div class="line">  Timestamp DATE,</div><div class="line">  MachineName NVARCHAR2,</div><div class="line">  AppDomainName NVARCHAR2,</div><div class="line">  ProcessID NVARCHAR2,</div><div class="line">  ProcessName NVARCHAR2,</div><div class="line">  ThreadName NVARCHAR2,</div><div class="line">  Win32ThreadId NVARCHAR2,</div><div class="line">  Message NVARCHAR2,</div><div class="line">  FormattedMessage NVARCHAR2,</div><div class="line">  LogId out INTEGER) is</div><div class="line">  v_ID INTEGER;</div><div class="line">begin</div><div class="line">  SELECT SEQ_T_SYS_LOG_INFO.NEXTVAL INTO v_ID FROM DUAL;</div><div class="line">  INSERT INTO T_SYS_LOG_INFO</div><div class="line">  VALUES(v_ID, EventID, Priority, Severity, Title, Timestamp, MachineName, AppDomainName, ProcessID, ProcessName, ThreadName, Win32ThreadId, Message, FormattedMessage);</div><div class="line">  SELECT v_ID INTO LogId FROM DUAL;</div><div class="line">end Write_Log;</div></pre></td></tr></table></figure></p>
+<p>添加的列中无默认值，导致在调用这个存储过程时，存储过程中的sql执行失败。修改存储过程INSERT语句，指定列。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">--Oracle存储过程</div><div class="line">create or replace procedure Write_Log(</div><div class="line">  EventID INTEGER,</div><div class="line">  Priority INTEGER,</div><div class="line">  Severity NVARCHAR2,</div><div class="line">  Title NVARCHAR2,</div><div class="line">  Timestamp DATE,</div><div class="line">  MachineName NVARCHAR2,</div><div class="line">  AppDomainName NVARCHAR2,</div><div class="line">  ProcessID NVARCHAR2,</div><div class="line">  ProcessName NVARCHAR2,</div><div class="line">  ThreadName NVARCHAR2,</div><div class="line">  Win32ThreadId NVARCHAR2,</div><div class="line">  Message NVARCHAR2,</div><div class="line">  FormattedMessage NVARCHAR2,</div><div class="line">  LogId out INTEGER) is</div><div class="line">  v_ID INTEGER;</div><div class="line">begin</div><div class="line">  SELECT SEQ_T_SYS_LOG_INFO.NEXTVAL INTO v_ID FROM DUAL;</div><div class="line">  INSERT INTO T_SYS_LOG_INFO</div><div class="line">  (ID, EVENT_ID, PRIORITY, SEVERITY, TITLE, TIMESTAMP, MACHINE_NAME, APPDOMAIN_NAME, PROCESS_ID, PROCESS_NAME, THREAD_NAME, WIN32_THREAD_ID, MESSAGE, FORMATTED_MESSAGE)</div><div class="line">  VALUES(v_ID, EventID, Priority, Severity, Title, Timestamp, MachineName, AppDomainName, ProcessID, ProcessName, ThreadName, Win32ThreadId, Message, FormattedMessage);</div><div class="line">  SELECT v_ID INTO LogId FROM DUAL;</div><div class="line">end Write_Log;</div></pre></td></tr></table></figure></p>
 
         
         
@@ -552,7 +554,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -795,7 +797,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -803,7 +805,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
