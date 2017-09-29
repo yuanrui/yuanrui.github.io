@@ -12,13 +12,13 @@
 
     
     <meta name="description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
-<meta name="keywords" content="开发笔记,Oracle">
+<meta name="keywords" content="Oracle,开发笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle使用过程中的常见问题">
 <meta property="og:url" content="http://yuanrui.github.io/2017/06/28/Oracle-using-FAQ/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
-<meta property="og:updated_time" content="2017-09-28T06:19:26.606Z">
+<meta property="og:updated_time" content="2017-09-29T01:37:01.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle使用过程中的常见问题">
 <meta name="twitter:description" content="Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示A:需要执行命令: set serverout on; Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytesA:serverout的size默认为2000，需要修改size, 命令: set">
@@ -101,6 +101,7 @@
 <p>Q:在Windows安装Oracle Grid Infrastructure时报”PRCI-1113 : 目录 E:\app\11.2.0\grid 不存在”的错误提示。<br>A:打开目录C:\Program Files\Oracle\Inventory\ContentsXML删除inventory.xml文件。</p>
 <p>Q:在Windows安装Oracle Grid Infrastructure时报”[INS-20802] 网格基础结构配置 失败。” 原因 - 插件的执行方法失败<br>A:查看Grid的安装目录下的\cfgtoollogs\crsconfig，找到目录中节点文件安装日志。查看安装日志中内容。安装过程中发现如下日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">2017-09-25 09:56:34: ### Printing of configuration values complete ###</div><div class="line">2017-09-25 09:56:34: HKLM/Software/Oracle/ocr/ is NOT configured</div><div class="line"></div><div class="line">2017-09-25 09:56:34: HASH(0x4366ef8) registry key does not exist</div><div class="line">2017-09-25 09:56:34: HASH(0x4366ef8) registry key does not exist</div><div class="line">2017-09-25 09:56:34: Improper Oracle Clusterware configuration found on this host</div><div class="line">2017-09-25 09:56:34: Deconfigure the existing cluster configuration before starting</div><div class="line">2017-09-25 09:56:34: to configure a new Clusterware</div><div class="line">2017-09-25 09:56:34: run &apos;E:\app\11.2.0\grid/crs/install/rootcrs.pl -deconfig&apos; </div><div class="line">2017-09-25 09:56:34: to deconfigure existing failed configuration and then rerun root.bat</div></pre></td></tr></table></figure></p>
 <p>/<em>发现在注册表的HKLM/Software/Oracle路径中无ocr项。添加ocr项，同时在ocr中添加字符串值local_only=FALSE和ocrconfig_loc=+DATA<br>原因：再次安装时，提示[INS-40417] 安装程序检测到系统中有未使用的 Oracle 集群注册表 (OCR) 位置注册表键 (HKEY_LOCAL_MACHINE\Software\Oracle\Ocr)。手动删除了Ocr项。</em>/<br>update:这种情况，还是重装系统吧。</p>
+<p>Q:Oracle RAC连接字符串设置<br>A:参考链接:<a href="http://www.oracle.com/technetwork/cn/articles/database-performance/oracle-rac-connection-mgmt-1650424-zhs.html" target="_blank" rel="external">http://www.oracle.com/technetwork/cn/articles/database-performance/oracle-rac-connection-mgmt-1650424-zhs.html</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -114,7 +115,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -241,15 +242,15 @@
 			
 		
 			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>
