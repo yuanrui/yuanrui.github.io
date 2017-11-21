@@ -78,6 +78,67 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/11/21/AspNet-WebService-show-image/" title="在WebService中预览图片" itemprop="url">在WebService中预览图片</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">	//版本1 使用html预览显示</div><div class="line">	[WebMethod]</div><div class="line">	public void Base64ToImage(string @base64)</div><div class="line">	&#123;            </div><div class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&apos;UTF-8&apos;&gt;</div><div class="line">&lt;meta http-equiv=&apos;x-ua-compatible&apos; content=&apos;IE=edge&apos; &gt;</div><div class="line">&lt;meta name=&apos;viewport&apos;   content=&apos;width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no&apos;/&gt;</div><div class="line">&lt;title&gt;&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;img src=&apos;data:image/png;base64,&#123;0&#125;&apos;/&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&quot;, @base64);</div><div class="line"></div><div class="line">		var context = HttpContext.Current;</div><div class="line">		if (context == null || context.Response == null)</div><div class="line">		&#123;</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		context.Response.Clear();</div><div class="line">		context.Response.ClearHeaders();</div><div class="line">		context.Response.Write(result);</div><div class="line">		context.Response.End();</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
+<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">////版本2 直接输出image类型</div><div class="line">[WebMethod]</div><div class="line">public void Base64ToImage(string @base64)</div><div class="line">&#123;</div><div class="line">	var result = Convert.FromBase64String(@base64);</div><div class="line">	var context = HttpContext.Current;</div><div class="line">	if (context == null || context.Response == null)</div><div class="line">	&#123;</div><div class="line">		return;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	context.Response.Clear();</div><div class="line">	context.Response.ClearHeaders();</div><div class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</div><div class="line">	context.Response.BinaryWrite(result);</div><div class="line">	context.Response.End();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/09/21/Oracle-crsctl-note/" title="Oracle crsctl命令笔记" itemprop="url">Oracle crsctl命令笔记</a>
   </h1>
   <p class="article-author">By
@@ -857,67 +918,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示" itemprop="url">Oracle常用提示</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> Published 2016-11-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="external">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">select *</div><div class="line"> from (</div><div class="line">select /*+ first_rows(25) */</div><div class="line">  your_columns,</div><div class="line">  row_number() </div><div class="line">  over (order by something unique)rn</div><div class="line"> from your_tables )</div><div class="line">where rn between :n and :m </div><div class="line">order by rn;</div></pre></td></tr></table></figure></p>
-<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</div></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -946,11 +946,15 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -987,7 +991,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>16</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>17</sup></a></li>
 			
 		
 			
@@ -1007,15 +1011,15 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 		</ul>
