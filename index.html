@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -78,6 +78,66 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/" title="让EasyUI timespinner支持24小时格式" itemprop="url">让EasyUI timespinner支持24小时格式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> 发表于 2017-12-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>EasyUI中timespinner最大值为23:59，项目中有一个需求需要显示24:00. 调试了下源代码，发现EasyUI，在赋值时调用parser函数先将字符串转换为Date对象，然后用获取到的Date对象与最大值和最小值进行比较。<br>小于最小值时，将当前值设置为最小值，大于最大值时，当前值等于最大值。在获取到Date对象后，调用formatter函数进行格式转换。<br>最终的解决方案如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">$.fn.timespinner.defaults.formatter = function(_23) &#123;</div><div class="line">	if (!_23) &#123;</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line">	var _24 = $(this).timespinner(&quot;options&quot;);</div><div class="line">	var tt = [_25(_23.getDay() * 24 + _23.getHours()), _25(_23.getMinutes())];</div><div class="line">	if (_24.showSeconds) &#123;</div><div class="line">		tt.push(_25(_23.getSeconds()));</div><div class="line">	&#125;</div><div class="line">	return tt.join(_24.separator);</div><div class="line">	function _25(_26) &#123;</div><div class="line">		return (_26 &lt; 10 ? &quot;0&quot;: &quot;&quot;) + _26;</div><div class="line">	&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$.fn.timespinner.defaults.parser = function(s) &#123;</div><div class="line">	var _27 = $(this).timespinner(&quot;options&quot;);</div><div class="line">	var _28 = _29(s);</div><div class="line">	if (_28) &#123;</div><div class="line">		var min = _29(_27.min || &quot;00:00&quot;);</div><div class="line">		var max = _29(_27.max || &quot;24:00&quot;);</div><div class="line">		if (min &amp;&amp; min &gt; _28) &#123;</div><div class="line">			_28 = min;</div><div class="line">		&#125;</div><div class="line">		if (max &amp;&amp; max &lt; _28) &#123;</div><div class="line">			_28 = max;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return _28;</div><div class="line">	function _29(s) &#123;</div><div class="line">		if (!s) &#123;</div><div class="line">			return null;</div><div class="line">		&#125;</div><div class="line">		var tt = s.split(_27.separator);</div><div class="line">		return new Date(1900, 0, 0, parseInt(tt[0], 10) || 0, parseInt(tt[1], 10) || 0, parseInt(tt[2], 10) || 0);</div><div class="line">	&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Javascript/">Javascript</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/11/21/AspNet-WebService-show-image/" title="在WebService中预览图片" itemprop="url">在WebService中预览图片</a>
   </h1>
   <p class="article-author">By
@@ -85,7 +145,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
     
   </p>
 </header>
@@ -139,66 +199,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/11/21/Js-easyui-timespinner-support-24hour-format/" title="让EasyUI timespinner支持24小时格式" itemprop="url">让EasyUI timespinner支持24小时格式</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>EasyUI中timespinner最大值为23:59，项目中有一个需求需要显示24:00. 调试了下源代码，发现EasyUI，在赋值时调用parser函数先将字符串转换为Date对象，然后用获取到的Date对象与最大值和最小值进行比较。<br>小于最小值时，将当前值设置为最小值，大于最大值时，当前值等于最大值。在获取到Date对象后，调用formatter函数进行格式转换。<br>最终的解决方案如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">$.fn.timespinner.defaults.formatter = function(_23) &#123;</div><div class="line">	if (!_23) &#123;</div><div class="line">		return &quot;&quot;;</div><div class="line">	&#125;</div><div class="line">	var _24 = $(this).timespinner(&quot;options&quot;);</div><div class="line">	var tt = [_25(_23.getDay() * 24 + _23.getHours()), _25(_23.getMinutes())];</div><div class="line">	if (_24.showSeconds) &#123;</div><div class="line">		tt.push(_25(_23.getSeconds()));</div><div class="line">	&#125;</div><div class="line">	return tt.join(_24.separator);</div><div class="line">	function _25(_26) &#123;</div><div class="line">		return (_26 &lt; 10 ? &quot;0&quot;: &quot;&quot;) + _26;</div><div class="line">	&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$.fn.timespinner.defaults.parser = function(s) &#123;</div><div class="line">	var _27 = $(this).timespinner(&quot;options&quot;);</div><div class="line">	var _28 = _29(s);</div><div class="line">	if (_28) &#123;</div><div class="line">		var min = _29(_27.min || &quot;00:00&quot;);</div><div class="line">		var max = _29(_27.max || &quot;24:00&quot;);</div><div class="line">		if (min &amp;&amp; min &gt; _28) &#123;</div><div class="line">			_28 = min;</div><div class="line">		&#125;</div><div class="line">		if (max &amp;&amp; max &lt; _28) &#123;</div><div class="line">			_28 = max;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return _28;</div><div class="line">	function _29(s) &#123;</div><div class="line">		if (!s) &#123;</div><div class="line">			return null;</div><div class="line">		&#125;</div><div class="line">		var tt = s.split(_27.separator);</div><div class="line">		return new Date(1900, 0, 0, parseInt(tt[0], 10) || 0, parseInt(tt[1], 10) || 0, parseInt(tt[2], 10) || 0);</div><div class="line">	&#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Javascript/">Javascript</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2017/09/21/Oracle-crsctl-note/" title="Oracle crsctl命令笔记" itemprop="url">Oracle crsctl命令笔记</a>
   </h1>
   <p class="article-author">By
@@ -206,7 +206,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> Published 2017-09-21</time>
+    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> 发表于 2017-09-21</time>
     
   </p>
 </header>
@@ -233,7 +233,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -268,7 +268,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
     
   </p>
 </header>
@@ -301,7 +301,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -336,7 +336,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> Published 2017-05-09</time>
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-05-09</time>
     
   </p>
 </header>
@@ -397,7 +397,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> Published 2017-05-08</time>
+    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-08</time>
     
   </p>
 </header>
@@ -466,7 +466,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> 发表于 2017-05-04</time>
     
   </p>
 </header>
@@ -529,7 +529,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> 发表于 2017-04-28</time>
     
   </p>
 </header>
@@ -690,7 +690,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -725,7 +725,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-02-09T09:22:00.000Z" itemprop="datePublished"> Published 2017-02-09</time>
+    <time datetime="2017-02-09T09:22:00.000Z" itemprop="datePublished"> 发表于 2017-02-09</time>
     
   </p>
 </header>
@@ -777,7 +777,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-02-08T02:39:00.000Z" itemprop="datePublished"> Published 2017-02-08</time>
+    <time datetime="2017-02-08T02:39:00.000Z" itemprop="datePublished"> 发表于 2017-02-08</time>
     
   </p>
 </header>
@@ -845,7 +845,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -873,15 +873,15 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -891,7 +891,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -903,15 +903,15 @@
 		  
 		
 		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -940,7 +940,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -960,11 +960,11 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -972,7 +972,7 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -980,7 +980,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -993,7 +993,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -1121,7 +1121,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
