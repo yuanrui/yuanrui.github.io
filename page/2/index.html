@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -78,6 +78,117 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/11/25/Oracle-learning/" title="Oracle学习笔记" itemprop="url">Oracle学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-25T02:17:55.000Z" itemprop="datePublished"> Published 2016-11-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--用户名test 密码123456</div><div class="line">create user test identified by 123456;</div></pre></td></tr></table></figure></p>
+<p>修改用户密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">--用户名test 密码test</div><div class="line">alter user test identified by test;</div></pre></td></tr></table></figure></p>
+<p>为用户指定默认表空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">--默认表空间test_DB 临时表空间test_temp</div><div class="line">alter user test</div><div class="line">default tablespace test_DB</div><div class="line">temporary tablespace test_temp;</div></pre></td></tr></table></figure></p>
+<p>授予用户权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">grant </div><div class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</div><div class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</div><div class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</div><div class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</div><div class="line">　　to test;</div><div class="line">grant resource, dba to test;</div></pre></td></tr></table></figure></p>
+<p>回收权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">revoke resource, dba from test;</div></pre></td></tr></table></figure></p>
+<h3 id="表空间管理"><a href="#表空间管理" class="headerlink" title="表空间管理"></a>表空间管理</h3><p>表空间大小与数据块大小(db_block_size)有关</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">数据块大小</th>
+<th style="text-align:left">表空间文件最大值M</th>
+<th>表空间文件最大值G</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4k</td>
+<td style="text-align:left">16383M</td>
+<td>16G</td>
+</tr>
+<tr>
+<td style="text-align:left">8k</td>
+<td style="text-align:left">32767M</td>
+<td>32G</td>
+</tr>
+<tr>
+<td style="text-align:left">16k</td>
+<td style="text-align:left">65535M</td>
+<td>64G</td>
+</tr>
+<tr>
+<td style="text-align:left">32k</td>
+<td style="text-align:left">131072M</td>
+<td>128G</td>
+</tr>
+<tr>
+<td style="text-align:left">64k</td>
+<td style="text-align:left">262144M</td>
+<td>256G</td>
+</tr>
+</tbody>
+</table>
+<p>数据块是4k的数据库，单个表空间数据文件的限制是小于16G，而不是小于等于16G。</p>
+<p>查询数据块大小大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">show parameter db_block_size</div></pre></td></tr></table></figure></p>
+<p>查询表空间使用情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">SELECT UPPER(F.TABLESPACE_NAME) AS &quot;表空间名称&quot;,</div><div class="line">       ROUND(D.AVAILB_BYTES,2) AS &quot;表空间大小(G)&quot;,</div><div class="line">       ROUND(D.MAX_BYTES,2) AS &quot;最终表空间大小(G)&quot;,</div><div class="line">       ROUND((D.AVAILB_BYTES - F.USED_BYTES),2) AS &quot;已使用空间(G)&quot;,</div><div class="line">       TO_CHAR(ROUND((D.AVAILB_BYTES - F.USED_BYTES) / D.AVAILB_BYTES * 100, 2), &apos;999.99&apos;) AS &quot;使用比&quot;,</div><div class="line">       ROUND(F.USED_BYTES, 6) AS &quot;空闲空间(G)&quot;,</div><div class="line">       F.MAX_BYTES AS &quot;最大块(M)&quot;</div><div class="line">FROM</div><div class="line">  ( SELECT TABLESPACE_NAME,</div><div class="line">           ROUND(SUM(BYTES) / (1024 * 1024 * 1024), 6) USED_BYTES,</div><div class="line">           ROUND(MAX(BYTES) / (1024 * 1024 * 1024), 6) MAX_BYTES</div><div class="line">   FROM SYS.DBA_FREE_SPACE</div><div class="line">   GROUP BY TABLESPACE_NAME) F,</div><div class="line">  (SELECT DD.TABLESPACE_NAME,</div><div class="line">          ROUND(SUM(DD.BYTES) / (1024 * 1024 * 1024), 6) AVAILB_BYTES,</div><div class="line">          ROUND(SUM(DECODE(DD.MAXBYTES, 0, DD.BYTES, DD.MAXBYTES))/(1024*1024*1024),6) MAX_BYTES</div><div class="line">   FROM SYS.DBA_DATA_FILES DD</div><div class="line">   GROUP BY DD.TABLESPACE_NAME) D</div><div class="line">WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME</div><div class="line">ORDER BY 4 DESC</div></pre></td></tr></table></figure></p>
+<p>查询表空间文件地址、是否自动增长、数据文件最大值、自动增长值(8k block)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select TABLESPACE_NAME,FILE_NAME,AUTOEXTENSIBLE,MAXBYTES / 1024 / 1024 / 1024,INCREMENT_BY*8192/1024/1024 from dba_data_files</div></pre></td></tr></table></figure></p>
+<p>增加表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">alter tablespace test_DB</div><div class="line">add datafile &apos;D:\ORADB\test_DB_2.DBF&apos; size 32M</div><div class="line">AUTOEXTEND ON</div><div class="line">NEXT 32M MAXSIZE 32767M;</div></pre></td></tr></table></figure></p>
+<p>调整数据文件大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</div><div class="line">RESIZE 64M;</div></pre></td></tr></table></figure></p>
+<p>设置已存在数据文件为自动增长并设置最大值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter database datafile &apos;D:\ORADB\test_DB_2.DBF&apos;</div><div class="line">AUTOEXTEND ON NEXT 32M MAXSIZE 32767M;</div></pre></td></tr></table></figure></p>
+<p>删除数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">alter tablespace test_DB</div><div class="line">drop datafile &apos;D:\ORADB\test_DB_2.DBF&apos;;</div></pre></td></tr></table></figure></p>
+<p>移动表空间数据文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">--1.将表空间离线</div><div class="line">alter tablespace test_DB offline normal;</div><div class="line">--2.移动数据文件目录</div><div class="line">--3.重命名表空间文件</div><div class="line">alter database rename file &apos;D:\ORADB\test_DB.DBF&apos; to &apos;D:\Oracle\Data\test_DB.DBF&apos;;</div><div class="line">--4.表空间联机</div><div class="line">alter tablespace test_DB online;</div></pre></td></tr></table></figure></p>
+<p>查看表空间或索引占用的存储空间大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select segment_name, segment_type, sum(bytes)/1024/1024 MB</div><div class="line">from user_segments  </div><div class="line">group by segment_name, segment_type</div><div class="line">order by 3 desc</div></pre></td></tr></table></figure></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示" itemprop="url">Oracle常用提示</a>
   </h1>
   <p class="article-author">By
@@ -85,7 +196,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> 发表于 2016-11-22</time>
+    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> Published 2016-11-22</time>
     
   </p>
 </header>
@@ -111,7 +222,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -146,7 +257,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> 发表于 2016-11-21</time>
+    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> Published 2016-11-21</time>
     
   </p>
 </header>
@@ -200,7 +311,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> 发表于 2016-10-31</time>
+    <time datetime="2016-10-31T08:20:00.000Z" itemprop="datePublished"> Published 2016-10-31</time>
     
   </p>
 </header>
@@ -266,7 +377,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> 发表于 2016-10-18</time>
+    <time datetime="2016-10-18T06:06:07.000Z" itemprop="datePublished"> Published 2016-10-18</time>
     
   </p>
 </header>
@@ -317,7 +428,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-19T07:50:00.000Z" itemprop="datePublished"> 发表于 2016-08-19</time>
+    <time datetime="2016-08-19T07:50:00.000Z" itemprop="datePublished"> Published 2016-08-19</time>
     
   </p>
 </header>
@@ -347,7 +458,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -382,7 +493,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished"> 发表于 2016-08-10</time>
+    <time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished"> Published 2016-08-10</time>
     
   </p>
 </header>
@@ -443,7 +554,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-07-20T03:44:13.000Z" itemprop="datePublished"> 发表于 2016-07-20</time>
+    <time datetime="2016-07-20T03:44:13.000Z" itemprop="datePublished"> Published 2016-07-20</time>
     
   </p>
 </header>
@@ -485,7 +596,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -520,7 +631,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-22T03:45:06.000Z" itemprop="datePublished"> 发表于 2016-06-22</time>
+    <time datetime="2016-06-22T03:45:06.000Z" itemprop="datePublished"> Published 2016-06-22</time>
     
   </p>
 </header>
@@ -586,7 +697,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> 发表于 2016-06-16</time>
+    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> Published 2016-06-16</time>
     
   </p>
 </header>
@@ -615,69 +726,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/05/18/Resolve-string-exceeds-maxJsonLength/" title="解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常" itemprop="url">解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> 发表于 2016-05-18</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。<br>查询Google之后找到解决方案如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public ContentResult GetResult()</div><div class="line">&#123;</div><div class="line">    var obj = new object();</div><div class="line">    var serializer = new JavaScriptSerializer &#123; MaxJsonLength = Int32.MaxValue, RecursionLimit = 3 &#125;;</div><div class="line">    </div><div class="line">    var jsonResult = new ContentResult()</div><div class="line">    &#123;</div><div class="line">        Content = serializer.Serialize(obj),</div><div class="line">        ContentType = &quot;application/json&quot;</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    return jsonResult;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>另外还可以通过自定义JsonReuslt的方式解决这个异常, 具体做法参考这个链接：<a href="https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/" target="_blank" rel="external">https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Mvc/">Mvc</a>►<a class="article-category-link" href="/categories/Mvc/Net/">.Net</a>►<a class="article-category-link" href="/categories/Mvc/Net/Asp-Net/">Asp.Net</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -705,15 +754,15 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -723,7 +772,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -735,10 +784,6 @@
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
@@ -747,7 +792,15 @@
 		  
 		
 		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
 		  
 		
 		  
@@ -768,11 +821,11 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>17</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>18</sup></a></li>
 			
 		
 			
@@ -788,11 +841,11 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -800,7 +853,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -808,7 +861,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -821,7 +874,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -949,7 +1002,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
