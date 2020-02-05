@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -60,7 +60,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -85,13 +85,13 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-02-04T08:20:00.000Z" itemprop="datePublished"> Published 2020-02-04</time>
+    <time datetime="2020-02-04T08:20:00.000Z" itemprop="datePublished"> 发表于 2020-02-04</time>
     
   </p>
 </header>
     <div class="article-content">
         
-        <h1 id="Python核心编程"><a href="#Python核心编程" class="headerlink" title="Python核心编程"></a>Python核心编程</h1><p><strong> 第二版学习笔记 YuanRui 2020.02.04 </strong></p>
+        <h1 id="Python核心编程"><a href="#Python核心编程" class="headerlink" title="Python核心编程"></a>Python核心编程</h1><p><strong> 第二版学习笔记 YuanRui 2020.02.05 </strong></p>
 <h2 id="Python基础"><a href="#Python基础" class="headerlink" title="Python基础"></a>Python基础</h2><h3 id="语句和语法"><a href="#语句和语法" class="headerlink" title="语句和语法"></a>语句和语法</h3><ul>
 <li>井号(#)之后的字符为Python的注释;</li>
 <li>换行(\n)是标准的行分隔符，一般一行一条语句;</li>
@@ -189,6 +189,40 @@
 </tbody>
 </table>
 <p>标量：一个保存单个字面对象的类型，类似于C#中的值类型和字符串。<br>容器：可存储多个对象（对象可以有不同的类型）的类型，类似C#集合。<br>可变类型：允许值被更新,每次修改后新值替换旧值。类似C#引用类型。<br>不可变类型：不允许值被更改，每次修改后使用新的值替代；旧值被丢弃，等待垃圾回收器处理回收对象。类似C#值类型。<br>直接访问:对数值直接进行访问，类似C#中栈。<br>顺序访问：可对容器按索引进行访问元素，类似C#中索引。<br>映射访问：元素无序存放，通过唯一Key访问，类似C#中哈希。</p>
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>Python的整型包含：布尔型、标准整型、长整型。布尔型只有两个取值：True和False, 对应整型的1和0. 标准整型和C# Int32和Int64表示范围相同，在32位机器上范围为Int32, 64位则为Int64. 长整型的范围超过Int64, 具体范围与（虚拟）内存大小有关，长整型一般在数值后面加一个大写的L. Python会自动转换整型和长整型。<br>复数由实数部分和虚数部分构成，虚数语法：real+imagj. 实数和虚数部分都是浮点类型，虚数部分后缀必须为j或J.<br>两个连续的星号(**)表示幂运算.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">3 ** 2 #结果为：9</div></pre></td></tr></table></figure></p>
+<p>整除操作符：//, 也称“地板除”，除法不管操作数为何种数值类型，总是舍去小数部分，返回数字序列总别真正商小的最接近的数字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1//2       #结果为：0</div><div class="line">1.0//2.0   #结果为：0.0</div><div class="line">-1//2      #结果为：-1</div></pre></td></tr></table></figure></p>
+<p>数值工厂函数<br>| 函数                                   | 操作                |<br>| ————————————– | —————— |<br>| bool(obj)                              | 返回obj对象的布尔值 |<br>| int(x [,base])                        | 将x转换为一个整型   |<br>| long(x [,base] )                      | 将x转换为一个长整型 |<br>| float(x)                               | 将x转换到一个浮点型 |<br>| complex(real [,imag]) or complex(str) | 创建一个复数        |</p>
+<p>仅适用于整型的内置函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hex(num)</td>
+<td>将数字转换成十六进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>oct(num)</td>
+<td>将数字转换成八进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>chr(num)</td>
+<td>将ASCII值的数字转换成ASCII字符，范围：0&lt;=num&lt;=255</td>
+</tr>
+<tr>
+<td>ord(chr)</td>
+<td>传入长度为1的字符串，返回相应的ASCII整数值或Unicode整数值</td>
+</tr>
+<tr>
+<td>unichr(num)</td>
+<td>将一个整数转换为Unicode字符</td>
+</tr>
+</tbody>
+</table>
 
         
         
@@ -242,7 +276,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> Published 2018-05-24</time>
+    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> 发表于 2018-05-24</time>
     
   </p>
 </header>
@@ -271,7 +305,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -306,7 +340,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> Published 2017-12-19</time>
+    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> 发表于 2017-12-19</time>
     
   </p>
 </header>
@@ -366,7 +400,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
     
   </p>
 </header>
@@ -427,7 +461,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> Published 2017-09-21</time>
+    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> 发表于 2017-09-21</time>
     
   </p>
 </header>
@@ -454,7 +488,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -489,7 +523,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
     
   </p>
 </header>
@@ -522,7 +556,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -557,7 +591,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> Published 2017-05-09</time>
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-05-09</time>
     
   </p>
 </header>
@@ -618,7 +652,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> Published 2017-05-08</time>
+    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-08</time>
     
   </p>
 </header>
@@ -687,7 +721,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> 发表于 2017-05-04</time>
     
   </p>
 </header>
@@ -750,7 +784,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> 发表于 2017-04-28</time>
     
   </p>
 </header>
@@ -911,7 +945,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -939,15 +973,15 @@
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github Card</p>
+<p class="asidetitle">Github 名片</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -957,7 +991,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
@@ -973,11 +1007,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -1010,7 +1044,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
 		
 			
@@ -1034,19 +1068,19 @@
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -1054,7 +1088,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -1067,7 +1101,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
 </aside>
@@ -1195,7 +1229,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
