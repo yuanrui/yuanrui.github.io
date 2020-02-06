@@ -1,0 +1,760 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Python核心编程学习笔记 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="Python核心编程 第二版学习笔记  Python基础语句和语法 井号(#)之后的字符为Python的注释; 换行(\n)是标准的行分隔符，一般一行一条语句; 反斜杠()表示继续上一行，一行过长的语句使用反斜杠（\）可以分解成多行； 分号(;)将两个语句连接在一起，如果需要将两条语句放到同一行中，需要使用分号隔开； 冒号(:)将代码块的头和体分开，像if、while、def、class复合语句，">
+<meta name="keywords" content="读书笔记,学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python核心编程学习笔记">
+<meta property="og:url" content="http://yuanrui.github.io/2020/02/06/Core-Python-Programming-Learning/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="Python核心编程 第二版学习笔记  Python基础语句和语法 井号(#)之后的字符为Python的注释; 换行(\n)是标准的行分隔符，一般一行一条语句; 反斜杠()表示继续上一行，一行过长的语句使用反斜杠（\）可以分解成多行； 分号(;)将两个语句连接在一起，如果需要将两条语句放到同一行中，需要使用分号隔开； 冒号(:)将代码块的头和体分开，像if、while、def、class复合语句，">
+<meta property="og:updated_time" content="2020-02-06T07:44:57.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python核心编程学习笔记">
+<meta name="twitter:description" content="Python核心编程 第二版学习笔记  Python基础语句和语法 井号(#)之后的字符为Python的注释; 换行(\n)是标准的行分隔符，一般一行一条语句; 反斜杠()表示继续上一行，一行过长的语句使用反斜杠（\）可以分解成多行； 分号(;)将两个语句连接在一起，如果需要将两条语句放到同一行中，需要使用分号隔开； 冒号(:)将代码块的头和体分开，像if、while、def、class复合语句，">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/02/06/Core-Python-Programming-Learning/" title="Python核心编程学习笔记" itemprop="url">Python核心编程学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-02-06T08:00:00.000Z" itemprop="datePublished"> Published 2020-02-06</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python核心编程"><span class="toc-number">1.</span> <span class="toc-text">Python核心编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python基础"><span class="toc-number">1.1.</span> <span class="toc-text">Python基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语句和语法"><span class="toc-number">1.1.1.</span> <span class="toc-text">语句和语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量赋值"><span class="toc-number">1.1.2.</span> <span class="toc-text">变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标识符"><span class="toc-number">1.1.3.</span> <span class="toc-text">标识符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python对象"><span class="toc-number">1.2.</span> <span class="toc-text">Python对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本数据类型"><span class="toc-number">1.2.1.</span> <span class="toc-text">基本数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作符"><span class="toc-number">1.2.2.</span> <span class="toc-text">操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内置函数"><span class="toc-number">1.2.3.</span> <span class="toc-text">内置函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型分类"><span class="toc-number">1.2.4.</span> <span class="toc-text">类型分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字"><span class="toc-number">1.3.</span> <span class="toc-text">数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列：字符串、列表和元组"><span class="toc-number">1.4.</span> <span class="toc-text">序列：字符串、列表和元组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列"><span class="toc-number">1.4.1.</span> <span class="toc-text">序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串"><span class="toc-number">1.4.2.</span> <span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列表"><span class="toc-number">1.4.3.</span> <span class="toc-text">列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元组"><span class="toc-number">1.4.4.</span> <span class="toc-text">元组</span></a></li></ol></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="Python核心编程"><a href="#Python核心编程" class="headerlink" title="Python核心编程"></a>Python核心编程</h1><p><strong> 第二版学习笔记 </strong></p>
+<h2 id="Python基础"><a href="#Python基础" class="headerlink" title="Python基础"></a>Python基础</h2><h3 id="语句和语法"><a href="#语句和语法" class="headerlink" title="语句和语法"></a>语句和语法</h3><ul>
+<li>井号(#)之后的字符为Python的注释;</li>
+<li>换行(\n)是标准的行分隔符，一般一行一条语句;</li>
+<li>反斜杠()表示继续上一行，一行过长的语句使用反斜杠（\）可以分解成多行；</li>
+<li>分号(;)将两个语句连接在一起，如果需要将两条语句放到同一行中，需要使用分号隔开；</li>
+<li>冒号(:)将代码块的头和体分开，像if、while、def、class复合语句，首行以关键字开始，以冒号（：）结束，该行之后的一行或多行构成代码组，首行和代码组合起来称为一个子句；</li>
+<li>语句(代码块)用缩进的方式体现，不同的缩进深度分割不同的代码块，缩进相同的一组语句构成一个代码块，建议每个缩进使用4个空格表示；</li>
+<li>Python文件以模块的形式进行组织。</li>
+</ul>
+<h3 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h3><p>等号是主要的赋值操作符。<br>增量操作符和C语言类似。<br>Python使用下划线作为变量前缀和后缀时为特殊变量。<br>Python支持多元赋值，示例如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">x, y, z = <span class="number">1</span>, <span class="number">2</span>, <span class="string">'Hello World!'</span></div></pre></td></tr></table></figure></p>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><p>标识符定义规则：第一个字符必须是字母或下划线，剩下的字符可以说字符、数字和下划线。标识符大小写敏感。</p>
+<h2 id="Python对象"><a href="#Python对象" class="headerlink" title="Python对象"></a>Python对象</h2><h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><ul>
+<li>数字</li>
+<li>Integer 整型</li>
+<li>Boolean 布尔型</li>
+<li>Long integer 长整型</li>
+<li>Floating point real number 浮点型</li>
+<li>Complex number 复数类型</li>
+<li>String 字符串</li>
+<li>List 列表</li>
+<li>Tuple 元组</li>
+<li>Dictionary 字典</li>
+</ul>
+<p>所有类型对象的类型都是type，这个概念有点类似于C#中所有类型都是由object派生出的一样。<br>Python中的特殊类型是None, 表示Null对象或NoneType. None类型类似于C#中的void, 值类似于null. None的布尔值总是为False.</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p>对象值可以使用：&gt;、&lt;、==、&gt;=、&lt;=、!=等操作符进行比较。<br>对象引用方式根据赋值方式，有所不同。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#示例</span></div><div class="line"><span class="comment">#a1和a1引用的相同对象</span></div><div class="line">a1 = a2 = <span class="number">123</span></div><div class="line"></div><div class="line"><span class="comment">#b1和b2引用的不同对象</span></div><div class="line">b1=<span class="number">123</span></div><div class="line">b2=<span class="number">123</span></div></pre></td></tr></table></figure></p>
+<p>使用is、is not可以比较是否引用的同一对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#结果：True</span></div><div class="line">a1 <span class="keyword">is</span> a1 </div><div class="line"></div><div class="line"><span class="comment">#结果：False</span></div><div class="line">b1 <span class="keyword">is</span> b2</div></pre></td></tr></table></figure></p>
+<p>布尔类型操作符：not、and、or.</p>
+<h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmp(obj1,obj2)</td>
+<td>比较obj1和obj2，根据比较结果返回整型值</td>
+</tr>
+<tr>
+<td>repr(obj)</td>
+<td>返回一个对象的字符表示，类似C#中ToString方法</td>
+</tr>
+<tr>
+<td>str(obj)</td>
+<td>返回可读性好的对象字符串，类似C#中ToString带格式的方法</td>
+</tr>
+<tr>
+<td>type(obj)</td>
+<td>获取对象的类型，返回相应的type对象</td>
+</tr>
+</tbody>
+</table>
+<h3 id="类型分类"><a href="#类型分类" class="headerlink" title="类型分类"></a>类型分类</h3><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>存储类型</th>
+<th>更新模型</th>
+<th>访问模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数字</td>
+<td>标量</td>
+<td>不可更改</td>
+<td>直接访问</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>标量</td>
+<td>不可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>容器</td>
+<td>可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>元组</td>
+<td>容器</td>
+<td>不可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>字典</td>
+<td>容器</td>
+<td>可更改</td>
+<td>映射访问</td>
+</tr>
+</tbody>
+</table>
+<p>标量：一个保存单个字面对象的类型，类似于C#中的值类型和字符串。<br>容器：可存储多个对象（对象可以有不同的类型）的类型，类似C#集合。<br>可变类型：允许值被更新,每次修改后新值替换旧值。类似C#引用类型。<br>不可变类型：不允许值被更改，每次修改后使用新的值替代；旧值被丢弃，等待垃圾回收器处理回收对象。类似C#值类型。<br>直接访问:对数值直接进行访问，类似C#中栈。<br>顺序访问：可对容器按索引进行访问元素，类似C#中索引。<br>映射访问：元素无序存放，通过唯一Key访问，类似C#中哈希。</p>
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>Python的整型包含：布尔型、标准整型、长整型。布尔型只有两个取值：True和False, 对应整型的1和0. 标准整型和C# Int32和Int64表示范围相同，在32位机器上范围为Int32, 64位则为Int64. 长整型的范围超过Int64, 具体范围与（虚拟）内存大小有关，长整型一般在数值后面加一个大写的L. Python会自动转换整型和长整型。<br>复数由实数部分和虚数部分构成，虚数语法：real+imagj. 实数和虚数部分都是浮点类型，虚数部分后缀必须为j或J.<br>两个连续的星号(**)表示幂运算.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">3</span> ** <span class="number">2</span> <span class="comment">#结果为：9</span></div></pre></td></tr></table></figure></p>
+<p>整除操作符：//, 也称“地板除”，除法不管操作数为何种数值类型，总是舍去小数部分，返回数字序列总别真正商小的最接近的数字。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>//<span class="number">2</span>       <span class="comment">#结果为：0</span></div><div class="line"><span class="number">1.0</span>//<span class="number">2.0</span>   <span class="comment">#结果为：0.0</span></div><div class="line"><span class="number">-1</span>//<span class="number">2</span>      <span class="comment">#结果为：-1</span></div></pre></td></tr></table></figure></p>
+<p>数值工厂函数<br>| 函数                                   | 操作                |<br>| ————————————– | —————— |<br>| bool(obj)                              | 返回obj对象的布尔值 |<br>| int(x [,base])                        | 将x转换为一个整型   |<br>| long(x [,base] )                      | 将x转换为一个长整型 |<br>| float(x)                               | 将x转换到一个浮点型 |<br>| complex(real [,imag]) or complex(str) | 创建一个复数        |</p>
+<p>仅适用于整型的内置函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hex(num)</td>
+<td>将数字转换成十六进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>oct(num)</td>
+<td>将数字转换成八进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>chr(num)</td>
+<td>将ASCII值的数字转换成ASCII字符，范围：0&lt;=num&lt;=255</td>
+</tr>
+<tr>
+<td>ord(chr)</td>
+<td>传入长度为1的字符串，返回相应的ASCII整数值或Unicode整数值</td>
+</tr>
+<tr>
+<td>unichr(num)</td>
+<td>将一个整数转换为Unicode字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="序列：字符串、列表和元组"><a href="#序列：字符串、列表和元组" class="headerlink" title="序列：字符串、列表和元组"></a>序列：字符串、列表和元组</h2><h3 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h3><p>序列元素顺序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">            0      1      2          N-2     N-1</div><div class="line">Sequence    ☐     ☐      ☐   ● ● ●   ☐      ☐ </div><div class="line">           -N   -(N-1)  -(N-2)        -2     -1</div></pre></td></tr></table></figure>
+<p>序列类型操作符</p>
+<table>
+<thead>
+<tr>
+<th>序列操作符</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seq[index]</td>
+<td>获取下标为index的与元素</td>
+</tr>
+<tr>
+<td>seq[index1:index2]</td>
+<td>获取下标从index1到index2之间的元素</td>
+</tr>
+<tr>
+<td>seq * expr</td>
+<td>序列重复expr次</td>
+</tr>
+<tr>
+<td>seq1 + seq2</td>
+<td>连接序列seq1和seq2</td>
+</tr>
+<tr>
+<td>obj in seq</td>
+<td>判断元素obj是否包含在seq中</td>
+</tr>
+<tr>
+<td>obj not in seq</td>
+<td>判断元素obj是否不包含在seq中</td>
+</tr>
+</tbody>
+</table>
+<p>切片操作符：[]、[:]、[::]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#切片示例</span></div><div class="line">s = <span class="string">'abcdefgh'</span></div><div class="line"></div><div class="line">s = <span class="string">'abcdefgh'</span></div><div class="line">print(s)           <span class="comment">#abcdefgh 打印原始字符串</span></div><div class="line">print(s[::<span class="number">-1</span>])     <span class="comment">#hgfedcba 字符串翻转操作</span></div><div class="line">print(s[::<span class="number">2</span>])      <span class="comment">#aceg     隔一个取一个的操作</span></div><div class="line">print(s[<span class="number">1</span>:<span class="number">3</span>])      <span class="comment">#bc       获取索引下标1到2之间的元素</span></div><div class="line">print(s[<span class="number">3</span>:])       <span class="comment">#defgh    获取索引下标从3开始的所有元素</span></div><div class="line">print(s[<span class="number">-3</span>:])      <span class="comment">#fgh      获取索引-3开始之后的所有元素</span></div><div class="line">print(s[:<span class="number">3</span>])       <span class="comment">#abc      从右往左获取前3个元素</span></div><div class="line">print(s[:<span class="number">-3</span>])      <span class="comment">#abcde    从右往左获取前5个元素（长度8 - 3）</span></div></pre></td></tr></table></figure>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>Python中使用单引号或双引号创建字符串，使用del语句删除字符串。</p>
+<p>字符串进行比较操作时，按照ASCII值的大小进行比较。</p>
+<p>字符串格式化操作符：%.</p>
+<p>字符串格式化符号</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式化符 号</th>
+<th style="text-align:left">转换方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">%c</td>
+<td style="text-align:left">格式化字符及其ASCII码</td>
+</tr>
+<tr>
+<td style="text-align:left">%s</td>
+<td style="text-align:left">格式化字符串</td>
+</tr>
+<tr>
+<td style="text-align:left">%d</td>
+<td style="text-align:left">格式化整数</td>
+</tr>
+<tr>
+<td style="text-align:left">%u</td>
+<td style="text-align:left">格式化无符号整型</td>
+</tr>
+<tr>
+<td style="text-align:left">%o</td>
+<td style="text-align:left">格式化无符号八进制数</td>
+</tr>
+<tr>
+<td style="text-align:left">%x</td>
+<td style="text-align:left">格式化无符号十六进制数</td>
+</tr>
+<tr>
+<td style="text-align:left">%X</td>
+<td style="text-align:left">格式化无符号十六进制数（大写）</td>
+</tr>
+<tr>
+<td style="text-align:left">%f</td>
+<td style="text-align:left">格式化浮点数字，可指定小数点后的精度</td>
+</tr>
+<tr>
+<td style="text-align:left">%e</td>
+<td style="text-align:left">用科学计数法格式化浮点数</td>
+</tr>
+<tr>
+<td style="text-align:left">%E</td>
+<td style="text-align:left">作用同%e，用科学计数法格式化浮点数</td>
+</tr>
+<tr>
+<td style="text-align:left">%g</td>
+<td style="text-align:left">%f和%e的简写</td>
+</tr>
+<tr>
+<td style="text-align:left">%G</td>
+<td style="text-align:left">%F 和 %E 的简写</td>
+</tr>
+<tr>
+<td style="text-align:left">%p</td>
+<td style="text-align:left">用十六进制数格式化变量的地址</td>
+</tr>
+</tbody>
+</table>
+<p>格式化操作符辅助指令<br>| 符号  | 作用                                                         |<br>| :—- | :———————————————————– |<br>| *     | 定义宽度或者小数点精度                                       |<br>| -     | 用做左对齐                                                   |<br>| +     | 在正数前面显示加号( + )                                      |<br>| <sp>  | 在正数前面显示空格                                           |<br>| #     | 在八进制数前面显示零(‘0’)，在十六进制前面显示’0x’或者’0X’(取决于用的是’x’还是’X’) |<br>| 0     | 显示的数字前面填充’0’而不是默认的空格                        |<br>| %     | ‘%%’输出一个单一的’%’                                        |<br>| (var) | 映射变量(字典参数)                                           |<br>| m.n.  | m 是显示的最小总宽度,n 是小数点后的位数(如果可用的话)        |</sp></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#格式示例</span></div><div class="line">print(<span class="string">'%x'</span> % <span class="number">100</span>)                 <span class="comment">#64</span></div><div class="line">print(<span class="string">'%#x'</span> % <span class="number">100</span>)                <span class="comment">#0x64</span></div><div class="line">print(<span class="string">'%c'</span> % <span class="number">100</span>)                 <span class="comment">#d</span></div><div class="line">print(<span class="string">'value is %d'</span> % <span class="number">100</span>)        <span class="comment">#value is 100</span></div><div class="line">print(<span class="string">'value is %s'</span> % <span class="string">'100'</span>)      <span class="comment">#value is 100</span></div></pre></td></tr></table></figure>
+<p>字符串格式化的高级用法是使用字符串模板，引入Template模块对象，调用substitute()和safe_substitute()方法进行格式化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> string <span class="keyword">import</span> Template</div><div class="line">s = Template(<span class="string">'Today is $&#123;year&#125;.$&#123;month&#125;.$&#123;day&#125;!'</span>)</div><div class="line"><span class="keyword">print</span> (s.substitute(year=<span class="number">2020</span>, month=<span class="number">2</span>, day=<span class="number">6</span>))         <span class="comment">#Today is 2020.2.6!</span></div></pre></td></tr></table></figure>
+<p>注意：字符串中的模板必须与变量一一对应，否则会出现KeyError异常。而使用safe_substitute()在缺少key时可以将字符串原封不动的打印出来。</p>
+<p>Unicode字符串在字符串前加大写U或小写u. 加前缀u表示告诉Python后面的字符串要编码成Unicode字符串。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">print(u&apos;\u8881&apos;)     #袁</div></pre></td></tr></table></figure>
+<p>在控制台界面中可以使用input(<del>raw_input()</del>为python2中的函数python3中不存在)函数进行输入字符串，类似于C#中的Console.ReadLine().</p>
+<p>使用反斜杠()加一个单一字符可以表示一个特殊字符。</p>
+<p>三引号语法允许一个字符串跨多行，字符串中可以包含换行符、制表符以及其他特殊字符。语法类似C# @“”.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#示例</span></div><div class="line">print(<span class="string">'''Hello</span></div><div class="line"></div><div class="line">World''')</div></pre></td></tr></table></figure>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><p>列表使用方括号([])进行定义。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">list = [<span class="number">123</span>, <span class="string">'Hello'</span>, <span class="string">'abc'</span>, <span class="number">123.456</span>, [<span class="string">'abcd'</span>, <span class="number">100</span>]]</div><div class="line">print(list)           <span class="comment">#[123, 'Hello', 'abc', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#访问列表中值</span></div><div class="line">print(list[<span class="number">0</span>])        <span class="comment">#123</span></div><div class="line"></div><div class="line"><span class="comment">#更新列表中值</span></div><div class="line">list[<span class="number">1</span>] = <span class="string">'abcdefg'</span></div><div class="line">print(list)           <span class="comment">#[123, 'abcdefg', 'abc', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#删除列表元素</span></div><div class="line"><span class="keyword">del</span> list[<span class="number">0</span>]</div><div class="line"><span class="comment">#或使用remove()方法</span></div><div class="line">list.remove(<span class="string">'abc'</span>)</div><div class="line">print(list)           <span class="comment">#['abcdefg', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#删除整个列表</span></div><div class="line"><span class="keyword">del</span> list</div></pre></td></tr></table></figure>
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><p>元组的功能和列表类似，元组使用圆括号进行定义。元组属于不可变类型，类似于C#中只读集合。元组中的元素不可跟新和删除，只能删除整个元组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">aTuple = (<span class="number">123</span>, <span class="string">'Hello'</span>, <span class="string">'abc'</span>, <span class="number">123.456</span>, [<span class="string">'abcd'</span>, <span class="number">100</span>])</div><div class="line"></div><div class="line"><span class="comment">#访问元组中的元素</span></div><div class="line">print(aTuple[<span class="number">1</span>])        <span class="comment">#Hello</span></div><div class="line"></div><div class="line"><span class="comment">#删除元组</span></div><div class="line"><span class="keyword">del</span> aTuple</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/读书笔记/">读书笔记</a><a href="/tags/学习笔记/">学习笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2020/02/06/Core-Python-Programming-Learning/" data-title="Python核心编程学习笔记 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2018/05/24/CSharp-OPD-NET-BindByName/" title="探讨下C#使用OPD.NET参数绑定问题">
+  <strong>上一篇：</strong><br/>
+  <span>
+  探讨下C#使用OPD.NET参数绑定问题</span>
+</a>
+</div>
+
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python核心编程"><span class="toc-number">1.</span> <span class="toc-text">Python核心编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python基础"><span class="toc-number">1.1.</span> <span class="toc-text">Python基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#语句和语法"><span class="toc-number">1.1.1.</span> <span class="toc-text">语句和语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量赋值"><span class="toc-number">1.1.2.</span> <span class="toc-text">变量赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标识符"><span class="toc-number">1.1.3.</span> <span class="toc-text">标识符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python对象"><span class="toc-number">1.2.</span> <span class="toc-text">Python对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本数据类型"><span class="toc-number">1.2.1.</span> <span class="toc-text">基本数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作符"><span class="toc-number">1.2.2.</span> <span class="toc-text">操作符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内置函数"><span class="toc-number">1.2.3.</span> <span class="toc-text">内置函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型分类"><span class="toc-number">1.2.4.</span> <span class="toc-text">类型分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数字"><span class="toc-number">1.3.</span> <span class="toc-text">数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#序列：字符串、列表和元组"><span class="toc-number">1.4.</span> <span class="toc-text">序列：字符串、列表和元组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#序列"><span class="toc-number">1.4.1.</span> <span class="toc-text">序列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串"><span class="toc-number">1.4.2.</span> <span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#列表"><span class="toc-number">1.4.3.</span> <span class="toc-text">列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#元组"><span class="toc-number">1.4.4.</span> <span class="toc-text">元组</span></a></li></ol></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>19</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2020 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
