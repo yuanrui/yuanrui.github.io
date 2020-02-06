@@ -190,7 +190,37 @@
 <p>标量：一个保存单个字面对象的类型，类似于C#中的值类型和字符串。<br>容器：可存储多个对象（对象可以有不同的类型）的类型，类似C#集合。<br>可变类型：允许值被更新,每次修改后新值替换旧值。类似C#引用类型。<br>不可变类型：不允许值被更改，每次修改后使用新的值替代；旧值被丢弃，等待垃圾回收器处理回收对象。类似C#值类型。<br>直接访问:对数值直接进行访问，类似C#中栈。<br>顺序访问：可对容器按索引进行访问元素，类似C#中索引。<br>映射访问：元素无序存放，通过唯一Key访问，类似C#中哈希。</p>
 <h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>Python的整型包含：布尔型、标准整型、长整型。布尔型只有两个取值：True和False, 对应整型的1和0. 标准整型和C# Int32和Int64表示范围相同，在32位机器上范围为Int32, 64位则为Int64. 长整型的范围超过Int64, 具体范围与（虚拟）内存大小有关，长整型一般在数值后面加一个大写的L. Python会自动转换整型和长整型。<br>复数由实数部分和虚数部分构成，虚数语法：real+imagj. 实数和虚数部分都是浮点类型，虚数部分后缀必须为j或J.<br>两个连续的星号(**)表示幂运算.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">3</span> ** <span class="number">2</span> <span class="comment">#结果为：9</span></div></pre></td></tr></table></figure></p>
 <p>整除操作符：//, 也称“地板除”，除法不管操作数为何种数值类型，总是舍去小数部分，返回数字序列总别真正商小的最接近的数字。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>//<span class="number">2</span>       <span class="comment">#结果为：0</span></div><div class="line"><span class="number">1.0</span>//<span class="number">2.0</span>   <span class="comment">#结果为：0.0</span></div><div class="line"><span class="number">-1</span>//<span class="number">2</span>      <span class="comment">#结果为：-1</span></div></pre></td></tr></table></figure></p>
-<p>数值工厂函数<br>| 函数                                   | 操作                |<br>| ————————————– | —————— |<br>| bool(obj)                              | 返回obj对象的布尔值 |<br>| int(x [,base])                        | 将x转换为一个整型   |<br>| long(x [,base] )                      | 将x转换为一个长整型 |<br>| float(x)                               | 将x转换到一个浮点型 |<br>| complex(real [,imag]) or complex(str) | 创建一个复数        |</p>
+<p>数值工厂函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bool(obj)</td>
+<td>返回obj对象的布尔值</td>
+</tr>
+<tr>
+<td>int(x [,base])</td>
+<td>将x转换为一个整型</td>
+</tr>
+<tr>
+<td>long(x [,base] )</td>
+<td>将x转换为一个长整型</td>
+</tr>
+<tr>
+<td>float(x)</td>
+<td>将x转换到一个浮点型</td>
+</tr>
+<tr>
+<td>complex(real [,imag]) or complex(str)</td>
+<td>创建一个复数</td>
+</tr>
+</tbody>
+</table>
 <p>仅适用于整型的内置函数</p>
 <table>
 <thead>
@@ -327,7 +357,53 @@
 </tr>
 </tbody>
 </table>
-<p>格式化操作符辅助指令<br>| 符号  | 作用                                                         |<br>| :—- | :———————————————————– |<br>| *     | 定义宽度或者小数点精度                                       |<br>| -     | 用做左对齐                                                   |<br>| +     | 在正数前面显示加号( + )                                      |<br>| <sp>  | 在正数前面显示空格                                           |<br>| #     | 在八进制数前面显示零(‘0’)，在十六进制前面显示’0x’或者’0X’(取决于用的是’x’还是’X’) |<br>| 0     | 显示的数字前面填充’0’而不是默认的空格                        |<br>| %     | ‘%%’输出一个单一的’%’                                        |<br>| (var) | 映射变量(字典参数)                                           |<br>| m.n.  | m 是显示的最小总宽度,n 是小数点后的位数(如果可用的话)        |</sp></p>
+<p>格式化操作符辅助指令</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">定义宽度或者小数点精度</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:left">用做左对齐</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">在正数前面显示加号( + )</td>
+</tr>
+<tr>
+<td style="text-align:left"><sp></sp></td>
+<td style="text-align:left">在正数前面显示空格</td>
+</tr>
+<tr>
+<td style="text-align:left">#</td>
+<td style="text-align:left">在八进制数前面显示零(‘0’)，在十六进制前面显示’0x’或者’0X’(取决于用的是’x’还是’X’)</td>
+</tr>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:left">显示的数字前面填充’0’而不是默认的空格</td>
+</tr>
+<tr>
+<td style="text-align:left">%</td>
+<td style="text-align:left">‘%%’输出一个单一的’%’</td>
+</tr>
+<tr>
+<td style="text-align:left">(var)</td>
+<td style="text-align:left">映射变量(字典参数)</td>
+</tr>
+<tr>
+<td style="text-align:left">m.n.</td>
+<td style="text-align:left">m 是显示的最小总宽度,n 是小数点后的位数(如果可用的话)</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#格式示例</span></div><div class="line">print(<span class="string">'%x'</span> % <span class="number">100</span>)                 <span class="comment">#64</span></div><div class="line">print(<span class="string">'%#x'</span> % <span class="number">100</span>)                <span class="comment">#0x64</span></div><div class="line">print(<span class="string">'%c'</span> % <span class="number">100</span>)                 <span class="comment">#d</span></div><div class="line">print(<span class="string">'value is %d'</span> % <span class="number">100</span>)        <span class="comment">#value is 100</span></div><div class="line">print(<span class="string">'value is %s'</span> % <span class="string">'100'</span>)      <span class="comment">#value is 100</span></div></pre></td></tr></table></figure>
 <p>字符串格式化的高级用法是使用字符串模板，引入Template模块对象，调用substitute()和safe_substitute()方法进行格式化。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> string <span class="keyword">import</span> Template</div><div class="line">s = Template(<span class="string">'Today is $&#123;year&#125;.$&#123;month&#125;.$&#123;day&#125;!'</span>)</div><div class="line"><span class="keyword">print</span> (s.substitute(year=<span class="number">2020</span>, month=<span class="number">2</span>, day=<span class="number">6</span>))         <span class="comment">#Today is 2020.2.6!</span></div></pre></td></tr></table></figure>
@@ -342,6 +418,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">list = [<span class="number">123</span>, <span class="string">'Hello'</span>, <span class="string">'abc'</span>, <span class="number">123.456</span>, [<span class="string">'abcd'</span>, <span class="number">100</span>]]</div><div class="line">print(list)           <span class="comment">#[123, 'Hello', 'abc', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#访问列表中值</span></div><div class="line">print(list[<span class="number">0</span>])        <span class="comment">#123</span></div><div class="line"></div><div class="line"><span class="comment">#更新列表中值</span></div><div class="line">list[<span class="number">1</span>] = <span class="string">'abcdefg'</span></div><div class="line">print(list)           <span class="comment">#[123, 'abcdefg', 'abc', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#删除列表元素</span></div><div class="line"><span class="keyword">del</span> list[<span class="number">0</span>]</div><div class="line"><span class="comment">#或使用remove()方法</span></div><div class="line">list.remove(<span class="string">'abc'</span>)</div><div class="line">print(list)           <span class="comment">#['abcdefg', 123.456, ['abcd', 100]]</span></div><div class="line"></div><div class="line"><span class="comment">#删除整个列表</span></div><div class="line"><span class="keyword">del</span> list</div></pre></td></tr></table></figure>
 <h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><p>元组的功能和列表类似，元组使用圆括号进行定义。元组属于不可变类型，类似于C#中只读集合。元组中的元素不可跟新和删除，只能删除整个元组。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">aTuple = (<span class="number">123</span>, <span class="string">'Hello'</span>, <span class="string">'abc'</span>, <span class="number">123.456</span>, [<span class="string">'abcd'</span>, <span class="number">100</span>])</div><div class="line"></div><div class="line"><span class="comment">#访问元组中的元素</span></div><div class="line">print(aTuple[<span class="number">1</span>])        <span class="comment">#Hello</span></div><div class="line"></div><div class="line"><span class="comment">#删除元组</span></div><div class="line"><span class="keyword">del</span> aTuple</div></pre></td></tr></table></figure>
+
         
         
         <p class="article-more-link">
@@ -423,7 +500,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
   </div>
 
 </div>
@@ -606,7 +683,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
   </div>
 
 </div>
@@ -674,7 +751,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
   </div>
 
 </div>
@@ -1063,7 +1140,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Oracle/">Oracle</a><a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -1113,19 +1190,19 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -1194,11 +1271,11 @@
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
 			
 		
 		</ul>
