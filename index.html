@@ -78,6 +78,195 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析" itemprop="url">勤务管理之排班分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-19T07:20:46.000Z" itemprop="datePublished"> Published 2020-08-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>排班是人力资源精细化控制的基础，一个好的排班管理不仅能调动人员的工作积极性，也能提高工作效率，提高劳动力生产力。</p>
+<p>对于排班管理而言，需要考虑：时间、人员、地点、工作事项、工作设备和环境要求等几个要素。针对不同需求场景，包含的要素需要有所侧重，其中时间和人员是最为核心的要素，毕竟排班讲究的是合适的时间安排合适的人去做某某事情。当然还有可能包含合适的地点，但是在一些固定工作场所的前提下，地点相对时间、人员而言属性不是那么重要。假设，某交巡警支队后台视频监控部门排班管理，需要保障道路交通持续不断的安全运维，对工作人员要求按照早班、中班、夜班三个班次进行轮换上班上岗。针对这种场景，工作场所一般是固定的，每个员工的工作内容一般是固化下来的，每天只需要按部就班执行即可。那么在这里，主要包含时间、人员这两个要素。</p>
+<p>该部门的排班表如下：</p>
+<table>
+<thead>
+<tr>
+<th>日期</th>
+<th>班次</th>
+<th>人员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020-08-15</td>
+<td>早班（8:00～16:00）</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>2020-08-15</td>
+<td>中班（16:00～24:00）</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>2020-08-15</td>
+<td>夜班（24:00～8:00）</td>
+<td>乔峰 虚竹 段誉</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>早班（8:00～16:00）</td>
+<td>黄药师 一灯大师 周伯通</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>中班（16:00～24:00）</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>夜班（24:00～8:00）</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>从这个排班表中，我们可以抽象出：日期、班次(时段)、人员这三个属性。一般班次属性可单独抽象出来，班次包含：班次名称、开始时间、结束时间和作用范围。作用范围可以为工作日、周末、节假日等选项。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/勤务模板-班次设置.png" alt="勤务模板-班次设置" title="勤务模板-班次设置">
+<p>结合到排列组合来讲，我们可以将人员进行按班次进行分组管理，每个分组对应一个班次即班组。有了班次和人员分组之后，我们可以设置班次的起始人员分组，然后按照班次顺序依次和人员分组进行循环对应。这也是自动排班管理的一种简单实现方式。</p>
+<p>通过上述分析，排班管理看上去做起来好像很容易？然而并没有那么简单，这里包含很多假定，班次时段是固定的，人员班组页面没有出现请假等情况。排班管理还需要考虑时间、人员、场所变化的情形，这个需要我们从变化的情景中找到合适的规律。下面我们根据一个时间和地点均存在变化的例子来分析排班。</p>
+<p>某部门外勤某日排班表（2020年8月17日）如下：</p>
+<table>
+<thead>
+<tr>
+<th>部门</th>
+<th>岗位类型</th>
+<th>执勤地点</th>
+<th>时段</th>
+<th>人员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>四公里</td>
+<td>7:00-10:00</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>五公里</td>
+<td>7:00-10:00</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>六公里</td>
+<td>7:00-10:00</td>
+<td>乔峰 虚竹 段誉</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>路面巡逻岗</td>
+<td></td>
+<td>7:00-10:00</td>
+<td>黄药师 一灯大师 周伯通</td>
+</tr>
+<tr>
+<td>二大队</td>
+<td>早晚高峰岗</td>
+<td>茶园</td>
+<td>7:00-9:30</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>二大队</td>
+<td>早晚高峰岗</td>
+<td>长生桥</td>
+<td>7:00-9:30</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>站在支队领导的角度，支队对各所属大队提出每日执勤要求包含：部门、岗位类型、执勤地点、时段、人员数量。一个部门下有多个岗位类型，同一岗位类型有多个执勤地点，部门、岗位类型、执勤地点可以设置不同的时段和多个人员。每日的排班表，会对岗位类型和执勤地点进行适当的调整。大致上，周一到周五的排班表内容基本相同，周末有所变化，节假日需做针对性安排。</p>
+<p>外勤的业务模式具有支队安排，大队上报人员的特点，由支队安排需要执勤的岗位、地点、时段，由大队管理员上报每天的执勤人员。支队以周为单位，安排周一至周天的每天勤务安排，可设置节假日和指定日期的勤务。</p>
+<p>如何根据这些规则进行的合适的勤务安排呢？</p>
+<p>勤务模板，勤务模板是需求落地通往实现的桥梁。模板的存在是对特定规则的一个抽象，需要我们抽象出模板的用途、分类、状态、规则等信息。就排班管理而言需要：模板名称、模板类型、模板状态、日期选项、时段规则等信息。注意这里的日期选项和时段规则是合集关系，一个日期选项可以包含多个时段规则，时段通俗的叫法也称班次。这里的日期选项可以归纳为工作日、周末、节假日、星期等范围选项。在人员安排时，可根据日期查找对应的日期选项，找到对应的时段规则，然后根据时段规则分配人员。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">假设某单位有如下上班时间设置：</div><div class="line">周一到周五每天八点到下午五点上班。</div><div class="line">日期选项为：工作日，时段规则为：8:00-17:00</div><div class="line"></div><div class="line">假设某单位有如下上班时间设置：</div><div class="line">周一上午八点到十二点上班，下午休息。</div><div class="line">周二到周五每天八点到到下午五点上班。</div><div class="line">这里日期选项为：星期，星期包含：星期一、星期二、星期三、星期四、星期五、星期六、星期日。</div><div class="line">规则：星期一 8:00-12:00 下午休息</div><div class="line">     星期二 8:00-17:00</div><div class="line">     星期三 8:00-17:00</div><div class="line">     星期四 8:00-17:00</div><div class="line">     星期五 8:00-17:00</div><div class="line">     星期六 休息</div><div class="line">     星期日 休息</div></pre></td></tr></table></figure>
+<p>按照星期来执行时段班次的编排，是一个常用的途径。星期排班有以下几个特点：</p>
+<ol>
+<li>循环性，星期具有天然的循环滚动属性，总是一周接着一周，每周天数固定7天。</li>
+<li>直观性，可横向比较（比如周一和周二），也可纵向比较（比如本周一和上周一）。</li>
+<li>规则影响范围有限，一个周的排班规则设置好之后，修改指定星期时只影响未来，不影响过去。假设现在是周三，修改周四的规则表示修改明天的规则；修改周一的规则，表示修改下周的规则，对本周一不影响。</li>
+<li>工作日容易实现，按照国家法律规定实行五天工作制，周一到周五为工作日，周末休息。工作日的排班一般通过周一到周五来实现，但还需要考虑法定节假日范围的影响。</li>
+</ol>
+<p>星期+周末+节假日能够满足一年中所有日期场景。</p>
+<p>根据每周设置执勤岗位。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/勤务模板-每周.png" alt="勤务模板-每周" title="勤务模板-每周">
+<p>根据节假日设置执勤岗位，同理可对指定日期进行勤务安排。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/勤务模板-节假日.png" alt="勤务模板-节假日" title="勤务模板-节假日">
+<p>延伸，既然星期有连续性也可循环迭代，那是否还有其他日期选项可以供模板设置呢？根据按天循环勤务安排，也是属于一个备选方案。我们可以设置天数范围用于周期性循环，再设置一个起始日期作为生效的开始条件，即可模拟星期的循环性。按月天数范围一般不超过31天。同理可设置按年进行设置，天数范围不超过366天。</p>
+
+<p>总结，对于工作场所和班次固定的排班，可按工作日、周末、节假日设置相应的班次时间段。对于工作场所、日期和时段不固定的情况，推荐使用星期加节假日排班，按天数循环方案备选。星期的循环连续特性，能够满足大多数场景，当然也存在特殊情况。特殊情况应当特殊处理，比如设置特定日期的班次规则。需要指出的是，一般而言指定日期的设置优先级高于节假日，节假日的优先级高于星期设置，星期设置的优先级最低。</p>
+<p>有了排班模板后，下一步就是根据将人员分配到日期上，同时满足对应的时段（班次）规则。另外再补充说明下，时段的范围需要考虑跨天的情景，单个时段的总时长不能超过24小时，多个时段的时长合计小于等于24小时。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/系统设计/">系统设计</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2020/02/13/Multi-table-union-query-thinking-in-2020/" title="一个多表联合查询引发的思考" itemprop="url">一个多表联合查询引发的思考</a>
   </h1>
   <p class="article-author">By
@@ -1116,70 +1305,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Asp-Net/">Asp.Net</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/" title="C#特定格式字符串转换为DateTime" itemprop="url">C#特定格式字符串转换为DateTime</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">DateTime time;</div><div class="line"></div><div class="line">if (input.Length &gt; 13)</div><div class="line">&#123;</div><div class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</div><div class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</div><div class="line">		+ input.Substring(10, 2);</div><div class="line"></div><div class="line">	time = DateTime.Parse(timeInput);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</div></pre></td></tr></table></figure></p>
-<p>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153999&quot;;</div><div class="line">var date = DateTime.ParseExact(input</div><div class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</div><div class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</div></pre></td></tr></table></figure></p>
-<p>将毫秒的每种可能格式列举出来，方法有点笨，这也不失为一种解决办法。</p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Net/">.Net</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Net/">.Net</a>
+  <span></span> <a href="/tags/Asp-Net/">Asp.Net</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -1229,19 +1355,19 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -1269,11 +1395,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -1286,7 +1412,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>19</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>20</sup></a></li>
 			
 		
 			
@@ -1302,11 +1428,11 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -1314,11 +1440,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>1</sup></a></li>
 			
 		
 		</ul>

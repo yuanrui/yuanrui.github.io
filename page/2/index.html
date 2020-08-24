@@ -78,6 +78,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/" title="C#特定格式字符串转换为DateTime" itemprop="url">C#特定格式字符串转换为DateTime</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">DateTime time;</div><div class="line"></div><div class="line">if (input.Length &gt; 13)</div><div class="line">&#123;</div><div class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</div><div class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</div><div class="line">		+ input.Substring(10, 2);</div><div class="line"></div><div class="line">	time = DateTime.Parse(timeInput);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</div></pre></td></tr></table></figure></p>
+<p>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153999&quot;;</div><div class="line">var date = DateTime.ParseExact(input</div><div class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</div><div class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</div></pre></td></tr></table></figure></p>
+<p>将毫秒的每种可能格式列举出来，方法有点笨，这也不失为一种解决办法。</p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Net/">.Net</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/04/28/Oracle-sql-recursion/" title="Oracle Sql递归" itemprop="url">Oracle Sql递归</a>
   </h1>
   <p class="article-author">By
@@ -246,7 +309,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -513,7 +576,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -574,7 +637,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -810,68 +873,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/08/10/AspNet-js-css-version/" title="为Asp.Net Mvc项目的Js和Css添加版本号处理" itemprop="url">为Asp.Net Mvc项目的Js和Css添加版本号处理</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-08-10T10:22:00.000Z" itemprop="datePublished"> Published 2016-08-10</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <h3 id="为什么需要版本号处理"><a href="#为什么需要版本号处理" class="headerlink" title="为什么需要版本号处理"></a>为什么需要版本号处理</h3><p>在项目开发部署过程中，经常会修改样式和脚本文件。在部署时经常会因为浏览器缓存的原因造成加载的样式和执行的脚本还是以前的版本。<br>解决浏览器缓存最常用的办法是，在服务器端渲染生成资源链接时，加上一个版本号，用于刷新客户端缓存。这个版本号只在第一次请求时重新加载资源文件，在后续的请求中从浏览器缓存中获取文件。<br>版本号相对来说是固定的，不是随机生成的。随机生成的版本号会造成每次加载页面时都会去服务器端请求数据，这不是我们想要的效果。</p>
-<h3 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h3><p>生成版本号的方式有几种：<br>1、从配置文件中读取版本号<br>2、计算当前文件的hash值，用hash值作为版本号<br>3、使用程序集（DLL）发布时间作为版本号<br>第1种，发布部署时可以灵活控制，但是也容易忘记修改版本号，导致版本还是使用的以前的版本。也许可以通过自动发布的方式，自动修改版本号（没有尝试过）。<br>第2种，如果使用计算hash值的方式来处理，文件每次请求时都会去计算hash值。每次请求都计算hash有点消耗资源，改进办法是将路径和计算后的值放大缓存中，先判断hash值是否存在，不存在则计算并加入到缓存中。<br>第3种，可以将版本值的计算设计为静态类，并在静态类的静态构造方法中初始化静态变量，静态构造方法只需执行一次。每次发布替换DLL后，静态类会重新初始化。相比1、2种方式，灵活而不失简便。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">public static class VersionUtils</div><div class="line">&#123;</div><div class="line">    public readonly static DateTime VersionDate;</div><div class="line"></div><div class="line">    public readonly static Int32 VersionNumber;</div><div class="line"></div><div class="line">    static VersionUtils()</div><div class="line">    &#123;</div><div class="line">        VersionDate = System.IO.File.GetLastWriteTime(typeof(VersionUtils).Assembly.Location);</div><div class="line">        VersionNumber = Int32.Parse(VersionDate.ToString(&quot;yyyyMMddHHmm&quot;));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class HtmlHelperExtension</div><div class="line">&#123;</div><div class="line">    public static MvcHtmlString Script(this HtmlHelper html, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return VersionedContent(html, &quot;&lt;script src=\&quot;&#123;0&#125;\&quot; type=\&quot;text/javascript\&quot;&gt;&lt;/script&gt;&quot;, contentPath);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static MvcHtmlString Style(this HtmlHelper html, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return VersionedContent(html, &quot;&lt;link href=\&quot;&#123;0&#125;\&quot; rel=\&quot;stylesheet\&quot; type=\&quot;text/css\&quot;&gt;&quot;, contentPath);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private static MvcHtmlString VersionedContent(this HtmlHelper html, string template, string contentPath)</div><div class="line">    &#123;</div><div class="line">        contentPath = UrlHelper.GenerateContentUrl(contentPath, html.ViewContext.HttpContext) + &quot;?v=&quot; + VersionUtils.VersionNumber;</div><div class="line">        return MvcHtmlString.Create(string.Format(template, contentPath));</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static class UrlHelperExtension</div><div class="line">&#123;</div><div class="line">    public static string ContentVersioned(this UrlHelper urlHelper, string contentPath)</div><div class="line">    &#123;</div><div class="line">        return String.Format(&quot;&#123;0&#125;?v=&#123;1&#125;&quot;, urlHelper.Content(contentPath), VersionUtils.VersionNumber);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;link href=&quot;@Url.ContentVersioned(&quot;~/Content/Site.css&quot;)&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot; /&gt;</div><div class="line">@Html.Style(&quot;~/Content/bootstrap.css&quot;);</div><div class="line">@Html.Script(&quot;~/Scripts/angular.js&quot;);</div></pre></td></tr></table></figure>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Mvc/">Mvc</a>►<a class="article-category-link" href="/categories/Mvc/Net/">.Net</a>►<a class="article-category-link" href="/categories/Mvc/Net/Asp-Net/">Asp.Net</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -921,19 +923,19 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
-		  
-		
-		  
 			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
 			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -961,11 +963,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -978,7 +980,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>19</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>20</sup></a></li>
 			
 		
 			
@@ -994,11 +996,11 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -1006,11 +1008,15 @@
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>1</sup></a></li>
 			
 		
 		</ul>
