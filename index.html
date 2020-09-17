@@ -44,7 +44,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -78,6 +78,636 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2020/09/17/Unified-identity-authentication-system-platform/" title="统一身份认证系统平台功能设计" itemprop="url">统一身份认证系统平台功能设计</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-09-17T07:02:00.000Z" itemprop="datePublished"> 發表於 2020-09-17</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="统一身份认证系统平台功能设计"><a href="#统一身份认证系统平台功能设计" class="headerlink" title="统一身份认证系统平台功能设计"></a>统一身份认证系统平台功能设计</h1><h2 id="系统设置"><a href="#系统设置" class="headerlink" title="系统设置"></a>系统设置</h2><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><p>用户属性：账户、密码、盐值、姓名、电话、角色ID、组织机构ID、数字证书（编号、路径）、密码更新时间、密码错误次数、账户有效期、是否启用、备注；<br>密码连续错误次数 &gt; 5 为锁定状态；正确则置0；</p>
+<h3 id="角色管理"><a href="#角色管理" class="headerlink" title="角色管理"></a>角色管理</h3><p>角色属性：角色ID、角色名称、权限项（集合）</p>
+<h3 id="权限项管理"><a href="#权限项管理" class="headerlink" title="权限项管理"></a>权限项管理</h3><p>权限项属性：权限ID、应用ID、对象名称、权限类型（菜单、按钮、API）、URL、关联权限项（多个）、备注、排序编号。</p>
+<h3 id="组织机构管理"><a href="#组织机构管理" class="headerlink" title="组织机构管理"></a>组织机构管理</h3><p>组织机构属性：组织机构ID、名称、代码、上级ID、级别;</p>
+<h3 id="应用系统"><a href="#应用系统" class="headerlink" title="应用系统"></a>应用系统</h3><p>应用系统属性：应用ID、系统名称、图标、系统令牌、加密算法；</p>
+<h3 id="安全参数"><a href="#安全参数" class="headerlink" title="安全参数"></a>安全参数</h3><p>参数：密码强度、密码有效期、初次登录必须修改密码；<br>密码强度：低：无限制<br>中：长度&gt;5; 至少2种字符组合<br>高：长度&gt;7; 至少3种字符组合<br>密码有效期：无期限、3个月、6个月、12个月；<br>密码加密方式：使用SHA256哈希算法加密加密盐值+密码原文，数据库保存加密后的密文。<br>IP登录范围：未设置时允许所有IP登录。</p>
+<h3 id="日志管理"><a href="#日志管理" class="headerlink" title="日志管理"></a>日志管理</h3><p>记录所有的接口日志 和 IP;<br>对非授权的接口访问视为攻击行为，并记入安全事件日志。</p>
+<h3 id="数据字典"><a href="#数据字典" class="headerlink" title="数据字典"></a>数据字典</h3><p>数据字典属性：编号、字典分类、字典名称、字典值、是否启用、排序编号。</p>
+<h2 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h2><p>统一权限系统接口基于OAuth2.0实现验证授权流程。该接口供内部或第三方登录访问授权。</p>
+<p>加密算法采用RSA 2048位进行加密解密和签名，由统一权限系统创建公钥和私钥，私钥由统一权限系统持有，公钥由第三方应用持有。采用密码模式登录时，由第三方应用将密码原文用公钥进行加密，系统收到密文后采用对应的私钥进行解码，解密原文后再使用SHA256哈希算法加密加密盐值+密码原文于数据库中的密码进行比对。</p>
+<p>登录完成后系统分配Access Token，Access Token采用<a href="https://jwt.io/" target="_blank" rel="external">JWT</a> 格式，JWT包含头部、载荷、签名三部分。JWT采用统一权限系统发布的私钥进行签名，第三方应用接收到JWT之后使用公钥进行验证有效性。</p>
+<p>JWT载荷JSON格式如下：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>英文全称</th>
+<th>是否必须</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iss</td>
+<td>Issuer Identifier</td>
+<td>是</td>
+<td>统一权限系统URL，用于提供认证信息者的唯一标识。一般是一个https的url（不包含querystring和fragment部分）。</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>Subject Identifier</td>
+<td>是</td>
+<td>iss提供的最终用户的标识，即用户名，在iss范围内唯一。它会被RP用来标识唯一的用户。最长为255个ASCII个字符。</td>
+</tr>
+<tr>
+<td>name</td>
+<td>Name</td>
+<td>是</td>
+<td>用户显示名称。</td>
+</tr>
+<tr>
+<td>aud</td>
+<td>Audience(s)</td>
+<td>是</td>
+<td>应用编号（AppId）</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>Expiration time</td>
+<td>是</td>
+<td>过期时间，超过此时间的Access Token会作废不再被验证通过。</td>
+</tr>
+<tr>
+<td>iat</td>
+<td>Issued At Time</td>
+<td>是</td>
+<td>JWT的构建的时间。</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>Nonce</td>
+<td>是</td>
+<td>发送请求的时候提供的随机字符串，用来减缓重放攻击，也可以来关联Access Token和受信客户端本身的Session信息。</td>
+</tr>
+<tr>
+<td>role</td>
+<td>Role</td>
+<td>否</td>
+<td>角色名称</td>
+</tr>
+<tr>
+<td>isa</td>
+<td>Is Super Admin</td>
+<td>否</td>
+<td>是否超级管理员</td>
+</tr>
+</tbody>
+</table>
+<p>JSON内容示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;sub&quot;: &quot;SuperAdmin&quot;,</div><div class="line">  &quot;name&quot;: &quot;超级管理员&quot;,</div><div class="line">  &quot;iss&quot;: &quot;http://192.168.1.100&quot;,</div><div class="line">  &quot;aud&quot;: &quot;TIMS-Client-1&quot;,</div><div class="line">  &quot;isa&quot;: true,</div><div class="line">  &quot;nonce&quot;: &quot;ABCAV32hkKG&quot;,</div><div class="line">  &quot;role&quot;: &quot;管理员&quot;,</div><div class="line">  &quot;exp&quot;: 1598851053729,</div><div class="line">  &quot;iat&quot;: 1598246196411</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="前后端分离系统权限控制流程"><a href="#前后端分离系统权限控制流程" class="headerlink" title="前后端分离系统权限控制流程"></a>前后端分离系统权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/前后端分离系统权限控制流程.png" alt="前后端分离系统权限控制流程.png" title="">
+<h4 id="应用程序登录权限控制流程"><a href="#应用程序登录权限控制流程" class="headerlink" title="应用程序登录权限控制流程"></a>应用程序登录权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/应用程序登录权限控制流程.png" alt="应用程序登录权限控制流程.png" title="">
+<h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><h4 id="1-获取Authorization-Code"><a href="#1-获取Authorization-Code" class="headerlink" title="1.获取Authorization Code"></a>1.获取Authorization Code</h4><p><strong>请求地址:</strong> <code>/oauth2/authorize</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">client_id</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的应用ID</td>
+</tr>
+<tr>
+<td style="text-align:left">redirect_uri</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">授权回调地址, 必须和申请应用是填写的一致(参数部分可不一致)</td>
+</tr>
+<tr>
+<td style="text-align:left">response_type</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">描述获取授权的方式， Authorization Code方式授权, <strong>response_type=code</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">scope</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">申请scope权限所需参数，可一次申请多个scope权限，用空格分隔。</td>
+</tr>
+<tr>
+<td style="text-align:left">state</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用于保持请求和回调的状态，授权请求成功后原样带回给第三方，该参数用于防止 CSRF攻击（跨站请求伪造攻击），强烈建议第三方带上该参数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功响应</strong></li>
+</ul>
+<p>如果授权成功，授权服务器会将用户的浏览器重定向到<code>redirect_uri</code>，并带上<code>code</code>，<code>state</code>等参数，例子如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://example.com/example?code=CODE&amp;state=STATE</div></pre></td></tr></table></figure>
+<p><strong>返回参数说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">code</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用来换取<code>access_token</code>的授权码，有效期为5分钟且只能用一次</td>
+</tr>
+<tr>
+<td style="text-align:left">state</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">如果请求时传递参数，会回传该参数</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>失败响应</strong></li>
+</ul>
+<p>如果授权失败，授权服务器会将用户的浏览器重定向到<code>redirect_uri</code>，并带上<code>error</code>，<code>error_description</code>, <code>state</code>等参数，例子如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://example.com/example?error=ERROR&amp;error_description=ERROR_DESCRIPTION&amp;state=STATE</div></pre></td></tr></table></figure>
+<p><strong>返回参数说明：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">error</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">int</td>
+<td style="text-align:left">OAuth定义的错误码</td>
+</tr>
+<tr>
+<td style="text-align:left">error_description</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">错误描述信息</td>
+</tr>
+<tr>
+<td style="text-align:left">state</td>
+<td style="text-align:left">否</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">如果请求时传递参数，会回传该参数</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-获取Access-Token"><a href="#2-获取Access-Token" class="headerlink" title="2.获取Access Token"></a>2.获取Access Token</h4><p><strong>请求地址:</strong> <code>/oauth2/access_token</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">client_id</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的应用ID</td>
+</tr>
+<tr>
+<td style="text-align:left">redirect_uri</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">授权回调地址, 必须和申请应用是填写的一致(参数部分可不一致)</td>
+</tr>
+<tr>
+<td style="text-align:left">client_secret</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">申请应用时分配的系统令牌</td>
+</tr>
+<tr>
+<td style="text-align:left">grant_type</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">固定为authorization_code</td>
+</tr>
+<tr>
+<td style="text-align:left">code</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">第1小节中拿到的授权码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功响应</strong></li>
+</ul>
+<p>如果请求成功，授权服务器会返回JSON格式的字符串：</p>
+<ol>
+<li>access_token: 要获取的Access Token</li>
+<li>token_type: token类别，固定为bearer（RFC6750 定义）</li>
+<li>expires_in: Access Token的有效期，以秒为单位。</li>
+<li>refresh_token: 用于刷新Access Token 的 Refresh Token,所有应用都会返回该参数（10年的有效期）</li>
+<li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
+<li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;token_type&quot;: &quot;Bearer&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;OPENID&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败响应</strong></li>
+</ul>
+<p>如果请求失败，授权服务器会返回JSON格式的字符串：</p>
+<ol>
+<li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
+<li>error_description：一段可读的文字，用来帮助理解和解决发生的错误</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-Refresh-Token刷新接口"><a href="#3-Refresh-Token刷新接口" class="headerlink" title="3.Refresh Token刷新接口"></a>3.Refresh Token刷新接口</h4><p><strong>请求地址:</strong> <code>/oauth2/refresh_token</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">client_id</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的 <strong>App Id</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">redirect_uri</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">授权回调地址, 必须和申请应用是填写的一致(参数部分可不一致)</td>
+</tr>
+<tr>
+<td style="text-align:left">client_secret</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">申请应用时分配的 <strong>App Secret</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">grant_type</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">固定为refresh_token</td>
+</tr>
+<tr>
+<td style="text-align:left">refresh_token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">请求授权成功时获取的刷新令牌</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值数据:</strong></p>
+<ul>
+<li><strong>成功响应</strong></li>
+</ul>
+<p>如果请求成功，授权服务器会返回JSON格式的字符串:</p>
+<ol>
+<li>access_token: 要获取的Access Token</li>
+<li>expires_in: Access Token的有效期，以秒为单位, 请参考Access Token生命周期</li>
+<li>refresh_token: 用于刷新Access Token 的 Refresh Token,所有应用都会返回该参数（10年的有效期）</li>
+<li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
+<li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;2.0XXXXXXXXX&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败响应</strong></li>
+</ul>
+<p>如果请求失败，授权服务器会返回JSON格式的字符串：</p>
+<ol>
+<li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
+<li>error_description：一段人类可读的文字，用来帮助理解和解决发生的错误</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-密码模式登录"><a href="#4-密码模式登录" class="headerlink" title="4.密码模式登录"></a>4.密码模式登录</h4><p><strong>请求地址:</strong> <code>/oauth2/signin</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">client_id</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的应用ID</td>
+</tr>
+<tr>
+<td style="text-align:left">client_secret</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">申请应用时分配的系统令牌</td>
+</tr>
+<tr>
+<td style="text-align:left">grant_type</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">固定为password</td>
+</tr>
+<tr>
+<td style="text-align:left">username</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户名</td>
+</tr>
+<tr>
+<td style="text-align:left">password</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">密码，密码采用RSA公钥加密</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功响应</strong></li>
+</ul>
+<p>如果请求成功，授权服务器会返回JSON格式的字符串：</p>
+<ol>
+<li>access_token: 要获取的Access Token</li>
+<li>expires_in: Access Token的有效期，以秒为单位。</li>
+<li>refresh_token: 用于刷新Access Token 的 Refresh Token,所有应用都会返回该参数（10年的有效期）</li>
+<li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
+<li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;OPENID&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败响应</strong></li>
+</ul>
+<p>如果请求失败，授权服务器会返回JSON格式的字符串：</p>
+<ol>
+<li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
+<li>error_description：一段可读的文字，用来帮助理解和解决发生的错误</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-获取用户信息"><a href="#5-获取用户信息" class="headerlink" title="5. 获取用户信息"></a>5. 获取用户信息</h4><p><strong>请求地址:</strong> <code>/oauth2/account_profile</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">clientId</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的APP ID</td>
+</tr>
+<tr>
+<td style="text-align:left">token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户授权得到的访问令牌（Access Token）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: &#123;</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;用户编号&quot;,</div><div class="line"></div><div class="line">            &quot;userName&quot;: &quot;用户姓名&quot;,</div><div class="line">            </div><div class="line">            &quot;email&quot;: &quot;电子邮箱&quot;,</div><div class="line"></div><div class="line">            &quot;role&quot;: &quot;角色名称，多个用英文逗号分隔&quot;</div><div class="line"></div><div class="line">           &#125;,</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="6-获取用户权限"><a href="#6-获取用户权限" class="headerlink" title="6. 获取用户权限"></a>6. 获取用户权限</h4><p><strong>请求地址:</strong> <code>/oauth2/get_permission</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">clientId</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的APP ID</td>
+</tr>
+<tr>
+<td style="text-align:left">token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户授权得到的访问令牌（Access Token）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;id&quot;: &quot;权限编号&quot;,</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;用户编号&quot;,</div><div class="line"></div><div class="line">            &quot;parentId&quot;: &quot;父权限编号&quot;,</div><div class="line">            </div><div class="line">            &quot;url&quot;: &quot;权限地址&quot;,</div><div class="line">            </div><div class="line">            &quot;icon&quot;: &quot;图标&quot;,</div><div class="line"></div><div class="line">            &quot;renderForm&quot;: &quot;呈现形式(0:菜单 1:按钮)&quot;,</div><div class="line"></div><div class="line">            &quot;openMode&quot;: &quot;打开方式(0:内部,1:弹窗)&quot;</div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="7-获取数据字典"><a href="#7-获取数据字典" class="headerlink" title="7. 获取数据字典"></a>7. 获取数据字典</h4><p><strong>请求地址:</strong> <code>/oauth2/get_dict</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">clientId</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">long</td>
+<td style="text-align:left">申请应用时分配的APP ID</td>
+</tr>
+<tr>
+<td style="text-align:left">token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户授权得到的访问令牌（Access Token）</td>
+</tr>
+<tr>
+<td style="text-align:left">categoryId</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">字典分类</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;key&quot;: &quot;字典Key&quot;,</div><div class="line"></div><div class="line">            &quot;value&quot;: &quot;字典Value&quot;      </div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="8-获取组织机构"><a href="#8-获取组织机构" class="headerlink" title="8. 获取组织机构"></a>8. 获取组织机构</h4><p><strong>请求地址:</strong> <code>/oauth2/get_org</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户授权得到的访问令牌（Access Token）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;id&quot;: &quot;组织机构编号&quot;,</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;组织机构名称&quot;,</div><div class="line"></div><div class="line">            &quot;parentId&quot;: &quot;组织机构父编号&quot;,</div><div class="line"></div><div class="line">            &quot;remark&quot;: &quot;备注&quot;</div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="9-权限校验"><a href="#9-权限校验" class="headerlink" title="9. 权限校验"></a>9. 权限校验</h4><p><strong>请求地址:</strong> <code>/oauth2/verify_permission</code></p>
+<p><strong>请求方法:</strong> GET</p>
+<p><strong>请求参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">必须</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">token</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">用户授权得到的访问令牌（Access Token）</td>
+</tr>
+<tr>
+<td style="text-align:left">permissionId</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">权限编号</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值:</strong></p>
+<ul>
+<li><strong>成功</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line">  </div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><strong>失败</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><img src="/2020/09/17/Unified-identity-authentication-system-platform/数据库设计.png" alt="数据库设计.png" title="">
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/系统设计/">系统设计</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析" itemprop="url">勤务管理之排班分析</a>
   </h1>
   <p class="article-author">By
@@ -85,7 +715,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-08-19T07:20:46.000Z" itemprop="datePublished"> 发表于 2020-08-19</time>
+    <time datetime="2020-08-19T07:20:46.000Z" itemprop="datePublished"> 發表於 2020-08-19</time>
     
   </p>
 </header>
@@ -276,7 +906,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> 发表于 2020-02-13</time>
+    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> 發表於 2020-02-13</time>
     
   </p>
 </header>
@@ -478,7 +1108,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-02-06T08:00:00.000Z" itemprop="datePublished"> 发表于 2020-02-06</time>
+    <time datetime="2020-02-06T08:00:00.000Z" itemprop="datePublished"> 發表於 2020-02-06</time>
     
   </p>
 </header>
@@ -862,7 +1492,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/读书笔记/">读书笔记</a><a href="/tags/学习笔记/">学习笔记</a>
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -897,7 +1527,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> 发表于 2018-05-24</time>
+    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> 發表於 2018-05-24</time>
     
   </p>
 </header>
@@ -961,7 +1591,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> 发表于 2017-12-19</time>
+    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> 發表於 2017-12-19</time>
     
   </p>
 </header>
@@ -1021,7 +1651,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> 發表於 2017-11-21</time>
     
   </p>
 </header>
@@ -1082,7 +1712,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> 发表于 2017-09-21</time>
+    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> 發表於 2017-09-21</time>
     
   </p>
 </header>
@@ -1144,7 +1774,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> 发表于 2017-06-28</time>
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> 發表於 2017-06-28</time>
     
   </p>
 </header>
@@ -1212,7 +1842,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> 发表于 2017-05-09</time>
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> 發表於 2017-05-09</time>
     
   </p>
 </header>
@@ -1260,85 +1890,16 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4" itemprop="url">Asp.Net Mvc 3升级到Mvc 4</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-08</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>本文的前提是安装了Asp.Net Mvc 3.0 RTM, 同时安装Mvc 4.0<br>新建一个Empty Mvc3项目, 创建HomeController控制器，并创建Index视图<br>使用nuget安装如下package:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Install-Package Microsoft.AspNet.Razor -Version 2.0.30506</div><div class="line">Install-Package Microsoft.AspNet.WebPages -Version 2.0.30506</div><div class="line">Install-Package Microsoft.AspNet.Mvc -Version 4.0.40804</div><div class="line">Install-Package Microsoft.AspNet.Mvc.zh-Hans -Version 4.0.40804</div></pre></td></tr></table></figure></p>
-<p>使用nuget完成安装dll后,需要修改根目录中的Web.config和Views文件夹中的Web.config<br>打开根目录中的Web.config,将System.Web.Helpers的版本修改为2.0.0.0, 将System.Web.Mvc的版本修改为4.0.0.1,将System.Web.WebPages的版本修改为2.0.0.0 </p>
-<p><system.web>中的最终配置如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</div><div class="line">  &lt;assemblies&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">	&lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">  &lt;/assemblies&gt;</div><div class="line">&lt;/compilation&gt;</div></pre></td></tr></table></figure></system.web></p>
-<p>在<runtime>节点中添加如下配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.Helpers&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.WebPages&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">	&lt;dependentAssembly&gt;</div><div class="line">		&lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">		&lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</div><div class="line">	&lt;/dependentAssembly&gt;</div><div class="line">&lt;/assemblyBinding&gt;</div></pre></td></tr></table></figure></runtime></p>
-<p>打开Views文件夹中的Web.config,将原先的configSections节点项中Razor版本修改为2.0.0.0, 同时将这个文件中的Mvc版本修改为4.0.0.1 </p>
-<p>根目录中的Web.config最终内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;!--</div><div class="line">  有关如何配置 ASP.NET 应用程序的详细信息，请访问</div><div class="line">  http://go.microsoft.com/fwlink/?LinkId=152368</div><div class="line">  --&gt;</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;appSettings&gt;</div><div class="line">    &lt;add key=&quot;ClientValidationEnabled&quot; value=&quot;true&quot;/&gt; </div><div class="line">    &lt;add key=&quot;UnobtrusiveJavaScriptEnabled&quot; value=&quot;true&quot;/&gt; </div><div class="line">  &lt;/appSettings&gt;</div><div class="line">    </div><div class="line">  &lt;system.web&gt;</div><div class="line">    &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</div><div class="line">      &lt;assemblies&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</div><div class="line">      &lt;/assemblies&gt;</div><div class="line">    &lt;/compilation&gt;</div><div class="line"></div><div class="line">    &lt;authentication mode=&quot;Forms&quot;&gt;</div><div class="line">      &lt;forms loginUrl=&quot;~/Account/LogOn&quot; timeout=&quot;2880&quot;/&gt;</div><div class="line">    &lt;/authentication&gt;</div><div class="line"></div><div class="line">    &lt;pages&gt;</div><div class="line">      &lt;namespaces&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Helpers&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Routing&quot;/&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.WebPages&quot;/&gt;</div><div class="line">      &lt;/namespaces&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web&gt;</div><div class="line"></div><div class="line">  &lt;system.webServer&gt;</div><div class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot;/&gt;</div><div class="line">    &lt;modules runAllManagedModulesForAllRequests=&quot;true&quot;/&gt;</div><div class="line">  &lt;/system.webServer&gt;</div><div class="line"></div><div class="line">  &lt;runtime&gt;</div><div class="line">    &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</div><div class="line">      &lt;dependentAssembly&gt;</div><div class="line">        &lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</div><div class="line">        &lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</div><div class="line">      &lt;/dependentAssembly&gt;</div><div class="line">    &lt;/assemblyBinding&gt;</div><div class="line">  &lt;/runtime&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
-<p>Views文件夹中的Web.config中的最终内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;configSections&gt;</div><div class="line">    &lt;sectionGroup name=&quot;system.web.webPages.razor&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</div><div class="line">      &lt;section name=&quot;host&quot; type=&quot;System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</div><div class="line">      &lt;section name=&quot;pages&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorPagesSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</div><div class="line">    &lt;/sectionGroup&gt;</div><div class="line">  &lt;/configSections&gt;</div><div class="line"></div><div class="line">  &lt;system.web.webPages.razor&gt;</div><div class="line">    &lt;host factoryType=&quot;System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;</div><div class="line">    &lt;pages pageBaseType=&quot;System.Web.Mvc.WebViewPage&quot;&gt;</div><div class="line">      &lt;namespaces&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot; /&gt;</div><div class="line">        &lt;add namespace=&quot;System.Web.Routing&quot; /&gt;</div><div class="line">      &lt;/namespaces&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web.webPages.razor&gt;</div><div class="line"></div><div class="line">  &lt;appSettings&gt;</div><div class="line">    &lt;add key=&quot;webpages:Enabled&quot; value=&quot;false&quot; /&gt;</div><div class="line">  &lt;/appSettings&gt;</div><div class="line"></div><div class="line">  &lt;system.web&gt;</div><div class="line">    &lt;httpHandlers&gt;</div><div class="line">      &lt;add path=&quot;*&quot; verb=&quot;*&quot; type=&quot;System.Web.HttpNotFoundHandler&quot;/&gt;</div><div class="line">    &lt;/httpHandlers&gt;</div><div class="line"></div><div class="line">    &lt;!--</div><div class="line">        在视图页面中启用请求验证将导致验证在</div><div class="line">        控制器已对输入进行处理后发生。默认情况下，</div><div class="line">        MVC 在控制器处理输入前执行请求验证。</div><div class="line">        若要更改此行为，请对控制器或操作</div><div class="line">        应用 ValidateInputAttribute。</div><div class="line">    --&gt;</div><div class="line">    &lt;pages</div><div class="line">        validateRequest=&quot;false&quot;</div><div class="line">        pageParserFilterType=&quot;System.Web.Mvc.ViewTypeParserFilter, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</div><div class="line">        pageBaseType=&quot;System.Web.Mvc.ViewPage, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</div><div class="line">        userControlBaseType=&quot;System.Web.Mvc.ViewUserControl, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</div><div class="line">      &lt;controls&gt;</div><div class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; namespace=&quot;System.Web.Mvc&quot; tagPrefix=&quot;mvc&quot; /&gt;</div><div class="line">      &lt;/controls&gt;</div><div class="line">    &lt;/pages&gt;</div><div class="line">  &lt;/system.web&gt;</div><div class="line"></div><div class="line">  &lt;system.webServer&gt;</div><div class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot; /&gt;</div><div class="line"></div><div class="line">    &lt;handlers&gt;</div><div class="line">      &lt;remove name=&quot;BlockViewHandler&quot;/&gt;</div><div class="line">      &lt;add name=&quot;BlockViewHandler&quot; path=&quot;*&quot; verb=&quot;*&quot; preCondition=&quot;integratedMode&quot; type=&quot;System.Web.HttpNotFoundHandler&quot; /&gt;</div><div class="line">    &lt;/handlers&gt;</div><div class="line">  &lt;/system.webServer&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
-<p>重新编译后运行，自动跳转到/Home/Index</p>
-<p>Mvc 4的最新版本为4.0.0.1, 在Nuget上可以下载, 为了方便还原packages.config如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;packages&gt;</div><div class="line">  &lt;package id=&quot;Antlr&quot; version=&quot;3.5.0.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;jQuery&quot; version=&quot;1.12.4&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.Mvc&quot; version=&quot;4.0.40804.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.Mvc.zh-Hans&quot; version=&quot;4.0.40804.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.Razor&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.Razor.zh-Hans&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.Core&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.JS&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.Owin&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.SystemWeb&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.Web.Optimization&quot; version=&quot;1.1.3&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Client&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Client.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Core&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Core.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.WebHost&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.WebHost.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebPages&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.AspNet.WebPages.zh-Hans&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.Net.Http&quot; version=&quot;2.0.20710.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.Net.Http.zh-Hans&quot; version=&quot;2.0.20710.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.Owin.Host.SystemWeb&quot; version=&quot;1.0.1&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Microsoft.Web.Infrastructure&quot; version=&quot;1.0.0.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.4&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;Owin&quot; version=&quot;1.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">  &lt;package id=&quot;WebGrease&quot; version=&quot;1.6.0&quot; targetFramework=&quot;net40&quot; /&gt;</div><div class="line">&lt;/packages&gt;</div></pre></td></tr></table></figure></p>
-<p>Mvc漏洞安全公告:<a href="https://technet.microsoft.com/zh-cn/library/security/ms14-059" target="_blank" rel="external">https://technet.microsoft.com/zh-cn/library/security/ms14-059</a><br>Mvc补丁地址:<a href="https://www.microsoft.com/zh-CN/download/details.aspx?id=44533" target="_blank" rel="external">https://www.microsoft.com/zh-CN/download/details.aspx?id=44533</a><br>Mvc4发布说明:<a href="https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes" target="_blank" rel="external">https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes</a><br>Mvc4安装包:<a href="https://www.microsoft.com/zh-CN/download/details.aspx?id=30683" target="_blank" rel="external">https://www.microsoft.com/zh-CN/download/details.aspx?id=30683</a></p>
-
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Asp-Net/">Asp.Net</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
   </nav>
 
 </div>
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -1353,7 +1914,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
@@ -1410,11 +1971,11 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>20</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>21</sup></a></li>
 			
 		
 			
@@ -1430,7 +1991,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
 			
 		
 			
@@ -1442,15 +2003,17 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
 			
 		
 		</ul>
@@ -1458,7 +2021,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -1471,7 +2034,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
 </aside>
@@ -1599,7 +2162,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
