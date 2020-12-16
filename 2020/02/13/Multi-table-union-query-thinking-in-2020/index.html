@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>一个多表联合查询引发的思考 | 棠城夜雨</title>
+    <title>一个多表联合查询需求 | 棠城夜雨</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Banana">
@@ -14,13 +14,13 @@
     <meta name="description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
 <meta name="keywords" content="Sql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个多表联合查询引发的思考">
+<meta property="og:title" content="一个多表联合查询需求">
 <meta property="og:url" content="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-thinking-in-2020/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
-<meta property="og:updated_time" content="2020-02-13T14:11:15.726Z">
+<meta property="og:updated_time" content="2020-12-16T09:03:16.213Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个多表联合查询引发的思考">
+<meta name="twitter:title" content="一个多表联合查询需求">
 <meta name="twitter:description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
 
     
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -81,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/02/13/Multi-table-union-query-thinking-in-2020/" title="一个多表联合查询引发的思考" itemprop="url">一个多表联合查询引发的思考</a>
+      <a href="/2020/02/13/Multi-table-union-query-thinking-in-2020/" title="一个多表联合查询需求" itemprop="url">一个多表联合查询需求</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> 發表於 2020-02-13</time>
+    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
     
   </p>
 </header>
@@ -259,7 +259,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-thinking-in-2020/" data-title="一个多表联合查询引发的思考 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  <div data-url="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-thinking-in-2020/" data-title="一个多表联合查询需求 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -294,15 +294,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -312,7 +312,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分類</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -369,7 +369,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">標簽</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -389,11 +389,15 @@
 			
 		
 			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>1</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
 			
 		
 			
@@ -405,13 +409,15 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -419,7 +425,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情鏈接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -432,7 +438,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -635,7 +641,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
