@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>统一身份认证系统平台功能设计 | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2020/09/17/Unified-identity-authentication-system-platform/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="统一身份认证系统平台功能设计系统设置用户管理用户属性：账户、密码、盐值、姓名、电话、角色ID、组织机构ID、数字证书（编号、路径）、密码更新时间、密码错误次数、账户有效期、是否启用、备注；密码连续错误次数 &amp;gt; 5 为锁定状态；正确则置0； 角色管理角色属性：角色ID、角色名称、权限项（集合） 权限项管理权限项属性：权限ID、应用ID、对象名称、权限类型（菜单、按钮、API）、URL、关联权限">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://yuanrui.github.io/2020/09/17/Unified-identity-authentication-system-platform/前后端分离系统权限控制流程.png">
 <meta property="og:image" content="http://yuanrui.github.io/2020/09/17/Unified-identity-authentication-system-platform/应用程序登录权限控制流程.png">
 <meta property="og:image" content="http://yuanrui.github.io/2020/09/17/Unified-identity-authentication-system-platform/数据库设计.png">
@@ -39,9 +40,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -53,7 +55,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -69,7 +71,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -92,14 +94,14 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-09-17T07:02:00.000Z" itemprop="datePublished"> 发表于 2020-09-17</time>
+    <time datetime="2020-09-17T07:02:00.000Z" itemprop="datePublished"> Published 2020-09-17</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#统一身份认证系统平台功能设计"><span class="toc-number">1.</span> <span class="toc-text">统一身份认证系统平台功能设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#系统设置"><span class="toc-number">1.1.</span> <span class="toc-text">系统设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户管理"><span class="toc-number">1.1.1.</span> <span class="toc-text">用户管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#角色管理"><span class="toc-number">1.1.2.</span> <span class="toc-text">角色管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限项管理"><span class="toc-number">1.1.3.</span> <span class="toc-text">权限项管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组织机构管理"><span class="toc-number">1.1.4.</span> <span class="toc-text">组织机构管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用系统"><span class="toc-number">1.1.5.</span> <span class="toc-text">应用系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全参数"><span class="toc-number">1.1.6.</span> <span class="toc-text">安全参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志管理"><span class="toc-number">1.1.7.</span> <span class="toc-text">日志管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据字典"><span class="toc-number">1.1.8.</span> <span class="toc-text">数据字典</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#业务逻辑"><span class="toc-number">1.2.</span> <span class="toc-text">业务逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#前后端分离系统权限控制流程"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">前后端分离系统权限控制流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用程序登录权限控制流程"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">应用程序登录权限控制流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口定义"><span class="toc-number">1.3.</span> <span class="toc-text">接口定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-获取Authorization-Code"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">1.获取Authorization Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-获取Access-Token"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">2.获取Access Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Refresh-Token刷新接口"><span class="toc-number">1.3.0.3.</span> <span class="toc-text">3.Refresh Token刷新接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-密码模式登录"><span class="toc-number">1.3.0.4.</span> <span class="toc-text">4.密码模式登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-获取用户信息"><span class="toc-number">1.3.0.5.</span> <span class="toc-text">5. 获取用户信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-获取用户权限"><span class="toc-number">1.3.0.6.</span> <span class="toc-text">6. 获取用户权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-获取数据字典"><span class="toc-number">1.3.0.7.</span> <span class="toc-text">7. 获取数据字典</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-获取组织机构"><span class="toc-number">1.3.0.8.</span> <span class="toc-text">8. 获取组织机构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-权限校验"><span class="toc-number">1.3.0.9.</span> <span class="toc-text">9. 权限校验</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库设计"><span class="toc-number">1.4.</span> <span class="toc-text">数据库设计</span></a></li></ol></li></ol>
 		
@@ -115,7 +117,7 @@
 <h3 id="数据字典"><a href="#数据字典" class="headerlink" title="数据字典"></a>数据字典</h3><p>数据字典属性：编号、字典分类、字典名称、字典值、是否启用、排序编号。</p>
 <h2 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h2><p>统一权限系统接口基于OAuth2.0实现验证授权流程。该接口供内部或第三方登录访问授权。</p>
 <p>加密算法采用RSA 2048位进行加密解密和签名，由统一权限系统创建公钥和私钥，私钥由统一权限系统持有，公钥由第三方应用持有。采用密码模式登录时，由第三方应用将密码原文用公钥进行加密，系统收到密文后采用对应的私钥进行解码，解密原文后再使用SHA256哈希算法加密加密盐值+密码原文于数据库中的密码进行比对。</p>
-<p>登录完成后系统分配Access Token，Access Token采用<a href="https://jwt.io/" target="_blank" rel="external">JWT</a> 格式，JWT包含头部、载荷、签名三部分。JWT采用统一权限系统发布的私钥进行签名，第三方应用接收到JWT之后使用公钥进行验证有效性。</p>
+<p>登录完成后系统分配Access Token，Access Token采用<a href="https://jwt.io/" target="_blank" rel="noopener">JWT</a> 格式，JWT包含头部、载荷、签名三部分。JWT采用统一权限系统发布的私钥进行签名，第三方应用接收到JWT之后使用公钥进行验证有效性。</p>
 <p>JWT载荷JSON格式如下：</p>
 <table>
 <thead>
@@ -184,9 +186,9 @@
 </tbody>
 </table>
 <p>JSON内容示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;sub&quot;: &quot;SuperAdmin&quot;,</div><div class="line">  &quot;name&quot;: &quot;超级管理员&quot;,</div><div class="line">  &quot;iss&quot;: &quot;http://192.168.1.100&quot;,</div><div class="line">  &quot;aud&quot;: &quot;TIMS-Client-1&quot;,</div><div class="line">  &quot;isa&quot;: true,</div><div class="line">  &quot;nonce&quot;: &quot;ABCAV32hkKG&quot;,</div><div class="line">  &quot;role&quot;: &quot;管理员&quot;,</div><div class="line">  &quot;exp&quot;: 1598851053729,</div><div class="line">  &quot;iat&quot;: 1598246196411</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="前后端分离系统权限控制流程"><a href="#前后端分离系统权限控制流程" class="headerlink" title="前后端分离系统权限控制流程"></a>前后端分离系统权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/前后端分离系统权限控制流程.png" alt="前后端分离系统权限控制流程.png" title="">
-<h4 id="应用程序登录权限控制流程"><a href="#应用程序登录权限控制流程" class="headerlink" title="应用程序登录权限控制流程"></a>应用程序登录权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/应用程序登录权限控制流程.png" alt="应用程序登录权限控制流程.png" title="">
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;sub&quot;: &quot;SuperAdmin&quot;,</span><br><span class="line">  &quot;name&quot;: &quot;超级管理员&quot;,</span><br><span class="line">  &quot;iss&quot;: &quot;http://192.168.1.100&quot;,</span><br><span class="line">  &quot;aud&quot;: &quot;TIMS-Client-1&quot;,</span><br><span class="line">  &quot;isa&quot;: true,</span><br><span class="line">  &quot;nonce&quot;: &quot;ABCAV32hkKG&quot;,</span><br><span class="line">  &quot;role&quot;: &quot;管理员&quot;,</span><br><span class="line">  &quot;exp&quot;: 1598851053729,</span><br><span class="line">  &quot;iat&quot;: 1598246196411</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="前后端分离系统权限控制流程"><a href="#前后端分离系统权限控制流程" class="headerlink" title="前后端分离系统权限控制流程"></a>前后端分离系统权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/前后端分离系统权限控制流程.png">
+<h4 id="应用程序登录权限控制流程"><a href="#应用程序登录权限控制流程" class="headerlink" title="应用程序登录权限控制流程"></a>应用程序登录权限控制流程</h4><img src="/2020/09/17/Unified-identity-authentication-system-platform/应用程序登录权限控制流程.png">
 <h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><h4 id="1-获取Authorization-Code"><a href="#1-获取Authorization-Code" class="headerlink" title="1.获取Authorization Code"></a>1.获取Authorization Code</h4><p><strong>请求地址:</strong> <code>/oauth2/authorize</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -237,7 +239,7 @@
 <li><strong>成功响应</strong></li>
 </ul>
 <p>如果授权成功，授权服务器会将用户的浏览器重定向到<code>redirect_uri</code>，并带上<code>code</code>，<code>state</code>等参数，例子如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://example.com/example?code=CODE&amp;state=STATE</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/example?code=CODE&amp;state=STATE</span><br></pre></td></tr></table></figure>
 <p><strong>返回参数说明：</strong></p>
 <table>
 <thead>
@@ -267,7 +269,7 @@
 <li><strong>失败响应</strong></li>
 </ul>
 <p>如果授权失败，授权服务器会将用户的浏览器重定向到<code>redirect_uri</code>，并带上<code>error</code>，<code>error_description</code>, <code>state</code>等参数，例子如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http://example.com/example?error=ERROR&amp;error_description=ERROR_DESCRIPTION&amp;state=STATE</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/example?error=ERROR&amp;error_description=ERROR_DESCRIPTION&amp;state=STATE</span><br></pre></td></tr></table></figure>
 <p><strong>返回参数说明：</strong></p>
 <table>
 <thead>
@@ -357,7 +359,7 @@
 <li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
 <li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;token_type&quot;: &quot;Bearer&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;OPENID&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;token_type&quot;: &quot;Bearer&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;expires_in&quot;: 360000,</span><br><span class="line"></span><br><span class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;scope&quot;: &quot;scope value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;openId&quot;:&quot;OPENID&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败响应</strong></li>
 </ul>
@@ -366,7 +368,7 @@
 <li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
 <li>error_description：一段可读的文字，用来帮助理解和解决发生的错误</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;error&quot;: &quot;error_code&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="3-Refresh-Token刷新接口"><a href="#3-Refresh-Token刷新接口" class="headerlink" title="3.Refresh Token刷新接口"></a>3.Refresh Token刷新接口</h4><p><strong>请求地址:</strong> <code>/oauth2/refresh_token</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -424,7 +426,7 @@
 <li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
 <li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;2.0XXXXXXXXX&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;expires_in&quot;: 360000,</span><br><span class="line"></span><br><span class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;scope&quot;: &quot;scope value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;openId&quot;:&quot;2.0XXXXXXXXX&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败响应</strong></li>
 </ul>
@@ -433,7 +435,7 @@
 <li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
 <li>error_description：一段人类可读的文字，用来帮助理解和解决发生的错误</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;error&quot;: &quot;error_code&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="4-密码模式登录"><a href="#4-密码模式登录" class="headerlink" title="4.密码模式登录"></a>4.密码模式登录</h4><p><strong>请求地址:</strong> <code>/oauth2/signin</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -491,7 +493,7 @@
 <li>scope: Access Token最终的访问范围，关于权限的具体信息参考scope权限列表</li>
 <li>openId: 用户统一标识，可以唯一标识一个用户.网站或应用可将此ID进行存储，便于用户下次登录时辨识其身份</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</div><div class="line"></div><div class="line">  &quot;expires_in&quot;: 360000,</div><div class="line"></div><div class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</div><div class="line"></div><div class="line">  &quot;scope&quot;: &quot;scope value&quot;,</div><div class="line"></div><div class="line">  &quot;openId&quot;:&quot;OPENID&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;access_token&quot;: &quot;access token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;expires_in&quot;: 360000,</span><br><span class="line"></span><br><span class="line">  &quot;refresh_token&quot;: &quot;refresh token value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;scope&quot;: &quot;scope value&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;openId&quot;:&quot;OPENID&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败响应</strong></li>
 </ul>
@@ -500,7 +502,7 @@
 <li>error：错误码，是一个int类型的数字 请参考OAuth定义的错误码</li>
 <li>error_description：一段可读的文字，用来帮助理解和解决发生的错误</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;error&quot;: &quot;error_code&quot;,</div><div class="line"></div><div class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;error&quot;: &quot;error_code&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;error_description&quot;: &quot;错误描述&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="5-获取用户信息"><a href="#5-获取用户信息" class="headerlink" title="5. 获取用户信息"></a>5. 获取用户信息</h4><p><strong>请求地址:</strong> <code>/oauth2/account_profile</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -532,11 +534,11 @@
 <ul>
 <li><strong>成功</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: &#123;</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;用户编号&quot;,</div><div class="line"></div><div class="line">            &quot;userName&quot;: &quot;用户姓名&quot;,</div><div class="line">            </div><div class="line">            &quot;email&quot;: &quot;电子邮箱&quot;,</div><div class="line"></div><div class="line">            &quot;role&quot;: &quot;角色名称，多个用英文逗号分隔&quot;</div><div class="line"></div><div class="line">           &#125;,</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;result&quot;: &quot;ok&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;description&quot;: &quot;成功&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;data&quot;: &#123;</span><br><span class="line"></span><br><span class="line">            &quot;name&quot;: &quot;用户编号&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;userName&quot;: &quot;用户姓名&quot;,</span><br><span class="line">            </span><br><span class="line">            &quot;email&quot;: &quot;电子邮箱&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;role&quot;: &quot;角色名称，多个用英文逗号分隔&quot;</span><br><span class="line"></span><br><span class="line">           &#125;,</span><br><span class="line"></span><br><span class="line">  &quot;code&quot;: 0</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &quot;result&quot;: &quot;error&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;description&quot;: &quot;错误描述&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;code&quot;: &quot;错误码&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="6-获取用户权限"><a href="#6-获取用户权限" class="headerlink" title="6. 获取用户权限"></a>6. 获取用户权限</h4><p><strong>请求地址:</strong> <code>/oauth2/get_permission</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -568,11 +570,11 @@
 <ul>
 <li><strong>成功</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;id&quot;: &quot;权限编号&quot;,</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;用户编号&quot;,</div><div class="line"></div><div class="line">            &quot;parentId&quot;: &quot;父权限编号&quot;,</div><div class="line">            </div><div class="line">            &quot;url&quot;: &quot;权限地址&quot;,</div><div class="line">            </div><div class="line">            &quot;icon&quot;: &quot;图标&quot;,</div><div class="line"></div><div class="line">            &quot;renderForm&quot;: &quot;呈现形式(0:菜单 1:按钮)&quot;,</div><div class="line"></div><div class="line">            &quot;openMode&quot;: &quot;打开方式(0:内部,1:弹窗)&quot;</div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;result&quot;: &quot;ok&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;description&quot;: &quot;成功&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;data&quot;: [&#123;</span><br><span class="line">            &quot;id&quot;: &quot;权限编号&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;name&quot;: &quot;用户编号&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;parentId&quot;: &quot;父权限编号&quot;,</span><br><span class="line">            </span><br><span class="line">            &quot;url&quot;: &quot;权限地址&quot;,</span><br><span class="line">            </span><br><span class="line">            &quot;icon&quot;: &quot;图标&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;renderForm&quot;: &quot;呈现形式(0:菜单 1:按钮)&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;openMode&quot;: &quot;打开方式(0:内部,1:弹窗)&quot;</span><br><span class="line">           &#125;</span><br><span class="line">          ]</span><br><span class="line"></span><br><span class="line">  &quot;code&quot;: 0</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &quot;result&quot;: &quot;error&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;description&quot;: &quot;错误描述&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;code&quot;: &quot;错误码&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="7-获取数据字典"><a href="#7-获取数据字典" class="headerlink" title="7. 获取数据字典"></a>7. 获取数据字典</h4><p><strong>请求地址:</strong> <code>/oauth2/get_dict</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -610,11 +612,11 @@
 <ul>
 <li><strong>成功</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;key&quot;: &quot;字典Key&quot;,</div><div class="line"></div><div class="line">            &quot;value&quot;: &quot;字典Value&quot;      </div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;result&quot;: &quot;ok&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;description&quot;: &quot;成功&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;data&quot;: [&#123;</span><br><span class="line">            &quot;key&quot;: &quot;字典Key&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;value&quot;: &quot;字典Value&quot;      </span><br><span class="line">           &#125;</span><br><span class="line">          ]</span><br><span class="line"></span><br><span class="line">  &quot;code&quot;: 0</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &quot;result&quot;: &quot;error&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;description&quot;: &quot;错误描述&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;code&quot;: &quot;错误码&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="8-获取组织机构"><a href="#8-获取组织机构" class="headerlink" title="8. 获取组织机构"></a>8. 获取组织机构</h4><p><strong>请求地址:</strong> <code>/oauth2/get_org</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -640,11 +642,11 @@
 <ul>
 <li><strong>成功</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line"></div><div class="line">  &quot;data&quot;: [&#123;</div><div class="line">            &quot;id&quot;: &quot;组织机构编号&quot;,</div><div class="line"></div><div class="line">            &quot;name&quot;: &quot;组织机构名称&quot;,</div><div class="line"></div><div class="line">            &quot;parentId&quot;: &quot;组织机构父编号&quot;,</div><div class="line"></div><div class="line">            &quot;remark&quot;: &quot;备注&quot;</div><div class="line">           &#125;</div><div class="line">          ]</div><div class="line"></div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;result&quot;: &quot;ok&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;description&quot;: &quot;成功&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;data&quot;: [&#123;</span><br><span class="line">            &quot;id&quot;: &quot;组织机构编号&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;name&quot;: &quot;组织机构名称&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;parentId&quot;: &quot;组织机构父编号&quot;,</span><br><span class="line"></span><br><span class="line">            &quot;remark&quot;: &quot;备注&quot;</span><br><span class="line">           &#125;</span><br><span class="line">          ]</span><br><span class="line"></span><br><span class="line">  &quot;code&quot;: 0</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &quot;result&quot;: &quot;error&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;description&quot;: &quot;错误描述&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;code&quot;: &quot;错误码&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="9-权限校验"><a href="#9-权限校验" class="headerlink" title="9. 权限校验"></a>9. 权限校验</h4><p><strong>请求地址:</strong> <code>/oauth2/verify_permission</code></p>
 <p><strong>请求方法:</strong> GET</p>
 <p><strong>请求参数:</strong></p>
@@ -676,12 +678,21 @@
 <ul>
 <li><strong>成功</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">  &quot;result&quot;: &quot;ok&quot;,</div><div class="line"></div><div class="line">  &quot;description&quot;: &quot;成功&quot;,</div><div class="line">  </div><div class="line">  &quot;code&quot;: 0</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &quot;result&quot;: &quot;ok&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;description&quot;: &quot;成功&quot;,</span><br><span class="line">  </span><br><span class="line">  &quot;code&quot;: 0</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><strong>失败</strong></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line"></div><div class="line">   &quot;result&quot;: &quot;error&quot;,</div><div class="line"></div><div class="line">   &quot;description&quot;: &quot;错误描述&quot;,</div><div class="line"></div><div class="line">   &quot;code&quot;: &quot;错误码&quot;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><img src="/2020/09/17/Unified-identity-authentication-system-platform/数据库设计.png" alt="数据库设计.png" title="">  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &quot;result&quot;: &quot;error&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;description&quot;: &quot;错误描述&quot;,</span><br><span class="line"></span><br><span class="line">   &quot;code&quot;: &quot;错误码&quot;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h2><img src="/2020/09/17/Unified-identity-authentication-system-platform/数据库设计.png">
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -712,18 +723,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析">
+ <a href="/2020/12/16/Spring-learning-spring-data-JPA-mysql/" title="Spring学习：数据访问层采用JPA集成MySQL">
   <strong>上一篇：</strong><br/>
   <span>
-  勤务管理之排班分析</span>
+  Spring学习：数据访问层采用JPA集成MySQL</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2020/12/16/Spring-learning-spring-data-JPA-mysql/"  title="Spring学习：数据访问层采用JPA集成MySQL">
+<a href="/2020/08/19/Schedule-analysis-of-duty-management/"  title="勤务管理之排班分析">
  <strong>下一篇：</strong><br/> 
- <span>Spring学习：数据访问层采用JPA集成MySQL
+ <span>勤务管理之排班分析
 </span>
 </a>
 </div>
@@ -733,22 +744,22 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#统一身份认证系统平台功能设计"><span class="toc-number">1.</span> <span class="toc-text">统一身份认证系统平台功能设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#系统设置"><span class="toc-number">1.1.</span> <span class="toc-text">系统设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#用户管理"><span class="toc-number">1.1.1.</span> <span class="toc-text">用户管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#角色管理"><span class="toc-number">1.1.2.</span> <span class="toc-text">角色管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#权限项管理"><span class="toc-number">1.1.3.</span> <span class="toc-text">权限项管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组织机构管理"><span class="toc-number">1.1.4.</span> <span class="toc-text">组织机构管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#应用系统"><span class="toc-number">1.1.5.</span> <span class="toc-text">应用系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安全参数"><span class="toc-number">1.1.6.</span> <span class="toc-text">安全参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#日志管理"><span class="toc-number">1.1.7.</span> <span class="toc-text">日志管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据字典"><span class="toc-number">1.1.8.</span> <span class="toc-text">数据字典</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#业务逻辑"><span class="toc-number">1.2.</span> <span class="toc-text">业务逻辑</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#前后端分离系统权限控制流程"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">前后端分离系统权限控制流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用程序登录权限控制流程"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">应用程序登录权限控制流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口定义"><span class="toc-number">1.3.</span> <span class="toc-text">接口定义</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-获取Authorization-Code"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">1.获取Authorization Code</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-获取Access-Token"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">2.获取Access Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-Refresh-Token刷新接口"><span class="toc-number">1.3.0.3.</span> <span class="toc-text">3.Refresh Token刷新接口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-密码模式登录"><span class="toc-number">1.3.0.4.</span> <span class="toc-text">4.密码模式登录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-获取用户信息"><span class="toc-number">1.3.0.5.</span> <span class="toc-text">5. 获取用户信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-获取用户权限"><span class="toc-number">1.3.0.6.</span> <span class="toc-text">6. 获取用户权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-获取数据字典"><span class="toc-number">1.3.0.7.</span> <span class="toc-text">7. 获取数据字典</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-获取组织机构"><span class="toc-number">1.3.0.8.</span> <span class="toc-text">8. 获取组织机构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#9-权限校验"><span class="toc-number">1.3.0.9.</span> <span class="toc-text">9. 权限校验</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据库设计"><span class="toc-number">1.4.</span> <span class="toc-text">数据库设计</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -758,7 +769,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -802,11 +813,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -815,7 +826,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -827,7 +838,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -851,7 +862,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -859,7 +870,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -871,7 +882,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -884,7 +895,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -1099,7 +1110,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

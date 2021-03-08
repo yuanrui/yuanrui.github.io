@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>在WebService中预览图片 | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2017/11/21/AspNet-WebService-show-image/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。html也是xml。只要构造特定的h">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-11-21T06:47:47.903Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在WebService中预览图片">
@@ -35,9 +36,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -49,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +67,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,15 +90,24 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> 发表于 2017-11-21</time>
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">	//版本1 使用html预览显示</div><div class="line">	[WebMethod]</div><div class="line">	public void Base64ToImage(string @base64)</div><div class="line">	&#123;            </div><div class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;meta charset=&apos;UTF-8&apos;&gt;</div><div class="line">&lt;title&gt;&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;img src=&apos;data:image/png;base64,&#123;0&#125;&apos;/&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&quot;, @base64);</div><div class="line"></div><div class="line">		var context = HttpContext.Current;</div><div class="line">		if (context == null || context.Response == null)</div><div class="line">		&#123;</div><div class="line">			return;</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		context.Response.Clear();</div><div class="line">		context.Response.ClearHeaders();</div><div class="line">		context.Response.Write(result);</div><div class="line">		context.Response.End();</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
-<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//版本2 直接输出image类型</div><div class="line">[WebMethod]</div><div class="line">public void Base64ToImage(string @base64)</div><div class="line">&#123;</div><div class="line">	byte[] data = Convert.FromBase64String(@base64);</div><div class="line">	var context = HttpContext.Current;</div><div class="line"></div><div class="line">	if (context == null || context.Response == null)</div><div class="line">	&#123;</div><div class="line">		return;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	context.Response.Clear();</div><div class="line">	context.Response.ClearHeaders();</div><div class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</div><div class="line">	context.Response.BinaryWrite(data);</div><div class="line">	context.Response.End();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-  
+		<p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">	//版本1 使用html预览显示</span><br><span class="line">	[WebMethod]</span><br><span class="line">	public void Base64ToImage(string @base64)</span><br><span class="line">	&#123;            </span><br><span class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;img src=&apos;data:image/png;base64,&#123;0&#125;&apos;/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&quot;, @base64);</span><br><span class="line"></span><br><span class="line">		var context = HttpContext.Current;</span><br><span class="line">		if (context == null || context.Response == null)</span><br><span class="line">		&#123;</span><br><span class="line">			return;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		context.Response.Clear();</span><br><span class="line">		context.Response.ClearHeaders();</span><br><span class="line">		context.Response.Write(result);</span><br><span class="line">		context.Response.End();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//版本2 直接输出image类型</span><br><span class="line">[WebMethod]</span><br><span class="line">public void Base64ToImage(string @base64)</span><br><span class="line">&#123;</span><br><span class="line">	byte[] data = Convert.FromBase64String(@base64);</span><br><span class="line">	var context = HttpContext.Current;</span><br><span class="line"></span><br><span class="line">	if (context == null || context.Response == null)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	context.Response.Clear();</span><br><span class="line">	context.Response.ClearHeaders();</span><br><span class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</span><br><span class="line">	context.Response.BinaryWrite(data);</span><br><span class="line">	context.Response.End();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -132,18 +143,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/09/21/Oracle-crsctl-note/" title="Oracle crsctl命令笔记">
+ <a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/" title="让EasyUI timespinner支持24小时格式">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle crsctl命令笔记</span>
+  让EasyUI timespinner支持24小时格式</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/"  title="让EasyUI timespinner支持24小时格式">
+<a href="/2017/09/21/Oracle-crsctl-note/"  title="Oracle crsctl命令笔记">
  <strong>下一篇：</strong><br/> 
- <span>让EasyUI timespinner支持24小时格式
+ <span>Oracle crsctl命令笔记
 </span>
 </a>
 </div>
@@ -153,15 +164,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -171,7 +182,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -215,11 +226,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -228,7 +239,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -240,7 +251,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -264,7 +275,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -272,7 +283,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -284,7 +295,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -297,7 +308,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -510,7 +521,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

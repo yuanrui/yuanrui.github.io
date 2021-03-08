@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>C#特定格式字符串转换为DateTime | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2017/05/04/CSharp-string-parse-exact-to-datetime/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。难道只能将字符串转换为特定的格式，比如下面这样？1234567891011var input = &amp;quot;20170504112153&amp;quot;;DateTime time;if (input.Leng">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-05-04T06:49:05.891Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C#特定格式字符串转换为DateTime">
@@ -35,9 +36,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -49,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +67,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,17 +90,26 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> 发表于 2017-05-04</time>
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">DateTime time;</div><div class="line"></div><div class="line">if (input.Length &gt; 13)</div><div class="line">&#123;</div><div class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</div><div class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</div><div class="line">		+ input.Substring(10, 2);</div><div class="line"></div><div class="line">	time = DateTime.Parse(timeInput);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153&quot;;</div><div class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</div></pre></td></tr></table></figure></p>
-<p>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var input = &quot;20170504112153999&quot;;</div><div class="line">var date = DateTime.ParseExact(input</div><div class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</div><div class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</div></pre></td></tr></table></figure></p>
+		<p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153&quot;;</span><br><span class="line">DateTime time;</span><br><span class="line"></span><br><span class="line">if (input.Length &gt; 13)</span><br><span class="line">&#123;</span><br><span class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</span><br><span class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</span><br><span class="line">		+ input.Substring(10, 2);</span><br><span class="line"></span><br><span class="line">	time = DateTime.Parse(timeInput);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153&quot;;</span><br><span class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</span><br></pre></td></tr></table></figure></p>
+<p>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153999&quot;;</span><br><span class="line">var date = DateTime.ParseExact(input</span><br><span class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</span><br><span class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</span><br></pre></td></tr></table></figure></p>
 <p>将毫秒的每种可能格式列举出来，方法有点笨，这也不失为一种解决办法。</p>
-  
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -134,18 +145,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/04/28/Oracle-sql-recursion/" title="Oracle Sql递归">
+ <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4">
   <strong>上一篇：</strong><br/>
   <span>
-  Oracle Sql递归</span>
+  Asp.Net Mvc 3升级到Mvc 4</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/"  title="Asp.Net Mvc 3升级到Mvc 4">
+<a href="/2017/04/28/Oracle-sql-recursion/"  title="Oracle Sql递归">
  <strong>下一篇：</strong><br/> 
- <span>Asp.Net Mvc 3升级到Mvc 4
+ <span>Oracle Sql递归
 </span>
 </a>
 </div>
@@ -155,15 +166,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -173,7 +184,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -217,11 +228,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -230,7 +241,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -242,7 +253,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -266,7 +277,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -274,7 +285,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -286,7 +297,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -299,7 +310,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -512,7 +523,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

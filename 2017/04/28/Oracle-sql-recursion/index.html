@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>Oracle Sql递归 | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2017/04/28/Oracle-sql-recursion/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="最近在做一个用户管理方面的需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户1234567891011121314151617181920212223--测试用脚本create table T_SYS_USER(  id         INTEGER,  name       VARCHAR2(20),  password   VARCHAR2(20)">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2017-05-05T09:25:53.674Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Oracle Sql递归">
@@ -35,9 +36,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -49,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +67,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,14 +90,14 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> 发表于 2017-04-28</time>
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>最近在做一个用户管理方面的需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">--测试用脚本</div><div class="line">create table T_SYS_USER</div><div class="line">(</div><div class="line">  id         INTEGER,</div><div class="line">  name       VARCHAR2(20),</div><div class="line">  password   VARCHAR2(20),</div><div class="line">  created_by VARCHAR2(20)</div><div class="line">);</div><div class="line">/</div><div class="line">--id为主键 name唯一</div><div class="line">insert into T_SYS_USER values (1, &apos;admin&apos;, &apos;&apos;, &apos;admin&apos;);</div><div class="line">insert into T_SYS_USER values (2, &apos;root&apos;, &apos;&apos;, &apos;admin&apos;);</div><div class="line">insert into T_SYS_USER values (3, &apos;user&apos;, &apos;&apos;, &apos;root&apos;);</div><div class="line">insert into T_SYS_USER values (4, &apos;dba&apos;, &apos;&apos;, &apos;user&apos;);</div><div class="line">insert into T_SYS_USER values (5, &apos;yuanrui&apos;, &apos;&apos;, &apos;dba&apos;);</div><div class="line">insert into T_SYS_USER values (6, &apos;banana&apos;, &apos;&apos;, &apos;yuanrui&apos;);</div><div class="line">insert into T_SYS_USER values (7, &apos;dog&apos;, &apos;&apos;, &apos;banana&apos;);</div><div class="line">insert into T_SYS_USER values (8, &apos;cat&apos;, &apos;&apos;, &apos;dog&apos;);</div><div class="line">insert into T_SYS_USER values (9, &apos;pig&apos;, &apos;&apos;, &apos;cat&apos;);</div><div class="line">insert into T_SYS_USER values (10, &apos;fish&apos;, &apos;&apos;, &apos;pig&apos;);</div><div class="line"></div><div class="line">commit</div><div class="line">/</div></pre></td></tr></table></figure></p>
-<p>查询用户yuanrui的子账户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select level, id, name, created_by </div><div class="line">from T_SYS_USER</div><div class="line">start with id = 5</div><div class="line">connect by prior UPPER(name) = UPPER(created_by)</div></pre></td></tr></table></figure></p>
+		<p>最近在做一个用户管理方面的需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">--测试用脚本</span><br><span class="line">create table T_SYS_USER</span><br><span class="line">(</span><br><span class="line">  id         INTEGER,</span><br><span class="line">  name       VARCHAR2(20),</span><br><span class="line">  password   VARCHAR2(20),</span><br><span class="line">  created_by VARCHAR2(20)</span><br><span class="line">);</span><br><span class="line">/</span><br><span class="line">--id为主键 name唯一</span><br><span class="line">insert into T_SYS_USER values (1, &apos;admin&apos;, &apos;&apos;, &apos;admin&apos;);</span><br><span class="line">insert into T_SYS_USER values (2, &apos;root&apos;, &apos;&apos;, &apos;admin&apos;);</span><br><span class="line">insert into T_SYS_USER values (3, &apos;user&apos;, &apos;&apos;, &apos;root&apos;);</span><br><span class="line">insert into T_SYS_USER values (4, &apos;dba&apos;, &apos;&apos;, &apos;user&apos;);</span><br><span class="line">insert into T_SYS_USER values (5, &apos;yuanrui&apos;, &apos;&apos;, &apos;dba&apos;);</span><br><span class="line">insert into T_SYS_USER values (6, &apos;banana&apos;, &apos;&apos;, &apos;yuanrui&apos;);</span><br><span class="line">insert into T_SYS_USER values (7, &apos;dog&apos;, &apos;&apos;, &apos;banana&apos;);</span><br><span class="line">insert into T_SYS_USER values (8, &apos;cat&apos;, &apos;&apos;, &apos;dog&apos;);</span><br><span class="line">insert into T_SYS_USER values (9, &apos;pig&apos;, &apos;&apos;, &apos;cat&apos;);</span><br><span class="line">insert into T_SYS_USER values (10, &apos;fish&apos;, &apos;&apos;, &apos;pig&apos;);</span><br><span class="line"></span><br><span class="line">commit</span><br><span class="line">/</span><br></pre></td></tr></table></figure></p>
+<p>查询用户yuanrui的子账户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(name) = UPPER(created_by)</span><br></pre></td></tr></table></figure></p>
 <p>结果</p>
 <table>
 <thead>
@@ -145,7 +147,7 @@
 </tr>
 </tbody>
 </table>
-<p>查询用户yuanrui的父账户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select  level, id, name, created_by </div><div class="line">from T_SYS_USER</div><div class="line">start with id = 5</div><div class="line">connect by prior UPPER(created_by) = UPPER(name)</div></pre></td></tr></table></figure></p>
+<p>查询用户yuanrui的父账户<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure></p>
 <p>结果</p>
 <table>
 <thead>
@@ -189,8 +191,8 @@
 </tr>
 </tbody>
 </table>
-<p>在实际使用情况中，递归查询有时候还是会抛出异常，主要原因是数据不正确造成的。<br>举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">update T_SYS_USER</div><div class="line">set created_by = name</div><div class="line">where id = 1;</div><div class="line">commit</div><div class="line">/</div><div class="line">select  level, id, name, created_by </div><div class="line">from T_SYS_USER</div><div class="line">start with id = 5</div><div class="line">connect by prior UPPER(created_by) = UPPER(name)</div></pre></td></tr></table></figure></p>
-<p>执行时会抛出异常:ORA-01436:用户数据中的 CONNECT BY 循环<br>在CONNECT BY后加上nocycle可以结束循环调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select  level, id, name, created_by </div><div class="line">from T_SYS_USER</div><div class="line">start with id = 5</div><div class="line">connect by prior UPPER(created_by) = UPPER(name)</div></pre></td></tr></table></figure></p>
+<p>在实际使用情况中，递归查询有时候还是会抛出异常，主要原因是数据不正确造成的。<br>举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">update T_SYS_USER</span><br><span class="line">set created_by = name</span><br><span class="line">where id = 1;</span><br><span class="line">commit</span><br><span class="line">/</span><br><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure></p>
+<p>执行时会抛出异常:ORA-01436:用户数据中的 CONNECT BY 循环<br>在CONNECT BY后加上nocycle可以结束循环调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure></p>
 <p>注意结果有所变化，编号为1的数据行被排除掉了</p>
 <table>
 <thead>
@@ -228,10 +230,19 @@
 </tr>
 </tbody>
 </table>
-<p>以前玩MS SQL的时候，玩过用公用表表达式(Common Table Expressions)做递归。网上查找Oracle Sql递归大多数结果都是关于用CONNECT BY来实现的，在Oracle中其实也可以用CTE来做递归。注意版本问题，本地测试环境Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production可用，听说11g r2之前的版本不支持，求证？<br>给一个CTE版本查询示例，查询结果是差不多的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">--查询用户yuanrui的子账户</div><div class="line">with userCte(level_, id, name, created_by) as</div><div class="line">(</div><div class="line">     select 1 as level_, id, name, created_by</div><div class="line">     from T_SYS_USER</div><div class="line">     where id =5</div><div class="line">     union all</div><div class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</div><div class="line">     from T_SYS_USER a, userCte b</div><div class="line">     where UPPER(a.created_by) = UPPER(b.name) </div><div class="line">     and a.created_by &lt;&gt; a.name</div><div class="line">)</div><div class="line">select * from userCte;</div><div class="line"></div><div class="line">--查询用户yuanrui的父账户</div><div class="line">with userCte(level_, id, name, created_by) as</div><div class="line">(</div><div class="line">     select 1 as level_, id, name, created_by</div><div class="line">     from T_SYS_USER</div><div class="line">     where id =5</div><div class="line">     union all</div><div class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</div><div class="line">     from T_SYS_USER a, userCte b</div><div class="line">     where UPPER(a.name) = UPPER(b.created_by) </div><div class="line">     and a.created_by &lt;&gt; a.name</div><div class="line">)</div><div class="line">select * from userCte;</div></pre></td></tr></table></figure></p>
+<p>以前玩MS SQL的时候，玩过用公用表表达式(Common Table Expressions)做递归。网上查找Oracle Sql递归大多数结果都是关于用CONNECT BY来实现的，在Oracle中其实也可以用CTE来做递归。注意版本问题，本地测试环境Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production可用，听说11g r2之前的版本不支持，求证？<br>给一个CTE版本查询示例，查询结果是差不多的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">--查询用户yuanrui的子账户</span><br><span class="line">with userCte(level_, id, name, created_by) as</span><br><span class="line">(</span><br><span class="line">     select 1 as level_, id, name, created_by</span><br><span class="line">     from T_SYS_USER</span><br><span class="line">     where id =5</span><br><span class="line">     union all</span><br><span class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</span><br><span class="line">     from T_SYS_USER a, userCte b</span><br><span class="line">     where UPPER(a.created_by) = UPPER(b.name) </span><br><span class="line">     and a.created_by &lt;&gt; a.name</span><br><span class="line">)</span><br><span class="line">select * from userCte;</span><br><span class="line"></span><br><span class="line">--查询用户yuanrui的父账户</span><br><span class="line">with userCte(level_, id, name, created_by) as</span><br><span class="line">(</span><br><span class="line">     select 1 as level_, id, name, created_by</span><br><span class="line">     from T_SYS_USER</span><br><span class="line">     where id =5</span><br><span class="line">     union all</span><br><span class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</span><br><span class="line">     from T_SYS_USER a, userCte b</span><br><span class="line">     where UPPER(a.name) = UPPER(b.created_by) </span><br><span class="line">     and a.created_by &lt;&gt; a.name</span><br><span class="line">)</span><br><span class="line">select * from userCte;</span><br></pre></td></tr></table></figure></p>
 <p>where id=5为起始条件，union all 后面的子查询where UPPER(a.name) = UPPER(b.created_by) 为连接条件<br>注意where条件中的and a.created_by &lt;&gt; a.name, 这个条件主要用于结束循环(对应上文中的nocycle)</p>
-<p>其他参考:<a href="http://www.cnblogs.com/yingsong/p/5035907.html" target="_blank" rel="external">http://www.cnblogs.com/yingsong/p/5035907.html</a></p>
-  
+<p>其他参考:<a href="http://www.cnblogs.com/yingsong/p/5035907.html" target="_blank" rel="noopener">http://www.cnblogs.com/yingsong/p/5035907.html</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -267,18 +278,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/02/09/Vs-Code-handling-note/" title="VS Code 上手杂记">
+ <a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/" title="C#特定格式字符串转换为DateTime">
   <strong>上一篇：</strong><br/>
   <span>
-  VS Code 上手杂记</span>
+  C#特定格式字符串转换为DateTime</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/"  title="C#特定格式字符串转换为DateTime">
+<a href="/2017/02/09/Vs-Code-handling-note/"  title="VS Code 上手杂记">
  <strong>下一篇：</strong><br/> 
- <span>C#特定格式字符串转换为DateTime
+ <span>VS Code 上手杂记
 </span>
 </a>
 </div>
@@ -288,15 +299,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -306,7 +317,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -350,11 +361,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -363,7 +374,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -375,7 +386,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -399,7 +410,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -407,7 +418,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -419,7 +430,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -432,7 +443,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -645,7 +656,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

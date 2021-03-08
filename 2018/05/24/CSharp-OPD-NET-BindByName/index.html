@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>探讨下C#使用OPD.NET参数绑定问题 | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2018/05/24/CSharp-OPD-NET-BindByName/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="Oracle官方出的OPD.NET托管驱动对于ADO.NET的参数绑定方面，让人看不懂。如下面这个代码，注意SAL、COMM、DEPTNO的值。1234567891011121314151617181920212223	const string cmdText = @&amp;quot;insert into emp (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-false.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-code.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-config.png">
@@ -39,9 +40,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -53,7 +55,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -69,7 +71,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -92,18 +94,27 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> 发表于 2018-05-24</time>
+    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> Published 2018-05-24</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
-		<p>Oracle官方出的OPD.NET托管驱动对于ADO.NET的参数绑定方面，让人看不懂。<br>如下面这个代码，注意SAL、COMM、DEPTNO的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">	const string cmdText = @&quot;</div><div class="line">insert into emp (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) </div><div class="line">values (:EMPNO, :ENAME, :JOB, :MGR, :HIREDATE, :SAL, :COMM, :DEPTNO)&quot;;</div><div class="line"></div><div class="line">	var connStr = &quot;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.1.170)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ebos)));User ID=scott;Password=tiger;&quot;;</div><div class="line">	using (var conn = new OracleConnection(connStr))</div><div class="line">	&#123;</div><div class="line">		using (var cmd = conn.CreateCommand())</div><div class="line">		&#123;</div><div class="line">			cmd.CommandText = cmdText;</div><div class="line">			cmd.Parameters.Add(&quot;EMPNO&quot;, OracleDbType.Int16, 1, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;ENAME&quot;, OracleDbType.Varchar2, &quot;ENAME&quot;.ToArray(), ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;JOB&quot;, OracleDbType.Varchar2, &quot;JOB&quot;, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;MGR&quot;, OracleDbType.Int32, 1, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;HIREDATE&quot;, OracleDbType.Date, DateTime.Now, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;DEPTNO&quot;, OracleDbType.Int32, 30, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;COMM&quot;, OracleDbType.Decimal, 20, ParameterDirection.Input);</div><div class="line">			cmd.Parameters.Add(&quot;SAL&quot;, OracleDbType.Decimal, 10, ParameterDirection.Input);</div><div class="line"></div><div class="line">			conn.Open();</div><div class="line">			var result = cmd.ExecuteNonQuery() &gt; 0;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure></p>
-<p>你想要的结果：SAL=10、COMM=20、DEPTNO=30。但实际上结果是这样的：<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-false.png" alt="默认情况下BindName为false"><br>很奇怪是吧，OPD.NET中默认情况下，参数绑定的不是依据名称而是根据顺序来传递的。<br>我们设置OracleCommand属性BindByName为true，再次执行插入语句代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cmd.BindByName = true;</div></pre></td></tr></table></figure></p>
-<p>EMPNO=2的行是我们想要的结果。<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-code.png" alt="设置OracleCommand属性BindByName为true"><br>那么每次通过设置BindByName=true，对于开发人员而言是一件痛苦的事情。当前不设置也没有关系，前提是你必须保证参数顺序的正确性。<br>有没有配置或全局属性可以将BindByName默认设置为true呢，Oracle官方考虑到这种情况，提供在web.config或app.config文件中设置默认值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;configuration&gt;</div><div class="line">    &lt;configSections&gt;</div><div class="line">        &lt;section name=&quot;oracle.manageddataaccess.client&quot;</div><div class="line">          type=&quot;OracleInternal.Common.ODPMSectionHandler, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</div><div class="line">    &lt;/configSections&gt;</div><div class="line">    &lt;system.data&gt;</div><div class="line">        &lt;DbProviderFactories&gt;</div><div class="line">            &lt;remove invariant=&quot;Oracle.ManagedDataAccess.Client&quot;/&gt;</div><div class="line">            &lt;add name=&quot;ODP.NET, Managed Driver&quot; invariant=&quot;Oracle.ManagedDataAccess.Client&quot; description=&quot;Oracle Data Provider for .NET, Managed Driver&quot;</div><div class="line">              type=&quot;Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</div><div class="line">        &lt;/DbProviderFactories&gt;</div><div class="line">    &lt;/system.data&gt;</div><div class="line">    &lt;runtime&gt;</div><div class="line">        &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</div><div class="line">            &lt;dependentAssembly&gt;</div><div class="line">                &lt;publisherPolicy apply=&quot;no&quot;/&gt;</div><div class="line">                &lt;assemblyIdentity name=&quot;Oracle.ManagedDataAccess&quot; publicKeyToken=&quot;89b483f429c47342&quot; culture=&quot;neutral&quot;/&gt;</div><div class="line">                &lt;bindingRedirect oldVersion=&quot;4.121.0.0 - 4.65535.65535.65535&quot; newVersion=&quot;4.122.1.0&quot;/&gt;</div><div class="line">            &lt;/dependentAssembly&gt;</div><div class="line">        &lt;/assemblyBinding&gt;</div><div class="line">    &lt;/runtime&gt;</div><div class="line">    &lt;oracle.manageddataaccess.client&gt;</div><div class="line">        &lt;version number=&quot;*&quot;&gt;</div><div class="line">            &lt;settings&gt;</div><div class="line">                &lt;setting name=&quot;BindByName&quot; value=&quot;true&quot;/&gt;</div><div class="line">            &lt;/settings&gt;</div><div class="line">        &lt;/version&gt;</div><div class="line">    &lt;/oracle.manageddataaccess.client&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure></p>
+		<p>Oracle官方出的OPD.NET托管驱动对于ADO.NET的参数绑定方面，让人看不懂。<br>如下面这个代码，注意SAL、COMM、DEPTNO的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">	const string cmdText = @&quot;</span><br><span class="line">insert into emp (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) </span><br><span class="line">values (:EMPNO, :ENAME, :JOB, :MGR, :HIREDATE, :SAL, :COMM, :DEPTNO)&quot;;</span><br><span class="line"></span><br><span class="line">	var connStr = &quot;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.1.170)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ebos)));User ID=scott;Password=tiger;&quot;;</span><br><span class="line">	using (var conn = new OracleConnection(connStr))</span><br><span class="line">	&#123;</span><br><span class="line">		using (var cmd = conn.CreateCommand())</span><br><span class="line">		&#123;</span><br><span class="line">			cmd.CommandText = cmdText;</span><br><span class="line">			cmd.Parameters.Add(&quot;EMPNO&quot;, OracleDbType.Int16, 1, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;ENAME&quot;, OracleDbType.Varchar2, &quot;ENAME&quot;.ToArray(), ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;JOB&quot;, OracleDbType.Varchar2, &quot;JOB&quot;, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;MGR&quot;, OracleDbType.Int32, 1, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;HIREDATE&quot;, OracleDbType.Date, DateTime.Now, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;DEPTNO&quot;, OracleDbType.Int32, 30, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;COMM&quot;, OracleDbType.Decimal, 20, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;SAL&quot;, OracleDbType.Decimal, 10, ParameterDirection.Input);</span><br><span class="line"></span><br><span class="line">			conn.Open();</span><br><span class="line">			var result = cmd.ExecuteNonQuery() &gt; 0;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>你想要的结果：SAL=10、COMM=20、DEPTNO=30。但实际上结果是这样的：<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-false.png" alt="默认情况下BindName为false"><br>很奇怪是吧，OPD.NET中默认情况下，参数绑定的不是依据名称而是根据顺序来传递的。<br>我们设置OracleCommand属性BindByName为true，再次执行插入语句代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd.BindByName = true;</span><br></pre></td></tr></table></figure></p>
+<p>EMPNO=2的行是我们想要的结果。<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-code.png" alt="设置OracleCommand属性BindByName为true"><br>那么每次通过设置BindByName=true，对于开发人员而言是一件痛苦的事情。当前不设置也没有关系，前提是你必须保证参数顺序的正确性。<br>有没有配置或全局属性可以将BindByName默认设置为true呢，Oracle官方考虑到这种情况，提供在web.config或app.config文件中设置默认值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;configSections&gt;</span><br><span class="line">        &lt;section name=&quot;oracle.manageddataaccess.client&quot;</span><br><span class="line">          type=&quot;OracleInternal.Common.ODPMSectionHandler, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</span><br><span class="line">    &lt;/configSections&gt;</span><br><span class="line">    &lt;system.data&gt;</span><br><span class="line">        &lt;DbProviderFactories&gt;</span><br><span class="line">            &lt;remove invariant=&quot;Oracle.ManagedDataAccess.Client&quot;/&gt;</span><br><span class="line">            &lt;add name=&quot;ODP.NET, Managed Driver&quot; invariant=&quot;Oracle.ManagedDataAccess.Client&quot; description=&quot;Oracle Data Provider for .NET, Managed Driver&quot;</span><br><span class="line">              type=&quot;Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</span><br><span class="line">        &lt;/DbProviderFactories&gt;</span><br><span class="line">    &lt;/system.data&gt;</span><br><span class="line">    &lt;runtime&gt;</span><br><span class="line">        &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</span><br><span class="line">            &lt;dependentAssembly&gt;</span><br><span class="line">                &lt;publisherPolicy apply=&quot;no&quot;/&gt;</span><br><span class="line">                &lt;assemblyIdentity name=&quot;Oracle.ManagedDataAccess&quot; publicKeyToken=&quot;89b483f429c47342&quot; culture=&quot;neutral&quot;/&gt;</span><br><span class="line">                &lt;bindingRedirect oldVersion=&quot;4.121.0.0 - 4.65535.65535.65535&quot; newVersion=&quot;4.122.1.0&quot;/&gt;</span><br><span class="line">            &lt;/dependentAssembly&gt;</span><br><span class="line">        &lt;/assemblyBinding&gt;</span><br><span class="line">    &lt;/runtime&gt;</span><br><span class="line">    &lt;oracle.manageddataaccess.client&gt;</span><br><span class="line">        &lt;version number=&quot;*&quot;&gt;</span><br><span class="line">            &lt;settings&gt;</span><br><span class="line">                &lt;setting name=&quot;BindByName&quot; value=&quot;true&quot;/&gt;</span><br><span class="line">            &lt;/settings&gt;</span><br><span class="line">        &lt;/version&gt;</span><br><span class="line">    &lt;/oracle.manageddataaccess.client&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
 <p>为了验证配置是否生效，注释代码cmd.BindByName=true, 再次运行代码，结果如下所示。<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-config.png" alt="在配置文件中设置BindByName为true"><br>需要说明的是，代码中设置BindByName的优先级高于配置。</p>
-<p>参考链接：<br><a href="https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160" target="_blank" rel="external">https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160</a><br><a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8" target="_blank" rel="external">https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8</a></p>
-  
+<p>参考链接：<br><a href="https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160" target="_blank" rel="noopener">https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160</a><br><a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8" target="_blank" rel="noopener">https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -139,18 +150,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/" title="让EasyUI timespinner支持24小时格式">
+ <a href="/2020/02/06/Core-Python-Programming-Learning/" title="Python核心编程学习笔记">
   <strong>上一篇：</strong><br/>
   <span>
-  让EasyUI timespinner支持24小时格式</span>
+  Python核心编程学习笔记</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2020/02/06/Core-Python-Programming-Learning/"  title="Python核心编程学习笔记">
+<a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/"  title="让EasyUI timespinner支持24小时格式">
  <strong>下一篇：</strong><br/> 
- <span>Python核心编程学习笔记
+ <span>让EasyUI timespinner支持24小时格式
 </span>
 </a>
 </div>
@@ -160,15 +171,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -178,7 +189,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -222,11 +233,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -235,7 +246,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -247,7 +258,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -271,7 +282,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -279,7 +290,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -291,7 +302,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -304,7 +315,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -517,7 +528,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

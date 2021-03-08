@@ -1,7 +1,7 @@
 
  <!DOCTYPE HTML>
-<html >
-<head>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="UTF-8">
   
     <title>一个多表联合查询需求 | 棠城夜雨</title>
@@ -18,6 +18,7 @@
 <meta property="og:url" content="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-thinking-in-2020/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
+<meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2020-12-16T09:03:16.213Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个多表联合查询需求">
@@ -35,9 +36,10 @@
     
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
   <body>
     <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
       
 <div>
 		
@@ -49,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +67,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yuanrui.github.io">
 					</form>
 					
@@ -88,7 +90,7 @@
 		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
 		
   <p class="article-time">
-    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> 发表于 2020-02-13</time>
+    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
     
   </p>
 </header>
@@ -194,7 +196,7 @@
 </tbody>
 </table>
 <p>最终提供的sql如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> t_table_c c</div><div class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</div><div class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</div><div class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id = b.system_id</div><div class="line">	<span class="keyword">where</span> a.system_id = <span class="number">123</span></div><div class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">'%'</span> || b.role_id || <span class="string">'%'</span> </div><div class="line">)</div></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">name</span> <span class="keyword">from</span> t_table_c c</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</span><br><span class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</span><br><span class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id = b.system_id</span><br><span class="line">	<span class="keyword">where</span> a.system_id = <span class="number">123</span></span><br><span class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">'%'</span> || b.role_id || <span class="string">'%'</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <p>上面的查询sql采用的exists子句的方式，采用连接的方式也能完成相同的功能，具体实现见文末附录Sql.</p>
 <p>从给的脱敏数据可以推测出各个表的功能。</p>
 <ul>
@@ -231,13 +233,22 @@
 <p>给存储的值添加一个前缀，也许是一个好办法，比如：r555,r777,r1777,r1555，前缀采用代表特定含义的单词或字母，加上实际的数值，可以构造出一个特殊的字符串。条件子语句：like ‘%r555’. 可以避免示例数据中的错误查询结果问题。</p>
 <p>等等，好像还是有点问题。如果字符串为：r55,r555,r1555，何解。</p>
 <p>当然如果存在这种情况，我们还有一个终极解决办法（适用于任何情况）：前缀+值+后缀</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">前缀+值+后缀</div><div class="line"></div><div class="line">列存储示例：[55],[555],[1555]</div><div class="line">条件子语句：like &apos;%[55]%&apos;，这里前缀=&apos;[&apos;、值=&apos;55&apos;、后缀=&apos;]&apos;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前缀+值+后缀</span><br><span class="line"></span><br><span class="line">列存储示例：[55],[555],[1555]</span><br><span class="line">条件子语句：like &apos;%[55]%&apos;，这里前缀=&apos;[&apos;、值=&apos;55&apos;、后缀=&apos;]&apos;</span><br></pre></td></tr></table></figure>
 <p>一般情况下，使用特定单词或字母作为特殊前缀加取值可以满级绝大多数情况，这种方式可读信更高。而需要严格意义上的避免误查询，可以采用：前缀+值+后缀。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">--附录Sql</div><div class="line"></div><div class="line">create table t_table_a</div><div class="line">(</div><div class="line">    id int primary key,</div><div class="line">    system_id int</div><div class="line">);</div><div class="line"></div><div class="line">create table t_table_b</div><div class="line">(</div><div class="line">    id int primary key,</div><div class="line">    system_id int,</div><div class="line">    role_id int</div><div class="line">);</div><div class="line"></div><div class="line">create table t_table_c</div><div class="line">(</div><div class="line">    id int primary key,</div><div class="line">    name varchar2(20),</div><div class="line">    role_list varchar2(200)</div><div class="line">);</div><div class="line"></div><div class="line">insert into t_table_a values(1, 123);</div><div class="line">insert into t_table_a values(2, 234);</div><div class="line">insert into t_table_a values(3, 100);</div><div class="line"></div><div class="line">insert into t_table_b values(1, 222, 667);</div><div class="line">insert into t_table_b values(2, 123, 555);</div><div class="line">insert into t_table_b values(3, 123, 777);</div><div class="line">insert into t_table_b values(4, 234, 567);</div><div class="line">insert into t_table_b values(5, 234, 231);</div><div class="line"></div><div class="line">insert into t_table_c values(1, &apos;james&apos;, &apos;667,777&apos;);</div><div class="line">insert into t_table_c values(2, &apos;lucy&apos;, &apos;223,555,823&apos;);</div><div class="line">insert into t_table_c values(3, &apos;tom&apos;, &apos;253,231&apos;);</div><div class="line">insert into t_table_c values(4, &apos;max&apos;, &apos;123,712&apos;);</div><div class="line">insert into t_table_c values(5, &apos;min&apos;, &apos;123,567&apos;);</div><div class="line">insert into t_table_c values(6, &apos;kim&apos;, &apos;1777,2211&apos;);</div><div class="line">insert into t_table_c values(7, &apos;kenv&apos;, &apos;220,1555,800&apos;);</div><div class="line"></div><div class="line">select name from t_table_c c</div><div class="line">where exists (</div><div class="line">	select 1 from t_table_a a</div><div class="line">	inner join t_table_b b on a.system_id = b.system_id</div><div class="line">	where a.system_id = 123</div><div class="line">    and c.role_list like &apos;%&apos; || b.role_id || &apos;%&apos; </div><div class="line">);</div><div class="line"></div><div class="line">select c.name, b.id from t_table_a a</div><div class="line">inner join t_table_b b on a.system_id = b.system_id</div><div class="line">inner join t_table_c c on c.role_list like &apos;%&apos; || b.role_id || &apos;%&apos; </div><div class="line">where a.system_id = 123;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">--附录Sql</span><br><span class="line"></span><br><span class="line">create table t_table_a</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_b</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int,</span><br><span class="line">    role_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_c</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    name varchar2(20),</span><br><span class="line">    role_list varchar2(200)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">insert into t_table_a values(1, 123);</span><br><span class="line">insert into t_table_a values(2, 234);</span><br><span class="line">insert into t_table_a values(3, 100);</span><br><span class="line"></span><br><span class="line">insert into t_table_b values(1, 222, 667);</span><br><span class="line">insert into t_table_b values(2, 123, 555);</span><br><span class="line">insert into t_table_b values(3, 123, 777);</span><br><span class="line">insert into t_table_b values(4, 234, 567);</span><br><span class="line">insert into t_table_b values(5, 234, 231);</span><br><span class="line"></span><br><span class="line">insert into t_table_c values(1, &apos;james&apos;, &apos;667,777&apos;);</span><br><span class="line">insert into t_table_c values(2, &apos;lucy&apos;, &apos;223,555,823&apos;);</span><br><span class="line">insert into t_table_c values(3, &apos;tom&apos;, &apos;253,231&apos;);</span><br><span class="line">insert into t_table_c values(4, &apos;max&apos;, &apos;123,712&apos;);</span><br><span class="line">insert into t_table_c values(5, &apos;min&apos;, &apos;123,567&apos;);</span><br><span class="line">insert into t_table_c values(6, &apos;kim&apos;, &apos;1777,2211&apos;);</span><br><span class="line">insert into t_table_c values(7, &apos;kenv&apos;, &apos;220,1555,800&apos;);</span><br><span class="line"></span><br><span class="line">select name from t_table_c c</span><br><span class="line">where exists (</span><br><span class="line">	select 1 from t_table_a a</span><br><span class="line">	inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">	where a.system_id = 123</span><br><span class="line">    and c.role_list like &apos;%&apos; || b.role_id || &apos;%&apos; </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like &apos;%&apos; || b.role_id || &apos;%&apos; </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
 <p>On more thing. </p>
 <p>这sql在Oracle中跑起来，没有任何问题。但是朋友拿去改造后在mysql中运行，出现的查询结果依旧不正常。排查了很长一段时间，才找到原因：在mysql中 ‘%’ || ‘S001’ || ‘%’ 显示打印为：1. 正确的方式是使用concat函数。所以如果你在mysql中运行，需要这样构造sql.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select c.name, b.id from t_table_a a</div><div class="line">inner join t_table_b b on a.system_id = b.system_id</div><div class="line">inner join t_table_c c on c.role_list like concat(&apos;%&apos;, b.role_id, &apos;%&apos;) </div><div class="line">where a.system_id = 123;</div></pre></td></tr></table></figure>
-  
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like concat(&apos;%&apos;, b.role_id, &apos;%&apos;) </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"https://github.com/yuanrui/yuanrui.github.io","owner":"https://github.com/yuanrui","admin":["https://github.com/yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -273,18 +284,18 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2020/02/06/Core-Python-Programming-Learning/" title="Python核心编程学习笔记">
+ <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析">
   <strong>上一篇：</strong><br/>
   <span>
-  Python核心编程学习笔记</span>
+  勤务管理之排班分析</span>
 </a>
 </div>
 
 
 <div class="next">
-<a href="/2020/08/19/Schedule-analysis-of-duty-management/"  title="勤务管理之排班分析">
+<a href="/2020/02/06/Core-Python-Programming-Learning/"  title="Python核心编程学习笔记">
  <strong>下一篇：</strong><br/> 
- <span>勤务管理之排班分析
+ <span>Python核心编程学习笔记
 </span>
 </a>
 </div>
@@ -294,15 +305,15 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -312,7 +323,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">Categories</p>
 		<ul>
 		
 		  
@@ -356,11 +367,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
 		</ul>
@@ -369,7 +380,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -381,7 +392,7 @@
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
 			
 		
 			
@@ -405,7 +416,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -413,7 +424,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -425,7 +436,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -438,7 +449,7 @@
 </div>
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
 </aside>
@@ -651,7 +662,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
