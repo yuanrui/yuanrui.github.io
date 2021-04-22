@@ -79,6 +79,69 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/11/21/Javascript-common-validation-function/" title="Javascript常用验证函数收集" itemprop="url">Javascript常用验证函数收集</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-21T02:40:00.000Z" itemprop="datePublished"> Published 2016-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>字符串是否为空或为空格<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return value == null || /\S/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>邮箱地址格式验证<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	//https: //html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address</span><br><span class="line">	///^[a-zA-Z0-9.!#$%&amp;&apos;*+\/=?^_`&#123;|&#125;~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]&#123;0,61&#125;[a-zA-Z0-9])?)*$/</span><br><span class="line"></span><br><span class="line">	//form 163</span><br><span class="line">	return !/^[._-]?(?:[a-z0-9]+[._-]?)+[a-z0-9]?@[a-z0-9](?:[.-]?[a-z0-9]+)*$/i.test(value)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>车辆号牌格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	return /(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;6&#125;$)|(^[A-Z]&#123;2&#125;[A-Z0-9]&#123;2&#125;[A-Z0-9\u4E00-\u9FA5]&#123;1&#125;[A-Z0-9]&#123;4&#125;$)|(^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼]&#123;1&#125;[A-Z0-9]&#123;5&#125;[挂学警军港澳]&#123;1&#125;$)|(^[A-Z]&#123;2&#125;[0-9]&#123;5&#125;$)|(^(08|38)&#123;1&#125;[A-Z0-9]&#123;4&#125;[A-Z0-9挂学警军港澳]&#123;1&#125;$)/.test(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>手机号码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var length = value.length;</span><br><span class="line">	var re = /^(((13[0-9]&#123;1&#125;)|(15[0-9]&#123;1&#125;)|(18[0-9]&#123;1&#125;))+\d&#123;8&#125;)$/;</span><br><span class="line">	return (length == 11 &amp;&amp; re.test(value));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>计算字符串长度<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function (value) &#123;</span><br><span class="line">	var utfStr = value.match(/[^\x00-\xff]/ig);</span><br><span class="line">	return value.length + (utfStr == null ? 0 : utfStr.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/10/31/Resolve-asp-net-session-sign-out-and-ajax-no-response/" title="解决Asp.Net Session退出造成Ajax请求无响应的Bug" itemprop="url">解决Asp.Net Session退出造成Ajax请求无响应的Bug</a>
   </h1>
   <p class="article-author">By
@@ -260,7 +323,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -416,7 +479,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
   </div>
 
 </div>
@@ -740,64 +803,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/05/11/CSharp-Learning/" title="C# Learning" itemprop="url">C# Learning</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-05-11T08:42:34.000Z" itemprop="datePublished"> Published 2016-05-11</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        
-<div id="gitalk-container"></div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-		<script>
-		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
-	    gitalkConfig.id = md5(location.pathname);
-		var gitalk = new Gitalk(gitalkConfig);
-	    gitalk.render("gitalk-container");
-	    </script>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/page/2/"><span></span>Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next<span></span></a>
@@ -858,7 +863,15 @@
 		  
 		
 		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/Oracle/" title="Oracle">Oracle<sup>1</sup></a></li>
 		  
 		
 		  
@@ -866,7 +879,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>3</sup></a></li>
 		  
 		
 		  
@@ -887,11 +900,11 @@
 			
 		
 			
-				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>11</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>9</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>10</sup></a></li>
 			
 		
 			
@@ -907,10 +920,6 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
@@ -919,11 +928,19 @@
 			
 		
 			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
 			
 		
 			
