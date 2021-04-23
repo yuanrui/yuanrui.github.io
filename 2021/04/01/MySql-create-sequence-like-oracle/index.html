@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="在Oracle中我们使用sequence来生成整型自增ID，而MySql不支持创建sequence. 虽然MySql中可以对主键设置AUTO_INCREMENT属性来实现表ID自增，但某些场景下需要提前获取ID标识领域对象，以实现业务生存周期的后续处理。在不支持sequence的其他RMDB中，一般使用序列表来实现对数列值的管理，并定义函数或存储过程用于获取更新序列值。 序列表的定义大同小异，一般">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-04-22T08:00:03.377Z">
+<meta property="og:updated_time" content="2021-04-23T03:09:41.656Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySql实现生成序列值">
 <meta name="twitter:description" content="在Oracle中我们使用sequence来生成整型自增ID，而MySql不支持创建sequence. 虽然MySql中可以对主键设置AUTO_INCREMENT属性来实现表ID自增，但某些场景下需要提前获取ID标识领域对象，以实现业务生存周期的后续处理。在不支持sequence的其他RMDB中，一般使用序列表来实现对数列值的管理，并定义函数或存储过程用于获取更新序列值。 序列表的定义大同小异，一般">
@@ -101,11 +101,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">drop table if exists t_sequence;</span><br><span class="line">create table t_sequence</span><br><span class="line">(</span><br><span class="line">  seq_name varchar(64) not null primary key comment &apos;序列名称&apos;,</span><br><span class="line">  start_value bigint(20) not null default 1 comment &apos;起始值&apos;,</span><br><span class="line">  increment int(11) not null default 1 comment &apos;增量值&apos;,</span><br><span class="line">  updated_at timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP comment &apos;更新时间&apos;</span><br><span class="line">);</span><br><span class="line">alter table t_sequence comment &apos;序列表&apos;;</span><br></pre></td></tr></table></figure>
 <p>在MySql的分支项目MariaDB，从10.3开始支持创建sequence，可以使用Oracle的PL/SQL语法调用序列。MariaDB为了兼容PostgreSQL语法风格，定义了函数：setval()、nextval()、lastval()，分布用于设置当前序列值、获取下一个序列值、获取当前序列值。在PostgreSQL还定义了currval函数，用于返回序列最近获取的值，功能上和lastval相同；不同的是lastval不需要传递序列参数，获取的是当前会话的的序列的最近值。MariaDB中的lastval函数其实应该对应PostgreSQL中的currval，等同于Oracle中的sequence_name.currval.</p>
 <p>为了和MariaDB保持兼容，我们定义名称相同的函数以实现序列功能。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">-- 启用函数创建功能</span><br><span class="line">-- set global log_bin_trust_function_creators=1;</span><br><span class="line"></span><br><span class="line">drop function if exists setval;</span><br><span class="line">create function setval(vseq varchar(64), vstart bigint(20))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  insert into t_sequence(seq_name, start_value, increment, updated_at)</span><br><span class="line">  values (vseq, vstart + 1, 1, CURRENT_TIMESTAMP())</span><br><span class="line">  on duplicate key update start_value = vstart + increment;</span><br><span class="line">  </span><br><span class="line">  return vstart;</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">drop function if exists nextval;</span><br><span class="line">create function nextval(vseq varchar(64))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  update t_sequence</span><br><span class="line">  set start_value = (@next := start_value) + increment</span><br><span class="line">  where seq_name = vseq;</span><br><span class="line">  </span><br><span class="line">  return ifnull(@next, setval(vseq, 1));</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">drop function if exists lastval;</span><br><span class="line">create function lastval(vseq varchar(64))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  declare cur_val bigint(20);</span><br><span class="line">  </span><br><span class="line">  select start_value into cur_val </span><br><span class="line">  from t_sequence</span><br><span class="line">  where seq_name = vseq;</span><br><span class="line">  </span><br><span class="line">  return ifnull(cur_val, setval(vseq, 1));</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
-<p>使用示例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select setval(&apos;abc&apos;, 1);   --返回值:1</span><br><span class="line">select nextval(&apos;abc&apos;);     --返回值:2</span><br><span class="line">select lastval(&apos;abc&apos;);     --返回值:3</span><br></pre></td></tr></table></figure>
-<p>虽然每一个函数都有自动创建序列的功能，但是推荐在使用nextval函数前，初始化序列。默认增量为1，可根据业务情况设置增量值，并在程序中循环构造ID. 以下是伪代码示例。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 执行sql:</span><br><span class="line">insert into t_sequence (seq_name, start_value, increment) values (&apos;system&apos;, 1, 100); -- 序列名称：system，初始值:1, 增量:100</span><br><span class="line">批量获取序列值:</span><br><span class="line">var startId = nextval(&apos;system&apos;);</span><br><span class="line">var increment = 100;</span><br><span class="line">var ids = new List&lt;long&gt;();</span><br><span class="line">for(var i = 0; i &lt; increment; i++) &#123;</span><br><span class="line">	ids.add(++startId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">-- 启用函数创建功能</span><br><span class="line">-- set global log_bin_trust_function_creators=1;</span><br><span class="line"></span><br><span class="line">drop function if exists setval;</span><br><span class="line">create function setval(vseq varchar(64), vstart bigint(20))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  insert into t_sequence(seq_name, start_value, increment, updated_at)</span><br><span class="line">  values (vseq, vstart + 1, 1, CURRENT_TIMESTAMP())</span><br><span class="line">  on duplicate key update start_value = vstart + increment;</span><br><span class="line">  </span><br><span class="line">  return vstart;</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">drop function if exists nextval;</span><br><span class="line">create function nextval(vseq varchar(64))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  set @next = null;</span><br><span class="line">  update t_sequence</span><br><span class="line">  set start_value = (@next := start_value) + increment</span><br><span class="line">  where seq_name = vseq;</span><br><span class="line">  </span><br><span class="line">  return ifnull(@next, setval(vseq, 1));</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">drop function if exists lastval;</span><br><span class="line">create function lastval(vseq varchar(64))</span><br><span class="line">returns bigint(20)</span><br><span class="line">begin</span><br><span class="line">  set @cur_val = null;</span><br><span class="line">  select start_value into @cur_val </span><br><span class="line">  from t_sequence</span><br><span class="line">  where seq_name = vseq;</span><br><span class="line">  </span><br><span class="line">  return ifnull(@cur_val, setval(vseq, 1));</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+<p>虽然每一个函数都有自动创建序列的功能，但是推荐在使用nextval函数前，初始化序列，避免高并发时获取到重复的初始值。使用示例如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select setval(&apos;abc&apos;,1);  -- 返回1</span><br><span class="line">select nextval(&apos;abc&apos;);   -- 返回2</span><br><span class="line">select lastval(&apos;abc&apos;);   -- 返回3</span><br></pre></td></tr></table></figure>
+<p>序列的默认增量为1，业务需要高并发生成ID时，可适当扩充增量值，并通过编程实现批量获取ID值。以下是伪代码示例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-- 执行sql:</span><br><span class="line">insert into t_sequence (seq_name, start_value, increment) values (&apos;system&apos;, 1, 100); -- 序列名称：system，初始值:1, 增量:100</span><br><span class="line">批量获取序列值:</span><br><span class="line">var startId = nextval(&apos;system&apos;); // 返回1</span><br><span class="line">var increment = 100;</span><br><span class="line">var ids = new List&lt;long&gt;();</span><br><span class="line">for(var i = 0; i &lt; increment; i++) &#123;</span><br><span class="line">	ids.add(startId++);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>本文所列举的是MySql的示例，此方案同样可用于其他不支持sequence的RMDB，比如Sql Server 2008、Sqlite…  </p>
+<p>sql附件： <a href="/2021/04/01/MySql-create-sequence-like-oracle/mysql_sequence.sql" title="mysql_sequence.sql">mysql_sequence.sql</a></p>
 <p>参考信息：</p>
 <p><a href="https://mariadb.com/kb/en/sequence-overview/" target="_blank" rel="noopener">https://mariadb.com/kb/en/sequence-overview/</a></p>
 <p><a href="https://mariadb.com/kb/en/create-sequence/" target="_blank" rel="noopener">https://mariadb.com/kb/en/create-sequence/</a></p>
@@ -192,11 +194,15 @@
 		<ul>
 		
 		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -205,10 +211,6 @@
 		
 		  
 			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -277,10 +279,6 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
 			
 		
@@ -289,7 +287,7 @@
 			
 		
 			
-				<li><a href="/tags/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -297,7 +295,11 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
 			
 		
 			
