@@ -79,6 +79,76 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017/11/21/AspNet-WebService-show-image/" title="在WebService中预览图片" itemprop="url">在WebService中预览图片</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">	//版本1 使用html预览显示</span><br><span class="line">	[WebMethod]</span><br><span class="line">	public void Base64ToImage(string @base64)</span><br><span class="line">	&#123;            </span><br><span class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;img src=&apos;data:image/png;base64,&#123;0&#125;&apos;/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&quot;, @base64);</span><br><span class="line"></span><br><span class="line">		var context = HttpContext.Current;</span><br><span class="line">		if (context == null || context.Response == null)</span><br><span class="line">		&#123;</span><br><span class="line">			return;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		context.Response.Clear();</span><br><span class="line">		context.Response.ClearHeaders();</span><br><span class="line">		context.Response.Write(result);</span><br><span class="line">		context.Response.End();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//版本2 直接输出image类型</span><br><span class="line">[WebMethod]</span><br><span class="line">public void Base64ToImage(string @base64)</span><br><span class="line">&#123;</span><br><span class="line">	byte[] data = Convert.FromBase64String(@base64);</span><br><span class="line">	var context = HttpContext.Current;</span><br><span class="line"></span><br><span class="line">	if (context == null || context.Response == null)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	context.Response.Clear();</span><br><span class="line">	context.Response.ClearHeaders();</span><br><span class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</span><br><span class="line">	context.Response.BinaryWrite(data);</span><br><span class="line">	context.Response.End();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017/09/21/Oracle-crsctl-note/" title="Oracle crsctl命令笔记" itemprop="url">Oracle crsctl命令笔记</a>
   </h1>
   <p class="article-author">By
@@ -419,7 +489,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Net/">.Net</a>
+  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/开发笔记/">开发笔记</a>
   </div>
 
 </div>
@@ -940,76 +1010,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2016/11/22/Oracle-useful-hints/" title="Oracle常用提示" itemprop="url">Oracle常用提示</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2016-11-22T01:55:22.000Z" itemprop="datePublished"> Published 2016-11-22</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>取前N条分页数据提示<br>采用row_number进行高效分页<br>参考：<a href="http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/issue-archive/2007/07-jan/o17asktom-093877.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">select *</span><br><span class="line"> from (</span><br><span class="line">select /*+ first_rows(25) */</span><br><span class="line">  your_columns,</span><br><span class="line">  row_number() </span><br><span class="line">  over (order by something unique)rn</span><br><span class="line"> from your_tables )</span><br><span class="line">where rn between :n and :m </span><br><span class="line">order by rn;</span><br></pre></td></tr></table></figure></p>
-<p>结果集缓存提示<br>用于缓存长期稳定的小表数据<br>参考：<a href="http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/articles/sql/11g-caching-pooling-088320.html</a><br>示例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT /*+ result_cache */ * FROM Your_Tables;</span><br></pre></td></tr></table></figure></p>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-		<script>
-		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
-	    gitalkConfig.id = md5(location.pathname);
-		var gitalk = new Gitalk(gitalkConfig);
-	    gitalk.render("gitalk-container");
-	    </script>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/读书笔记/">读书笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next<span></span></a>
@@ -1038,15 +1038,15 @@
 		<ul>
 		
 		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -1055,6 +1055,10 @@
 		
 		  
 			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -1071,6 +1075,10 @@
 		
 		  
 			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -1115,6 +1123,14 @@
 			
 		
 			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
 			
 		
@@ -1123,7 +1139,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -1131,15 +1147,11 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			

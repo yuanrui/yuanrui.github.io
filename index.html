@@ -79,6 +79,93 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2021/04/25/Bulk-insert-into-mysql-using-csharp/" title="C#实现MySql批量写入" itemprop="url">C#实现MySql批量写入</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2021-04-25T02:16:00.000Z" itemprop="datePublished"> Published 2021-04-25</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在MySql中实现批量写入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在本文主要介绍C#中实现批量写入的MySql数据库的几种方法，所测试引用的数据表结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS t_vehicle_pass_record;</span><br><span class="line">CREATE TABLE t_vehicle_pass_record (</span><br><span class="line">  id bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  plate_no varchar(10) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  plate_color varchar(6) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  pass_time datetime NOT NULL DEFAULT now(),</span><br><span class="line">  equip_id varchar(20) NOT NULL,</span><br><span class="line">  created_at datetime NOT NULL DEFAULT now(),</span><br><span class="line">  PRIMARY KEY (id)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+<p>C#模型代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class VehiclePassModel</span><br><span class="line">&#123;</span><br><span class="line">    public Int64 Id &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public string PlateNO &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public string PlateColor &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public DateTime PassTime &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public string EquipId &#123; get; set; &#125;</span><br><span class="line"></span><br><span class="line">    public DateTime CreatedAt &#123; get; set; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法1：循环执行命令"><a href="#方法1：循环执行命令" class="headerlink" title="方法1：循环执行命令"></a>方法1：循环执行命令</h3><p>循环执行命令（MySqlCommand）是一种常规的方式，一般步骤是：创建连接-&gt;打开数据库连接-&gt;创建事务-&gt;创建命令-&gt;循环执行命令-&gt;提交事务-&gt;关闭连接，结束。小提示：循环执行命令时，需要将绑定的参数清空后重新绑定，避免抛出参数已经定义的异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public static int DoInsertList1(IEnumerable&lt;VehiclePassModel&gt; list)</span><br><span class="line">&#123;</span><br><span class="line">    const string sql = &quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values (?id, ?plate_no, ?plate_color, ?pass_time, ?equip_id, now());&quot;;</span><br><span class="line">    var result = 0;</span><br><span class="line">    var connStr = ConfigurationManager.ConnectionStrings[&quot;DefaultConnectionString&quot;].ConnectionString;</span><br><span class="line"></span><br><span class="line">    using (var conn = new MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        using (var tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                foreach (var model in list)</span><br><span class="line">                &#123;</span><br><span class="line">                    cmd.Parameters.Clear();</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;id&quot;, model.Id);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;plate_no&quot;, model.PlateNO);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;plate_color&quot;, model.PlateColor);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;pass_time&quot;, model.PassTime);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;equip_id&quot;, model.EquipId);</span><br><span class="line"></span><br><span class="line">                    result += cmd.ExecuteNonQuery(); //执行sql语句</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法2：使用适配器"><a href="#方法2：使用适配器" class="headerlink" title="方法2：使用适配器"></a>方法2：使用适配器</h3><p>使用此方法执行插入语句，内部执行原理和方法1类似，不同是这里引入了一个适配器(MySqlDataAdapter)用于数据操作的适配。适配器包含4个执行命令：UpdateCommand、SelectCommand、InsertCommand、DeleteCommand，用于数据的更新、查询、插入、删除操作。批量插入时应当使用InsertCommand，不要给其他执行命令赋值，给其他执行命令赋值会造成不必要的执行。适配器包含一个UpdateBatchSize属性，用于将DataTable中的Rows拆分按照数量拆分成多个（Rows.Count / UpdateBatchSize）执行命令；UpdateBatchSize未设置或者小于1时，UpdateBatchSize等于DataTable行数，此时只有一个执行命令。</p>
+<p>适配器的Update方法，提供多个方法重载，推荐使用传入DataTable类型。传入DataSet类型时方法内部会转换为DataTable，并调用UpdateFromDataTable(DataTable dataTable, DataTableMapping tableMapping)方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">public static int DoInsertList2(IEnumerable&lt;VehiclePassModel&gt; list)</span><br><span class="line">&#123;</span><br><span class="line">    const string sql = &quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values (?id, ?plate_no, ?plate_color, ?pass_time, ?equip_id, now());&quot;;</span><br><span class="line">    var result = 0;</span><br><span class="line">    var connStr = ConfigurationManager.ConnectionStrings[&quot;DefaultConnectionString&quot;].ConnectionString;</span><br><span class="line"></span><br><span class="line">    var table = new DataTable(&quot;t_vehicle_pass_record&quot;);</span><br><span class="line">    table.Columns.Add(&quot;id&quot;, typeof(Int64));</span><br><span class="line">    table.Columns.Add(&quot;plate_no&quot;, typeof(string));</span><br><span class="line">    table.Columns.Add(&quot;plate_color&quot;, typeof(string));</span><br><span class="line">    table.Columns.Add(&quot;pass_time&quot;, typeof(DateTime));</span><br><span class="line">    table.Columns.Add(&quot;equip_id&quot;, typeof(string));</span><br><span class="line"></span><br><span class="line">    foreach (var model in list)</span><br><span class="line">    &#123;</span><br><span class="line">        var row = table.NewRow();</span><br><span class="line">        row[&quot;id&quot;] = model.Id;</span><br><span class="line">        row[&quot;plate_no&quot;] = model.PlateNO;</span><br><span class="line">        row[&quot;plate_color&quot;] = model.PlateColor;</span><br><span class="line">        row[&quot;pass_time&quot;] = model.PassTime;</span><br><span class="line">        row[&quot;equip_id&quot;] = model.EquipId;</span><br><span class="line"></span><br><span class="line">        table.Rows.Add(row);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    using (var conn = new MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        using (var tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                using (var adapter = new MySqlDataAdapter())</span><br><span class="line">                &#123;</span><br><span class="line">                    adapter.InsertCommand = cmd;</span><br><span class="line">                    </span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(&quot;?id&quot;, MySqlDbType.Int64, 21, &quot;id&quot;);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(&quot;?plate_no&quot;, MySqlDbType.VarChar, 10, &quot;plate_no&quot;);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(&quot;?plate_color&quot;, MySqlDbType.VarChar, 6, &quot;plate_color&quot;);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(&quot;?pass_time&quot;, MySqlDbType.DateTime, 8, &quot;pass_time&quot;);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(&quot;?equip_id&quot;, MySqlDbType.VarChar, 20, &quot;equip_id&quot;);</span><br><span class="line"></span><br><span class="line">                    adapter.InsertCommand.UpdatedRowSource = UpdateRowSource.None;</span><br><span class="line"></span><br><span class="line">                    //adapter.UpdateBatchSize = 1000;</span><br><span class="line">                    result = adapter.Update(table); //执行sql语句</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法3：执行拼接SQL语句"><a href="#方法3：执行拼接SQL语句" class="headerlink" title="方法3：执行拼接SQL语句"></a>方法3：执行拼接SQL语句</h3><p>MySql的<a href="https://dev.mysql.com/doc/refman/5.7/en/insert.html" target="_blank" rel="noopener"><code>INSERT ... VALUES</code></a> 语法中提供插入多个值列表的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tbl_name (a,b,c) VALUES(1,2,3),(4,5,6),(7,8,9);</span><br></pre></td></tr></table></figure>
+<p>此方法的核心在于拼接SQL语句，绑定参数变量列表。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">public static int DoInsertList3(IEnumerable&lt;VehiclePassModel&gt; list)</span><br><span class="line">&#123;</span><br><span class="line">    const string insertIntoClause = &quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values &quot;;</span><br><span class="line">    var result = 0;</span><br><span class="line">    var connStr = ConfigurationManager.ConnectionStrings[&quot;DefaultConnectionString&quot;].ConnectionString;</span><br><span class="line"></span><br><span class="line">    var valueClauses = new List&lt;string&gt;(list.Count());</span><br><span class="line">    var index = 0;</span><br><span class="line">    using (var conn = new MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        using (var tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.Transaction = tran;</span><br><span class="line"></span><br><span class="line">                foreach (var model in list)</span><br><span class="line">                &#123;</span><br><span class="line">                    var clause = $&quot;(?id_&#123;index&#125;, ?plate_no_&#123;index&#125;, ?plate_color_&#123;index&#125;, ?pass_time_&#123;index&#125;, ?equip_id_&#123;index&#125;, now())&quot;;</span><br><span class="line">                    valueClauses.Add(clause);</span><br><span class="line">                    cmd.Parameters.AddWithValue($&quot;id_&#123;index&#125;&quot;, model.Id);</span><br><span class="line">                    cmd.Parameters.AddWithValue($&quot;plate_no_&#123;index&#125;&quot;, model.PlateNO);</span><br><span class="line">                    cmd.Parameters.AddWithValue($&quot;plate_color_&#123;index&#125;&quot;, model.PlateColor);</span><br><span class="line">                    cmd.Parameters.AddWithValue($&quot;pass_time_&#123;index&#125;&quot;, model.PassTime);</span><br><span class="line">                    cmd.Parameters.AddWithValue($&quot;equip_id_&#123;index&#125;&quot;, model.EquipId);</span><br><span class="line">                    index++;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                var sql = insertIntoClause + string.Join(&quot;,&quot;, valueClauses) + &quot;;&quot;;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line">                result = cmd.ExecuteNonQuery(); //执行sql语句</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法4：使用MySqlBulkLoader"><a href="#方法4：使用MySqlBulkLoader" class="headerlink" title="方法4：使用MySqlBulkLoader"></a>方法4：使用MySqlBulkLoader</h3><p>MySqlBulkLoader主要包装MySql的语法 <a href="https://dev.mysql.com/doc/refman/8.0/en/load-data.html" target="_blank" rel="noopener"><code>LOAD DATA INFILE</code></a>，提供将数据文件从本地或远程保存到数据库。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public static int DoInsertList4(IEnumerable&lt;VehiclePassModel&gt; list)</span><br><span class="line">&#123;</span><br><span class="line">    var result = 0;</span><br><span class="line">    var connStr = ConfigurationManager.ConnectionStrings[&quot;DefaultConnectionString&quot;].ConnectionString;</span><br><span class="line">    var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString() + &quot;.csv&quot;);</span><br><span class="line"></span><br><span class="line">    var head = &quot;id,plate_color,plate_no,pass_time,equip_id&quot; + Environment.NewLine;</span><br><span class="line">    File.AppendAllText(path, head, Encoding.UTF8);</span><br><span class="line">    foreach (var item in list)</span><br><span class="line">    &#123;</span><br><span class="line">        var content = $&quot;&#123;item.Id&#125;,&#123;item.PlateColor&#125;,&#123;item.PlateNO&#125;,&#123;item.PassTime.ToString(&quot;yyyy-MM-dd HH:mm:ss&quot;)&#125;,&#123;item.EquipId&#125;&#123;Environment.NewLine&#125;&quot;;</span><br><span class="line">        File.AppendAllText(path, content, Encoding.UTF8);</span><br><span class="line">    &#125;</span><br><span class="line">    Console.WriteLine(path);</span><br><span class="line"></span><br><span class="line">    using (var conn = new MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        MySqlBulkLoader loader = new MySqlBulkLoader(conn);</span><br><span class="line">        loader.Local = true;</span><br><span class="line">        loader.FieldTerminator = &quot;,&quot;;</span><br><span class="line">        loader.LineTerminator = Environment.NewLine;</span><br><span class="line">        loader.FileName = path;</span><br><span class="line">        loader.NumberOfLinesToSkip = 1;</span><br><span class="line">        loader.CharacterSet = &quot;utf8&quot;;</span><br><span class="line"></span><br><span class="line">        loader.TableName = &quot;t_vehicle_pass_record&quot;;</span><br><span class="line">        loader.Columns.AddRange(head.Split(new[] &#123; &apos;,&apos; &#125;, StringSplitOptions.RemoveEmptyEntries));</span><br><span class="line"></span><br><span class="line">        result = loader.Load();                </span><br><span class="line">    &#125;</span><br><span class="line">    if (File.Exists(path))</span><br><span class="line">    &#123;</span><br><span class="line">        File.Delete(path);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考信息：</p>
+<p><a href="https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/Common/DbDataAdapter.cs" target="_blank" rel="noopener">https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/Common/DbDataAdapter.cs</a></p>
+<p><a href="https://dev.mysql.com/doc/refman/5.7/en/insert.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/insert.html</a></p>
+<p><a href="https://dev.mysql.com/doc/connector-net/en/connector-net-programming-bulk-loader.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/connector-net/en/connector-net-programming-bulk-loader.html</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/">Ado.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/">MySql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/Ado-Net/">Ado.Net</a><a href="/tags/MySql/">MySql</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2021/04/01/MySql-create-sequence-like-oracle/" title="MySql实现生成序列值" itemprop="url">MySql实现生成序列值</a>
   </h1>
   <p class="article-author">By
@@ -137,7 +224,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Sql/">Sql</a><a href="/tags/MySql/">MySql</a>
+  <span></span> <a href="/tags/MySql/">MySql</a><a href="/tags/Sql/">Sql</a>
   </div>
 
 </div>
@@ -8944,76 +9031,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2017/11/21/AspNet-WebService-show-image/" title="在WebService中预览图片" itemprop="url">在WebService中预览图片</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">	//版本1 使用html预览显示</span><br><span class="line">	[WebMethod]</span><br><span class="line">	public void Base64ToImage(string @base64)</span><br><span class="line">	&#123;            </span><br><span class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;img src=&apos;data:image/png;base64,&#123;0&#125;&apos;/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&quot;, @base64);</span><br><span class="line"></span><br><span class="line">		var context = HttpContext.Current;</span><br><span class="line">		if (context == null || context.Response == null)</span><br><span class="line">		&#123;</span><br><span class="line">			return;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		context.Response.Clear();</span><br><span class="line">		context.Response.ClearHeaders();</span><br><span class="line">		context.Response.Write(result);</span><br><span class="line">		context.Response.End();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
-<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//版本2 直接输出image类型</span><br><span class="line">[WebMethod]</span><br><span class="line">public void Base64ToImage(string @base64)</span><br><span class="line">&#123;</span><br><span class="line">	byte[] data = Convert.FromBase64String(@base64);</span><br><span class="line">	var context = HttpContext.Current;</span><br><span class="line"></span><br><span class="line">	if (context == null || context.Response == null)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	context.Response.Clear();</span><br><span class="line">	context.Response.ClearHeaders();</span><br><span class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</span><br><span class="line">	context.Response.BinaryWrite(data);</span><br><span class="line">	context.Response.End();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-		<script>
-		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
-	    gitalkConfig.id = md5(location.pathname);
-		var gitalk = new Gitalk(gitalkConfig);
-	    gitalk.render("gitalk-container");
-	    </script>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Asp-Net/">Asp.Net</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
@@ -9042,15 +9059,15 @@
 		<ul>
 		
 		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Net/" title=".Net">.Net<sup>4</sup></a></li>
-		  
-		
-		  
-			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 		  
 		
 		  
@@ -9059,6 +9076,10 @@
 		
 		  
 			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
 		  
 		
 		  
@@ -9075,6 +9096,10 @@
 		
 		  
 			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -9119,6 +9144,14 @@
 			
 		
 			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
 			
 		
@@ -9127,7 +9160,7 @@
 			
 		
 			
-				<li><a href="/tags/Net/" title=".Net">.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 			
 		
 			
@@ -9135,15 +9168,11 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
