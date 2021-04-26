@@ -79,7 +79,7 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2021/04/25/Bulk-insert-into-mysql-using-csharp/" title="C#实现MySql批量写入" itemprop="url">C#实现MySql批量写入</a>
+      <a href="/2021/04/25/Bulk-insert-into-mysql-using-csharp/" title="C#实现MySql批量导入" itemprop="url">C#实现MySql批量导入</a>
   </h1>
   <p class="article-author">By
        
@@ -92,7 +92,7 @@
 </header>
     <div class="article-content">
         
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量写入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量写入的MySql数据库的几种方法。</p>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。</p>
 <h3 id="方法1：循环执行命令"><a href="#方法1：循环执行命令" class="headerlink" title="方法1：循环执行命令"></a>方法1：循环执行命令</h3><p>循环执行命令（MySqlCommand）是一种常规的方式，一般步骤是：创建连接-&gt;打开数据库连接-&gt;创建事务-&gt;创建命令-&gt;循环执行命令-&gt;提交事务-&gt;关闭连接，结束。小提示：循环执行命令时，需要将绑定的参数清空后重新绑定，避免抛出参数已经定义的异常。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">public static int DoInsertList1(IEnumerable&lt;VehiclePassModel&gt; list)</span><br><span class="line">&#123;</span><br><span class="line">    const string sql = &quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values (?id, ?plate_no, ?plate_color, ?pass_time, ?equip_id, now());&quot;;</span><br><span class="line">    var result = 0;</span><br><span class="line">    var connStr = ConfigurationManager.ConnectionStrings[&quot;DefaultConnectionString&quot;].ConnectionString;</span><br><span class="line"></span><br><span class="line">    using (var conn = new MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        using (var tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            using (var cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                foreach (var model in list)</span><br><span class="line">                &#123;</span><br><span class="line">                    cmd.Parameters.Clear();</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;id&quot;, model.Id);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;plate_no&quot;, model.PlateNO);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;plate_color&quot;, model.PlateColor);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;pass_time&quot;, model.PassTime);</span><br><span class="line">                    cmd.Parameters.AddWithValue(&quot;equip_id&quot;, model.EquipId);</span><br><span class="line"></span><br><span class="line">                    result += cmd.ExecuteNonQuery(); //执行sql语句</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>测试引用的数据表结构如下：</p>
@@ -9248,11 +9248,11 @@
 			
 		
 			
-				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 			
 		
 			
