@@ -79,6 +79,77 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2016/05/18/Resolve-string-exceeds-maxJsonLength/" title="解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常" itemprop="url">解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-05-18T09:12:57.000Z" itemprop="datePublished"> Published 2016-05-18</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>在Mvc 3项目中老是出现“使用 JSON JavaScriptSerializer 进行序列化或反序列化时出错。字符串的长度超过了为 maxJsonLength 属性设置的值。”的异常信息。<br>查询Google之后找到解决方案如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public ContentResult GetResult()</span><br><span class="line">&#123;</span><br><span class="line">    var obj = new object();</span><br><span class="line">    var serializer = new JavaScriptSerializer &#123; MaxJsonLength = Int32.MaxValue, RecursionLimit = 3 &#125;;</span><br><span class="line">    </span><br><span class="line">    var jsonResult = new ContentResult()</span><br><span class="line">    &#123;</span><br><span class="line">        Content = serializer.Serialize(obj),</span><br><span class="line">        ContentType = &quot;application/json&quot;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    return jsonResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另外还可以通过自定义JsonReuslt的方式解决这个异常, 具体做法参考这个链接：<a href="https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/" target="_blank" rel="noopener">https://brianreiter.org/2011/01/03/custom-jsonresult-class-for-asp-net-mvc-to-avoid-maxjsonlength-exceeded-exception/</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Mvc/">Mvc</a>►<a class="article-category-link" href="/categories/Mvc/Net/">.Net</a>►<a class="article-category-link" href="/categories/Mvc/Net/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2016/05/13/How-to-use-hexo/" title="如何使用Hexo" itemprop="url">如何使用Hexo</a>
   </h1>
   <p class="article-author">By
@@ -342,6 +413,10 @@
 		  
 		
 		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
 		  
 		
@@ -362,6 +437,10 @@
 		  
 		
 		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
 			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
 		  
 		
@@ -379,11 +458,11 @@
 			
 		
 			
-				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>10</sup></a></li>
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
 			
 		
 			
@@ -391,7 +470,7 @@
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
 			
 		
 			
@@ -399,7 +478,7 @@
 			
 		
 			
-				<li><a href="/tags/MySql/" title="MySql">MySql<sup>2</sup></a></li>
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
 			
 		
 			
@@ -407,11 +486,11 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
 			
 		
 			
@@ -423,7 +502,7 @@
 			
 		
 			
-				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
 			
 		
 			
