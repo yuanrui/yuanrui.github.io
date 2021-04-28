@@ -12,14 +12,14 @@
 
     
     <meta name="description" content="前言随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。 环境准备本文使用的MySql数据库版本是：5.7，数据库连接驱动采用nuget.org的最新中间件MySql.Data，安装方式如下： 1Install-Package MySql.">
-<meta name="keywords" content=".Net,Ado.Net,MySql">
+<meta name="keywords" content=".Net,Sql,MySql,Ado.Net">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C#实现MySql批量导入">
 <meta property="og:url" content="http://yuanrui.github.io/2021/04/25/Bulk-insert-into-mysql-using-csharp/index.html">
 <meta property="og:site_name" content="棠城夜雨">
 <meta property="og:description" content="前言随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。 环境准备本文使用的MySql数据库版本是：5.7，数据库连接驱动采用nuget.org的最新中间件MySql.Data，安装方式如下： 1Install-Package MySql.">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2021-04-28T03:43:11.574Z">
+<meta property="og:updated_time" content="2021-04-28T05:14:11.738Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C#实现MySql批量导入">
 <meta name="twitter:description" content="前言随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。 环境准备本文使用的MySql数据库版本是：5.7，数据库连接驱动采用nuget.org的最新中间件MySql.Data，安装方式如下： 1Install-Package MySql.">
@@ -224,13 +224,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/">Ado.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/">MySql</a>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/">Ado.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/">MySql</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/Sql/">Sql</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/Ado-Net/">Ado.Net</a><a href="/tags/MySql/">MySql</a>
+  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/Sql/">Sql</a><a href="/tags/MySql/">MySql</a><a href="/tags/Ado-Net/">Ado.Net</a>
   </div>
 
 </div>
@@ -343,11 +343,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
 		  
 		
 		  
-			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -359,7 +359,11 @@
 		  
 		
 		  
-			<li><a href="/categories/Sql/" title="Sql">Sql<sup>3</sup></a></li>
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
 		  
 		
 		  
@@ -367,7 +371,7 @@
 		  
 		
 		  
-			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
 		  
 		
 		</ul>
@@ -400,11 +404,15 @@
 			
 		
 			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
 			
 		
 			
@@ -412,7 +420,7 @@
 			
 		
 			
-				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
 			
 		
 			
@@ -424,11 +432,7 @@
 			
 		
 			
-				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
 			
 		
 			
