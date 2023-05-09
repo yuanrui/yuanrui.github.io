@@ -1,0 +1,745 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>勤务管理之排班分析 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="前言排班是人力资源精细化控制的基础，一个好的排班管理不仅能调动人员的工作积极性，也能提高工作效率，提高劳动力生产力。 对于排班管理而言，需要考虑：时间、人员、地点、工作事项、工作设备和环境要求等几个要素。针对不同需求场景，包含的要素需要有所侧重，其中时间和人员是最为核心的要素，毕竟排班讲究的是合适的时间安排合适的人去做某某事情。当然还有可能包含合适的地点，但是在一些固定工作场所的前提下，地点相对时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="勤务管理之排班分析">
+<meta property="og:url" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="前言排班是人力资源精细化控制的基础，一个好的排班管理不仅能调动人员的工作积极性，也能提高工作效率，提高劳动力生产力。 对于排班管理而言，需要考虑：时间、人员、地点、工作事项、工作设备和环境要求等几个要素。针对不同需求场景，包含的要素需要有所侧重，其中时间和人员是最为核心的要素，毕竟排班讲究的是合适的时间安排合适的人去做某某事情。当然还有可能包含合适的地点，但是在一些固定工作场所的前提下，地点相对时">
+<meta property="og:locale">
+<meta property="og:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/_images/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E7%8F%AD%E6%AC%A1%E8%AE%BE%E7%BD%AE.png">
+<meta property="og:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%AF%8F%E5%91%A8.png">
+<meta property="og:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E8%8A%82%E5%81%87%E6%97%A5.png">
+<meta property="og:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%AF%8F%E6%9C%88.png">
+<meta property="og:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%A8%A1%E6%9D%BF%E5%88%97%E8%A1%A8.png">
+<meta property="article:published_time" content="2020-08-19T07:20:46.000Z">
+<meta property="article:modified_time" content="2020-12-16T09:01:37.463Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="开发笔记">
+<meta property="article:tag" content="系统设计">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/_images/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E7%8F%AD%E6%AC%A1%E8%AE%BE%E7%BD%AE.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析" itemprop="url">勤务管理之排班分析</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-08-19T07:20:46.000Z" itemprop="datePublished"> Published 2020-08-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E5%AE%9A%E5%9C%BA%E6%89%80%E6%8E%92%E7%8F%AD%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">固定场所排班分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E5%8C%96%E5%9C%BA%E6%89%80%E6%8E%92%E7%8F%AD%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">变化场所排班分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">举例分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.2.</span> <span class="toc-text">勤务模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF%E7%89%B9%E5%BE%81"><span class="toc-number">3.3.</span> <span class="toc-text">勤务模板特征</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>排班是人力资源精细化控制的基础，一个好的排班管理不仅能调动人员的工作积极性，也能提高工作效率，提高劳动力生产力。</p>
+<p>对于排班管理而言，需要考虑：时间、人员、地点、工作事项、工作设备和环境要求等几个要素。针对不同需求场景，包含的要素需要有所侧重，其中时间和人员是最为核心的要素，毕竟排班讲究的是合适的时间安排合适的人去做某某事情。当然还有可能包含合适的地点，但是在一些固定工作场所的前提下，地点相对时间、人员而言属性不是那么重要。</p>
+<h3 id="固定场所排班分析"><a href="#固定场所排班分析" class="headerlink" title="固定场所排班分析"></a>固定场所排班分析</h3><p>假设，某交巡警支队后台视频监控部门排班管理，需要保障道路交通持续不断的安全运维，对工作人员要求按照早班、中班、夜班三个班次进行轮换上班上岗。针对这种场景，工作场所一般是固定的，每个员工的工作内容一般是固化下来的，每天只需要按部就班执行即可。那么在这里，主要包含时间、人员这两个要素。</p>
+<p>该部门的排班表如下：</p>
+<table>
+<thead>
+<tr>
+<th>日期</th>
+<th>班次</th>
+<th>人员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020-08-15</td>
+<td>早班（8:00～16:00）</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>2020-08-15</td>
+<td>中班（16:00～24:00）</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>2020-08-15</td>
+<td>夜班（24:00～8:00）</td>
+<td>乔峰 虚竹 段誉</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>早班（8:00～16:00）</td>
+<td>黄药师 一灯大师 周伯通</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>中班（16:00～24:00）</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>2020-08-16</td>
+<td>夜班（24:00～8:00）</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>从这个排班表中，我们可以抽象出：日期、班次(时段)、人员这三个属性。一般班次属性可单独抽象出来，班次包含：班次名称、开始时间、结束时间和作用范围。作用范围可以为工作日、周末、节假日等选项。</p>
+<p><img src="_images/勤务模板-班次设置.png" alt=""></p>
+<p>结合到排列组合来讲，我们可以将人员进行按班次进行分组管理，每个分组对应一个班次即班组。有了班次和人员分组之后，我们可以设置班次的起始人员分组，然后按照班次顺序依次和人员分组进行循环对应。这也是自动排班管理的一种简单实现方式。</p>
+<h3 id="变化场所排班分析"><a href="#变化场所排班分析" class="headerlink" title="变化场所排班分析"></a>变化场所排班分析</h3><h4 id="举例分析"><a href="#举例分析" class="headerlink" title="举例分析"></a>举例分析</h4><p>通过上述分析，排班管理看上去做起来好像很容易？然而并没有那么简单，这里包含很多假定，班次时段是固定的，人员班组页面没有出现请假等情况。排班管理还需要考虑时间、人员、场所变化的情形，这个需要我们从变化的情景中找到合适的规律。下面我们根据一个时间和地点均存在变化的例子来分析排班。</p>
+<p>某部门外勤某日排班表（2020年8月17日）如下：</p>
+<table>
+<thead>
+<tr>
+<th>部门</th>
+<th>岗位类型</th>
+<th>执勤地点</th>
+<th>时段</th>
+<th>人员</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>四公里</td>
+<td>7:00-10:00</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>五公里</td>
+<td>7:00-10:00</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>早晚高峰岗</td>
+<td>六公里</td>
+<td>7:00-10:00</td>
+<td>乔峰 虚竹 段誉</td>
+</tr>
+<tr>
+<td>一大队</td>
+<td>路面巡逻岗</td>
+<td></td>
+<td>7:00-10:00</td>
+<td>黄药师 一灯大师 周伯通</td>
+</tr>
+<tr>
+<td>二大队</td>
+<td>早晚高峰岗</td>
+<td>茶园</td>
+<td>7:00-9:30</td>
+<td>令狐冲 郭靖 杨过</td>
+</tr>
+<tr>
+<td>二大队</td>
+<td>早晚高峰岗</td>
+<td>长生桥</td>
+<td>7:00-9:30</td>
+<td>任盈盈 黄蓉 小龙女</td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>站在支队领导的角度，支队对各所属大队提出每日执勤要求包含：部门、岗位类型、执勤地点、时段、人员数量。一个部门下有多个岗位类型，同一岗位类型有多个执勤地点，部门、岗位类型、执勤地点可以设置不同的时段和多个人员。每日的排班表，会对岗位类型和执勤地点进行适当的调整。大致上，周一到周五的排班表内容基本相同，周末有所变化，节假日需做针对性安排。</p>
+<p>外勤的业务模式具有支队安排，大队上报人员的特点，由支队安排需要执勤的岗位、地点、时段，由大队管理员上报每天的执勤人员。支队以周为单位，安排周一至周天的每天勤务安排，可设置节假日和指定日期的勤务。</p>
+<p>如何根据这些规则进行的合适的勤务安排呢？</p>
+<h4 id="勤务模板"><a href="#勤务模板" class="headerlink" title="勤务模板"></a>勤务模板</h4><p>勤务模板，勤务模板是需求落地通往实现的桥梁。模板的存在是对特定规则的一个抽象，需要我们抽象出模板的用途、分类、状态、规则等信息。就排班管理而言需要：模板名称、模板类型、模板状态、日期选项、时段规则等信息。注意这里的日期选项和时段规则是合集关系，一个日期选项可以包含多个时段规则，时段通俗的叫法也称班次。这里的日期选项可以归纳为工作日、周末、节假日、星期等范围选项。在人员安排时，可根据日期查找对应的日期选项，找到对应的时段规则，然后根据时段规则分配人员。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">假设某单位有如下上班时间设置：</span><br><span class="line">周一到周五每天八点到下午五点上班。</span><br><span class="line">日期选项为：工作日，时段规则为：8:00-17:00</span><br><span class="line"></span><br><span class="line">假设某单位有如下上班时间设置：</span><br><span class="line">周一上午八点到十二点上班，下午休息。</span><br><span class="line">周二到周五每天八点到到下午五点上班。</span><br><span class="line">这里日期选项为：星期，星期包含：星期一、星期二、星期三、星期四、星期五、星期六、星期日。</span><br><span class="line">规则：星期一 8:00-12:00 下午休息</span><br><span class="line">     星期二 8:00-17:00</span><br><span class="line">     星期三 8:00-17:00</span><br><span class="line">     星期四 8:00-17:00</span><br><span class="line">     星期五 8:00-17:00</span><br><span class="line">     星期六 休息</span><br><span class="line">     星期日 休息</span><br></pre></td></tr></table></figure>
+<h4 id="勤务模板特征"><a href="#勤务模板特征" class="headerlink" title="勤务模板特征"></a>勤务模板特征</h4><p>按照星期来执行时段班次的编排，是一个常用的途径。星期排班有以下几个特点：</p>
+<ol>
+<li>循环性，星期具有天然的循环滚动属性，总是一周接着一周，每周天数固定7天。</li>
+<li>直观性，可横向比较（比如周一和周二），也可纵向比较（比如本周一和上周一）。</li>
+<li>规则影响范围有限，一个周的排班规则设置好之后，修改指定星期时只影响未来，不影响过去。假设现在是周三，修改周四的规则表示修改明天的规则；修改周一的规则，表示修改下周的规则，对本周一不影响。</li>
+<li>工作日容易实现，按照国家法律规定实行五天工作制，周一到周五为工作日，周末休息。工作日的排班一般通过周一到周五来实现，但还需要考虑法定节假日范围的影响。</li>
+</ol>
+<p>星期+周末+节假日能够满足一年中所有日期场景。</p>
+<p>根据每周设置执勤岗位。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%AF%8F%E5%91%A8.png" class="">
+<p>根据节假日设置执勤岗位，同理可对指定日期进行勤务安排。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E8%8A%82%E5%81%87%E6%97%A5.png" class="">
+<p>延伸，既然星期有连续性也可循环迭代，那是否还有其他日期选项可以供模板设置呢？根据按天循环勤务安排，也是属于一个备选方案。我们可以设置天数范围用于周期性循环，再设置一个起始日期作为生效的开始条件，即可模拟星期的循环性。按月天数范围一般不超过31天。同理可设置按年进行设置，天数范围不超过366天。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%AF%8F%E6%9C%88.png" class="">
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总结，对于工作场所和班次固定的排班，可按工作日、周末、节假日设置相应的班次时间段。对于工作场所、日期和时段不固定的情况，推荐使用星期加节假日排班，按天数循环方案备选。星期的循环连续特性，能够满足大多数场景，当然也存在特殊情况。特殊情况应当特殊处理，比如设置特定日期的班次规则。需要指出的是，一般而言指定日期的设置优先级高于节假日，节假日的优先级高于星期设置，星期设置的优先级最低。</p>
+<p>勤务模板管理可根据部门、工作场所、日期、时段的需要，配置不同类型的模板。</p>
+<img src="/2020/08/19/Schedule-analysis-of-duty-management/%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF-%E6%A8%A1%E6%9D%BF%E5%88%97%E8%A1%A8.png" class="">
+<p>有了排班模板后，下一步就是根据将人员分配到日期上，同时满足对应的时段（班次）规则。另外再补充说明下，时段的范围需要考虑跨天的情景，单个时段的总时长不能超过24小时，多个时段的时长合计小于等于24小时。</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/系统设计/">系统设计</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2020/08/19/Schedule-analysis-of-duty-management/" data-title="勤务管理之排班分析 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/09/17/Unified-identity-authentication-system-platform/" title="统一身份认证系统平台功能设计">
+  <strong>上一篇：</strong><br/>
+  <span>
+  统一身份认证系统平台功能设计</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/02/13/Multi-table-union-query-sql-demo/"  title="一个多表联合查询需求">
+ <strong>下一篇：</strong><br/> 
+ <span>一个多表联合查询需求
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E5%AE%9A%E5%9C%BA%E6%89%80%E6%8E%92%E7%8F%AD%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">固定场所排班分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E5%8C%96%E5%9C%BA%E6%89%80%E6%8E%92%E7%8F%AD%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">变化场所排班分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BE%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">3.1.</span> <span class="toc-text">举例分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.2.</span> <span class="toc-text">勤务模板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8B%A4%E5%8A%A1%E6%A8%A1%E6%9D%BF%E7%89%B9%E5%BE%81"><span class="toc-number">3.3.</span> <span class="toc-text">勤务模板特征</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

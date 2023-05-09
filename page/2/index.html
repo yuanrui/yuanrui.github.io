@@ -1,0 +1,1638 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta property="og:type" content="website">
+<meta property="og:title" content="棠城夜雨">
+<meta property="og:url" content="http://yuanrui.github.io/page/2/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:locale">
+<meta property="article:author" content="Banana">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/02/13/Multi-table-union-query-sql-demo/" title="一个多表联合查询需求" itemprop="url">一个多表联合查询需求</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>朋友做一个项目，遇到一个多表联合查询的需求。</p>
+<ul>
+<li>A表SYSTEM_ID和B表SYSTEM_ID关联；</li>
+<li>C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；</li>
+</ul>
+<p>需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy.</p>
+<p>T_TABLE_A表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>SYSTEM_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>123</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>234</td>
+</tr>
+</tbody>
+</table>
+<p>T_TABLE_B表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>SYSTEM_ID</th>
+<th>ROLE_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>222</td>
+<td>667</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>123</code></td>
+<td><code>555</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>123</code></td>
+<td><code>777</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>234</td>
+<td>567</td>
+</tr>
+<tr>
+<td>5</td>
+<td>234</td>
+<td>231</td>
+</tr>
+</tbody>
+</table>
+<p>T_TABLE_C表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+<th>ROLE_LIST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>james</code></td>
+<td>667,<code>777</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>lucy</code></td>
+<td>223,<code>555</code>,823</td>
+</tr>
+<tr>
+<td>3</td>
+<td>tom</td>
+<td>253,231</td>
+</tr>
+<tr>
+<td>4</td>
+<td>max</td>
+<td>123,712</td>
+</tr>
+<tr>
+<td>5</td>
+<td>min</td>
+<td>123,567</td>
+</tr>
+</tbody>
+</table>
+<p>最终提供的sql如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> t_table_c c</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</span><br><span class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</span><br><span class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id <span class="operator">=</span> b.system_id</span><br><span class="line">	<span class="keyword">where</span> a.system_id <span class="operator">=</span> <span class="number">123</span></span><br><span class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">&#x27;%&#x27;</span> <span class="operator">||</span> b.role_id <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>上面的查询sql采用的exists子句的方式，采用连接的方式也能完成相同的功能，具体实现见文末附录Sql.</p>
+<p>从给的脱敏数据可以推测出各个表的功能。</p>
+<ul>
+<li>A表是权限（资源）表；</li>
+<li>B表是角色权限（资源）表；</li>
+<li>C表用户表；</li>
+</ul>
+<p>一般使用单独的表来存储用户和角色的关联信息，这里很巧妙的采用以逗号分隔的方式存储多个角色编号。采用这种方式可以减少表连接，但处理存储和查询的复杂度更高。</p>
+<p>单纯从数据上来看，由于采用的模糊查询，有可能出现错误的查询结果。</p>
+<p>假设C表中存在以下数据。</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+<th>ROLE_LIST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>kim</td>
+<td><code>1777</code>,2211</td>
+</tr>
+<tr>
+<td>7</td>
+<td>kenv</td>
+<td>220,<code>1555</code>,800</td>
+</tr>
+</tbody>
+</table>
+<p>重新执行sql，你会发现查询结果里面包含：kim和kenv. 造成这个结果的原因是，模糊查询可以匹配ROLE_LIST列中部分数据，1777和1555分别包含777和555. </p>
+<p>通过这个简单示例，可以发现存储多个值时确实包含一些局限性。我们既想一列存储多个数值，又想消除歧义，那么怎么解决这个问题呢？</p>
+<p>给存储的值添加一个前缀，也许是一个好办法，比如：r555,r777,r1777,r1555，前缀采用代表特定含义的单词或字母，加上实际的数值，可以构造出一个特殊的字符串。条件子语句：like ‘%r555’. 可以避免示例数据中的错误查询结果问题。</p>
+<p>等等，好像还是有点问题。如果字符串为：r55,r555,r1555，何解。</p>
+<p>当然如果存在这种情况，我们还有一个终极解决办法（适用于任何情况）：前缀+值+后缀</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前缀+值+后缀</span><br><span class="line"></span><br><span class="line">列存储示例：[55],[555],[1555]</span><br><span class="line">条件子语句：like &#x27;%[55]%&#x27;，这里前缀=&#x27;[&#x27;、值=&#x27;55&#x27;、后缀=&#x27;]&#x27;</span><br></pre></td></tr></table></figure>
+<p>一般情况下，使用特定单词或字母作为特殊前缀加取值可以满级绝大多数情况，这种方式可读信更高。而需要严格意义上的避免误查询，可以采用：前缀+值+后缀。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">--附录Sql</span><br><span class="line"></span><br><span class="line">create table t_table_a</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_b</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int,</span><br><span class="line">    role_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_c</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    name varchar2(20),</span><br><span class="line">    role_list varchar2(200)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">insert into t_table_a values(1, 123);</span><br><span class="line">insert into t_table_a values(2, 234);</span><br><span class="line">insert into t_table_a values(3, 100);</span><br><span class="line"></span><br><span class="line">insert into t_table_b values(1, 222, 667);</span><br><span class="line">insert into t_table_b values(2, 123, 555);</span><br><span class="line">insert into t_table_b values(3, 123, 777);</span><br><span class="line">insert into t_table_b values(4, 234, 567);</span><br><span class="line">insert into t_table_b values(5, 234, 231);</span><br><span class="line"></span><br><span class="line">insert into t_table_c values(1, &#x27;james&#x27;, &#x27;667,777&#x27;);</span><br><span class="line">insert into t_table_c values(2, &#x27;lucy&#x27;, &#x27;223,555,823&#x27;);</span><br><span class="line">insert into t_table_c values(3, &#x27;tom&#x27;, &#x27;253,231&#x27;);</span><br><span class="line">insert into t_table_c values(4, &#x27;max&#x27;, &#x27;123,712&#x27;);</span><br><span class="line">insert into t_table_c values(5, &#x27;min&#x27;, &#x27;123,567&#x27;);</span><br><span class="line">insert into t_table_c values(6, &#x27;kim&#x27;, &#x27;1777,2211&#x27;);</span><br><span class="line">insert into t_table_c values(7, &#x27;kenv&#x27;, &#x27;220,1555,800&#x27;);</span><br><span class="line"></span><br><span class="line">select name from t_table_c c</span><br><span class="line">where exists (</span><br><span class="line">	select 1 from t_table_a a</span><br><span class="line">	inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">	where a.system_id = 123</span><br><span class="line">    and c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
+<p>On more thing. </p>
+<p>这sql在Oracle中跑起来，没有任何问题。但是朋友拿去改造后在mysql中运行，出现的查询结果依旧不正常。排查了很长一段时间，才找到原因：在mysql中 ‘%’ || ‘S001’ || ‘%’ 显示打印为：1. 正确的方式是使用concat函数。所以如果你在mysql中运行，需要这样构造sql.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like concat(&#x27;%&#x27;, b.role_id, &#x27;%&#x27;) </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Sql/">Sql</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/02/06/Core-Python-Programming-Learning/" title="Python核心编程学习笔记" itemprop="url">Python核心编程学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-02-06T08:00:00.000Z" itemprop="datePublished"> Published 2020-02-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h1 id="Python核心编程"><a href="#Python核心编程" class="headerlink" title="Python核心编程"></a>Python核心编程</h1><p><strong> 第二版学习笔记 </strong></p>
+<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><p>Python是一门解释性语言，作为对比JavaScript也是解释性语言。学习的前提需要到官网(<a target="_blank" rel="noopener" href="https://www.python.org">https://www.python.org</a>) 下载并安装最新版本。Python源文件一般用.py作为扩展名。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#script.py</span></span><br><span class="line"><span class="comment">#井号是注释符号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#定义一个变量</span></span><br><span class="line">aValue = <span class="string">&#x27;Hello World!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#打印一个变量</span></span><br><span class="line"><span class="built_in">print</span>(aValue)</span><br><span class="line"></span><br><span class="line"><span class="comment">#定义一个函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">print_string</span>(<span class="params">astr</span>):</span><br><span class="line">    <span class="string">&#x27;打印一个字符串&#x27;</span>  <span class="comment">#文档字符串(注释)</span></span><br><span class="line">    <span class="built_in">print</span>(astr)</span><br><span class="line"></span><br><span class="line"><span class="comment">#调用函数</span></span><br><span class="line">print_string(aValue)</span><br></pre></td></tr></table></figure>
+<p>将示例文件另存为：script.py, 在Windows命令行中执行python script.py,  可以看到如下信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Hello World!</span><br><span class="line">Hello World!</span><br></pre></td></tr></table></figure>
+<h2 id="Python基础"><a href="#Python基础" class="headerlink" title="Python基础"></a>Python基础</h2><h3 id="语句和语法"><a href="#语句和语法" class="headerlink" title="语句和语法"></a>语句和语法</h3><ul>
+<li>井号(#)之后的字符为Python的注释;</li>
+<li>换行(\n)是标准的行分隔符，一般一行一条语句;</li>
+<li>反斜杠()表示继续上一行，一行过长的语句使用反斜杠（\）可以分解成多行；</li>
+<li>分号(;)将两个语句连接在一起，如果需要将两条语句放到同一行中，需要使用分号隔开；</li>
+<li>冒号(:)将代码块的头和体分开，像if、while、def、class复合语句，首行以关键字开始，以冒号（：）结束，该行之后的一行或多行构成代码组，首行和代码组合起来称为一个子句；</li>
+<li>语句(代码块)用缩进的方式体现，不同的缩进深度分割不同的代码块，缩进相同的一组语句构成一个代码块，建议每个缩进使用4个空格表示；</li>
+<li>Python文件以模块的形式进行组织。</li>
+</ul>
+<h3 id="变量赋值"><a href="#变量赋值" class="headerlink" title="变量赋值"></a>变量赋值</h3><p>等号是主要的赋值操作符。<br>增量操作符和C语言类似。<br>Python使用下划线作为变量前缀和后缀时为特殊变量。<br>Python支持多元赋值，示例如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x, y, z = <span class="number">1</span>, <span class="number">2</span>, <span class="string">&#x27;Hello World!&#x27;</span> </span><br></pre></td></tr></table></figure></p>
+<h3 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h3><p>标识符定义规则：第一个字符必须是字母或下划线，剩下的字符可以说字符、数字和下划线。标识符大小写敏感。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#不要使用dict、list、file、bool、str、input、len等内置类型作为变量名。</span></span><br></pre></td></tr></table></figure>
+<h2 id="Python对象"><a href="#Python对象" class="headerlink" title="Python对象"></a>Python对象</h2><h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><ul>
+<li>数字</li>
+<li>Integer 整型</li>
+<li>Boolean 布尔型</li>
+<li>Long integer 长整型</li>
+<li>Floating point real number 浮点型</li>
+<li>Complex number 复数类型</li>
+<li>String 字符串</li>
+<li>List 列表</li>
+<li>Tuple 元组</li>
+<li>Dictionary 字典</li>
+</ul>
+<p>所有类型对象的类型都是type，这个概念有点类似于C#中所有类型都是由object派生出的一样。<br>Python中的特殊类型是None, 表示Null对象或NoneType. None类型类似于C#中的void, 值类似于null. None的布尔值总是为False.</p>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p>对象值可以使用：&gt;、&lt;、==、&gt;=、&lt;=、!=等操作符进行比较。<br>对象引用方式根据赋值方式，有所不同。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#示例</span></span><br><span class="line"><span class="comment">#a1和a1引用的相同对象</span></span><br><span class="line">a1 = a2 = <span class="number">123</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#b1和b2引用的不同对象</span></span><br><span class="line">b1=<span class="number">123</span></span><br><span class="line">b2=<span class="number">123</span> </span><br></pre></td></tr></table></figure><br>使用is、is not可以比较是否引用的同一对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#结果：True</span></span><br><span class="line">a1 <span class="keyword">is</span> a1 </span><br><span class="line"></span><br><span class="line"><span class="comment">#结果：False</span></span><br><span class="line">b1 <span class="keyword">is</span> b2 </span><br></pre></td></tr></table></figure></p>
+<p>布尔类型操作符：not、and、or.</p>
+<h3 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cmp(obj1,obj2)</td>
+<td>比较obj1和obj2，根据比较结果返回整型值</td>
+</tr>
+<tr>
+<td>repr(obj)</td>
+<td>返回一个对象的字符表示，类似C#中ToString方法</td>
+</tr>
+<tr>
+<td>str(obj)</td>
+<td>返回可读性好的对象字符串，类似C#中ToString带格式的方法</td>
+</tr>
+<tr>
+<td>type(obj)</td>
+<td>获取对象的类型，返回相应的type对象</td>
+</tr>
+</tbody>
+</table>
+<h3 id="类型分类"><a href="#类型分类" class="headerlink" title="类型分类"></a>类型分类</h3><table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>存储类型</th>
+<th>更新模型</th>
+<th>访问模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数字</td>
+<td>标量</td>
+<td>不可更改</td>
+<td>直接访问</td>
+</tr>
+<tr>
+<td>字符串</td>
+<td>标量</td>
+<td>不可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>容器</td>
+<td>可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>元组</td>
+<td>容器</td>
+<td>不可更改</td>
+<td>顺序访问</td>
+</tr>
+<tr>
+<td>字典</td>
+<td>容器</td>
+<td>可更改</td>
+<td>映射访问</td>
+</tr>
+</tbody>
+</table>
+<p>标量：一个保存单个字面对象的类型，类似于C#中的值类型和字符串。<br>容器：可存储多个对象（对象可以有不同的类型）的类型，类似C#集合。<br>可变类型：允许值被更新,每次修改后新值替换旧值。类似C#引用类型。<br>不可变类型：不允许值被更改，每次修改后使用新的值替代；旧值被丢弃，等待垃圾回收器处理回收对象。类似C#值类型。<br>直接访问:对数值直接进行访问，类似C#中栈。<br>顺序访问：可对容器按索引进行访问元素，类似C#中索引。<br>映射访问：元素无序存放，通过唯一Key访问，类似C#中哈希。</p>
+<h2 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h2><p>Python的整型包含：布尔型、标准整型、长整型。布尔型只有两个取值：True和False, 对应整型的1和0. 标准整型和C# Int32和Int64表示范围相同，在32位机器上范围为Int32, 64位则为Int64. 长整型的范围超过Int64, 具体范围与（虚拟）内存大小有关，长整型一般在数值后面加一个大写的L. Python会自动转换整型和长整型。<br>复数由实数部分和虚数部分构成，虚数语法：real+imagj. 实数和虚数部分都是浮点类型，虚数部分后缀必须为j或J.<br>两个连续的星号(**)表示幂运算.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3</span> ** <span class="number">2</span> <span class="comment">#结果为：9</span></span><br></pre></td></tr></table></figure><br>整除操作符：//, 也称“地板除”，除法不管操作数为何种数值类型，总是舍去小数部分，返回数字序列总别真正商小的最接近的数字。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>//<span class="number">2</span>       <span class="comment">#结果为：0</span></span><br><span class="line"><span class="number">1.0</span>//<span class="number">2.0</span>   <span class="comment">#结果为：0.0</span></span><br><span class="line">-<span class="number">1</span>//<span class="number">2</span>      <span class="comment">#结果为：-1</span></span><br></pre></td></tr></table></figure></p>
+<p>数值工厂函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bool(obj)</td>
+<td>返回obj对象的布尔值</td>
+</tr>
+<tr>
+<td>int(x [,base])</td>
+<td>将x转换为一个整型</td>
+</tr>
+<tr>
+<td>long(x [,base] )</td>
+<td>将x转换为一个长整型</td>
+</tr>
+<tr>
+<td>float(x)</td>
+<td>将x转换到一个浮点型</td>
+</tr>
+<tr>
+<td>complex(real [,imag]) or complex(str)</td>
+<td>创建一个复数</td>
+</tr>
+</tbody>
+</table>
+<p>仅适用于整型的内置函数</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>hex(num)</td>
+<td>将数字转换成十六进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>oct(num)</td>
+<td>将数字转换成八进制数并以字符串形式返回</td>
+</tr>
+<tr>
+<td>chr(num)</td>
+<td>将ASCII值的数字转换成ASCII字符，范围：0&lt;=num&lt;=255</td>
+</tr>
+<tr>
+<td>ord(chr)</td>
+<td>传入长度为1的字符串，返回相应的ASCII整数值或Unicode整数值</td>
+</tr>
+<tr>
+<td>unichr(num)</td>
+<td>将一个整数转换为Unicode字符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="序列：字符串、列表和元组"><a href="#序列：字符串、列表和元组" class="headerlink" title="序列：字符串、列表和元组"></a>序列：字符串、列表和元组</h2><h3 id="序列"><a href="#序列" class="headerlink" title="序列"></a>序列</h3><p>序列元素顺序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">            0      1      2           N-2     N-1</span><br><span class="line">Sequence    ☐     ☐      ☐   ● ● ●   ☐      ☐ </span><br><span class="line">           -N   -(N-1)  -(N-2)        -2     -1</span><br></pre></td></tr></table></figure>
+<p>序列类型操作符</p>
+<table>
+<thead>
+<tr>
+<th>序列操作符</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seq[index]</td>
+<td>获取下标为index的与元素</td>
+</tr>
+<tr>
+<td>seq[index1:index2]</td>
+<td>获取下标从index1到index2之间的元素</td>
+</tr>
+<tr>
+<td>seq * expr</td>
+<td>序列重复expr次</td>
+</tr>
+<tr>
+<td>seq1 + seq2</td>
+<td>连接序列seq1和seq2</td>
+</tr>
+<tr>
+<td>obj in seq</td>
+<td>判断元素obj是否包含在seq中</td>
+</tr>
+<tr>
+<td>obj not in seq</td>
+<td>判断元素obj是否不包含在seq中</td>
+</tr>
+</tbody>
+</table>
+<p>切片操作符：[]、[:]、[::]</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#切片示例</span></span><br><span class="line">s = <span class="string">&#x27;abcdefgh&#x27;</span></span><br><span class="line"></span><br><span class="line">s = <span class="string">&#x27;abcdefgh&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(s)           <span class="comment">#abcdefgh 打印原始字符串</span></span><br><span class="line"><span class="built_in">print</span>(s[::-<span class="number">1</span>])     <span class="comment">#hgfedcba 字符串翻转操作</span></span><br><span class="line"><span class="built_in">print</span>(s[::<span class="number">2</span>])      <span class="comment">#aceg     隔一个取一个的操作</span></span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">1</span>:<span class="number">3</span>])      <span class="comment">#bc       获取索引下标1到2之间的元素</span></span><br><span class="line"><span class="built_in">print</span>(s[<span class="number">3</span>:])       <span class="comment">#defgh    获取索引下标从3开始的所有元素</span></span><br><span class="line"><span class="built_in">print</span>(s[-<span class="number">3</span>:])      <span class="comment">#fgh      获取索引-3开始之后的所有元素</span></span><br><span class="line"><span class="built_in">print</span>(s[:<span class="number">3</span>])       <span class="comment">#abc      从右往左获取前3个元素</span></span><br><span class="line"><span class="built_in">print</span>(s[:-<span class="number">3</span>])      <span class="comment">#abcde    从右往左获取前5个元素（长度8 - 3）</span></span><br></pre></td></tr></table></figure>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>Python中使用单引号或双引号创建字符串，使用del语句删除字符串。</p>
+<p>字符串进行比较操作时，按照ASCII值的大小进行比较。</p>
+<p>字符串格式化操作符：%.</p>
+<p>字符串格式化符号</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式化符 号</th>
+<th style="text-align:left">转换方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">%c</td>
+<td style="text-align:left">格式化字符及其ASCII码</td>
+</tr>
+<tr>
+<td style="text-align:left">%s</td>
+<td style="text-align:left">格式化字符串</td>
+</tr>
+<tr>
+<td style="text-align:left">%d</td>
+<td style="text-align:left">格式化整数</td>
+</tr>
+<tr>
+<td style="text-align:left">%u</td>
+<td style="text-align:left">格式化无符号整型</td>
+</tr>
+<tr>
+<td style="text-align:left">%o</td>
+<td style="text-align:left">格式化无符号八进制数</td>
+</tr>
+<tr>
+<td style="text-align:left">%x</td>
+<td style="text-align:left">格式化无符号十六进制数</td>
+</tr>
+<tr>
+<td style="text-align:left">%X</td>
+<td style="text-align:left">格式化无符号十六进制数（大写）</td>
+</tr>
+<tr>
+<td style="text-align:left">%f</td>
+<td style="text-align:left">格式化浮点数字，可指定小数点后的精度</td>
+</tr>
+<tr>
+<td style="text-align:left">%e</td>
+<td style="text-align:left">用科学计数法格式化浮点数</td>
+</tr>
+<tr>
+<td style="text-align:left">%E</td>
+<td style="text-align:left">作用同%e，用科学计数法格式化浮点数</td>
+</tr>
+<tr>
+<td style="text-align:left">%g</td>
+<td style="text-align:left">%f和%e的简写</td>
+</tr>
+<tr>
+<td style="text-align:left">%G</td>
+<td style="text-align:left">%F 和 %E 的简写</td>
+</tr>
+<tr>
+<td style="text-align:left">%p</td>
+<td style="text-align:left">用十六进制数格式化变量的地址</td>
+</tr>
+</tbody>
+</table>
+<p>格式化操作符辅助指令</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">符号</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">定义宽度或者小数点精度</td>
+</tr>
+<tr>
+<td style="text-align:left">-</td>
+<td style="text-align:left">用做左对齐</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">在正数前面显示加号( + )</td>
+</tr>
+<tr>
+<td style="text-align:left"><sp></td>
+<td style="text-align:left">在正数前面显示空格</td>
+</tr>
+<tr>
+<td style="text-align:left">#</td>
+<td style="text-align:left">在八进制数前面显示零(‘0’)，在十六进制前面显示’0x’或者’0X’(取决于用的是’x’还是’X’)</td>
+</tr>
+<tr>
+<td style="text-align:left">0</td>
+<td style="text-align:left">显示的数字前面填充’0’而不是默认的空格</td>
+</tr>
+<tr>
+<td style="text-align:left">%</td>
+<td style="text-align:left">‘%%’输出一个单一的’%’</td>
+</tr>
+<tr>
+<td style="text-align:left">(var)</td>
+<td style="text-align:left">映射变量(字典参数)</td>
+</tr>
+<tr>
+<td style="text-align:left">m.n.</td>
+<td style="text-align:left">m 是显示的最小总宽度,n 是小数点后的位数(如果可用的话)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#格式示例</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;%x&#x27;</span> % <span class="number">100</span>)                 <span class="comment">#64</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;%#x&#x27;</span> % <span class="number">100</span>)                <span class="comment">#0x64</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;%c&#x27;</span> % <span class="number">100</span>)                 <span class="comment">#d</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;value is %d&#x27;</span> % <span class="number">100</span>)        <span class="comment">#value is 100</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;value is %s&#x27;</span> % <span class="string">&#x27;100&#x27;</span>)      <span class="comment">#value is 100</span></span><br></pre></td></tr></table></figure>
+<p>字符串格式化的高级用法是使用字符串模板，引入Template模块对象，调用substitute()和safe_substitute()方法进行格式化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> string <span class="keyword">import</span> Template</span><br><span class="line">s = Template(<span class="string">&#x27;Today is $&#123;year&#125;.$&#123;month&#125;.$&#123;day&#125;!&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span> (s.substitute(year=<span class="number">2020</span>, month=<span class="number">2</span>, day=<span class="number">6</span>))         <span class="comment">#Today is 2020.2.6!</span></span><br></pre></td></tr></table></figure>
+<p>注意：字符串中的模板必须与变量一一对应，否则会出现KeyError异常。而使用safe_substitute()在缺少key时可以将字符串原封不动的打印出来。</p>
+<p>Unicode字符串在字符串前加大写U或小写u. 加前缀u表示告诉Python后面的字符串要编码成Unicode字符串。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(u&#x27;\u8881&#x27;)     #袁</span><br></pre></td></tr></table></figure>
+<p>在控制台界面中可以使用input(<del>raw_input()</del>为python2中的函数python3中不存在)函数进行输入字符串，类似于C#中的Console.ReadLine().</p>
+<p>使用反斜杠()加一个单一字符可以表示一个特殊字符。</p>
+<p>三引号语法允许一个字符串跨多行，字符串中可以包含换行符、制表符以及其他特殊字符。语法类似C# @””.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#示例</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;&#x27;Hello</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">World&#x27;&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><p>列表使用方括号([])进行定义。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">aList = [<span class="number">123</span>, <span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>, <span class="number">123.456</span>, [<span class="string">&#x27;abcd&#x27;</span>, <span class="number">100</span>]]</span><br><span class="line"><span class="built_in">print</span>(aList)           <span class="comment">#[123, &#x27;Hello&#x27;, &#x27;abc&#x27;, 123.456, [&#x27;abcd&#x27;, 100]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#访问列表中值</span></span><br><span class="line"><span class="built_in">print</span>(aList[<span class="number">0</span>])        <span class="comment">#123</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#更新列表中值</span></span><br><span class="line">aList[<span class="number">1</span>] = <span class="string">&#x27;abcdefg&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(aList)           <span class="comment">#[123, &#x27;abcdefg&#x27;, &#x27;abc&#x27;, 123.456, [&#x27;abcd&#x27;, 100]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#删除列表元素</span></span><br><span class="line"><span class="keyword">del</span> aList[<span class="number">0</span>]</span><br><span class="line"><span class="comment">#或使用remove()方法</span></span><br><span class="line">aList.remove(<span class="string">&#x27;abc&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(aList)           <span class="comment">#[&#x27;abcdefg&#x27;, 123.456, [&#x27;abcd&#x27;, 100]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#删除整个列表</span></span><br><span class="line"><span class="keyword">del</span> aList</span><br></pre></td></tr></table></figure>
+<h3 id="元组"><a href="#元组" class="headerlink" title="元组"></a>元组</h3><p>元组的功能和列表类似，元组使用圆括号进行定义。元组属于不可变类型，类似于C#中只读集合。元组中的元素不可跟新和删除，只能删除整个元组。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">aTuple = (<span class="number">123</span>, <span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>, <span class="number">123.456</span>, [<span class="string">&#x27;abcd&#x27;</span>, <span class="number">100</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#访问元组中的元素</span></span><br><span class="line"><span class="built_in">print</span>(aTuple[<span class="number">1</span>])        <span class="comment">#Hello</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#删除元组</span></span><br><span class="line"><span class="keyword">del</span> aTuple</span><br></pre></td></tr></table></figure>
+<h2 id="字典和集合类型"><a href="#字典和集合类型" class="headerlink" title="字典和集合类型"></a>字典和集合类型</h2><h3 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h3><p>字典是Python语言中唯一的映射类型，可以简单理解为Hash集合。字典初始化有两种方式：{}和dict()函数。字典和JavaScript中的对象类似，都是使用大括号({})将key和value值进行包裹。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#字典示例</span></span><br><span class="line">dict1 = &#123;&#125;</span><br><span class="line">dict2 = &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;wenwen&#x27;</span>, <span class="string">&#x27;year&#x27;</span>: <span class="string">&#x27;2020&#x27;</span>, <span class="string">&#x27;age&#x27;</span>: <span class="number">3</span>&#125;</span><br><span class="line">dict3 = <span class="built_in">dict</span>(([<span class="string">&#x27;x&#x27;</span>, <span class="number">1</span>], [<span class="string">&#x27;y&#x27;</span>, <span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment">#循环遍历字典中的值</span></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> dict2:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;key=%s, value=%s&#x27;</span> % (key, dict2[key]))</span><br><span class="line">    <span class="comment">#key=name, value=wenwen</span></span><br><span class="line">    <span class="comment">#key=year, value=2020</span></span><br><span class="line">    <span class="comment">#key=age, value=3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#获取特定元素</span></span><br><span class="line"><span class="built_in">print</span>(dict2[<span class="string">&#x27;name&#x27;</span>])      <span class="comment">#wenwen</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#更新字典</span></span><br><span class="line">dict2[<span class="string">&#x27;year&#x27;</span>] = <span class="number">2000</span>      <span class="comment">#更新已有key值</span></span><br><span class="line">dict2[<span class="string">&#x27;sex&#x27;</span>] = <span class="string">&#x27;girl&#x27;</span>     <span class="comment">#新增key value</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#删除字典元素</span></span><br><span class="line"><span class="keyword">del</span> dict2[<span class="string">&#x27;year&#x27;</span>]           <span class="comment">#删除key为&quot;year&quot;的项</span></span><br><span class="line">dict2.clear()               <span class="comment">#删除dict2中所有的项</span></span><br><span class="line"><span class="keyword">del</span> dict2                   <span class="comment">#删除整个dict2字典</span></span><br></pre></td></tr></table></figure>
+<p>不允许一个键对应多个值，当键冲突时，取最后（最近）的赋值。键必须是可哈希的，一般使用数字、字符串作为字典键。键必须是可哈希的原因是：解释器调用哈希函数，根据键中的值来计算存储位置，如果键是可变对象，它的值可能发生变化，导致哈希函数无法映射到原有的地址，无法获取数据。</p>
+<p>字典获取特定元素时，若key不存在则会抛出：”name ‘dict’ is not defined“异常。使用setdefault()方法可以避免key不存在的问题。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(dict2.setdefault(<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;yuan&#x27;</span>))      <span class="comment">#wenwen</span></span><br><span class="line"><span class="built_in">print</span>(dict2.setdefault(<span class="string">&#x27;height&#x27;</span>, <span class="number">100</span>))       <span class="comment">#100</span></span><br></pre></td></tr></table></figure>
+<h3 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h3><p>集合元素是一组无序排列的可哈希的值。集合有两种类型：可变集合(set)和不可变集合(frozenset)。可变集合不能作为字典的键，也不能作为其他集合的元素。创建集合只能使用集合的工厂方法set()和frozenset().</p>
+<p>集合类型操作符包括(所有集合类型)：联合(|)、交集(&amp;)、差补/相对补集(-)、对称差分(^)。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="built_in">set</span>(<span class="string">&#x27;abcdefgh&#x27;</span>)</span><br><span class="line">t = <span class="built_in">frozenset</span>(<span class="string">&#x27;python&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(s)            <span class="comment">#&#123;&#x27;g&#x27;, &#x27;h&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;, &#x27;f&#x27;, &#x27;a&#x27;&#125;</span></span><br><span class="line"><span class="built_in">print</span>(t)            <span class="comment">#frozenset(&#123;&#x27;p&#x27;, &#x27;n&#x27;, &#x27;h&#x27;, &#x27;o&#x27;, &#x27;y&#x27;, &#x27;t&#x27;&#125;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#集合类型操作符</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#联合(|)</span></span><br><span class="line"><span class="built_in">print</span>(s | t)        <span class="comment">#&#123;&#x27;g&#x27;, &#x27;p&#x27;, &#x27;n&#x27;, &#x27;h&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;, &#x27;f&#x27;, &#x27;o&#x27;, &#x27;y&#x27;, &#x27;a&#x27;, &#x27;t&#x27;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#交集(&amp;)</span></span><br><span class="line"><span class="built_in">print</span>(s &amp; t)        <span class="comment">#&#123;&#x27;h&#x27;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#差补/相对补集(-)</span></span><br><span class="line"><span class="built_in">print</span>(s - t)        <span class="comment">#&#123;&#x27;g&#x27;, &#x27;b&#x27;, &#x27;c&#x27;, &#x27;d&#x27;, &#x27;e&#x27;, &#x27;f&#x27;, &#x27;a&#x27;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#对称差分(^)</span></span><br><span class="line"><span class="built_in">print</span>(s ^ t)        <span class="comment">#&#123;&#x27;g&#x27;, &#x27;p&#x27;, &#x27;b&#x27;, &#x27;f&#x27;, &#x27;d&#x27;, &#x27;y&#x27;, &#x27;a&#x27;, &#x27;n&#x27;, &#x27;c&#x27;, &#x27;o&#x27;, &#x27;e&#x27;, &#x27;t&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>仅适用于可变集合的操作符：|=、&amp;=、-=、^=，功能和示例代码类似，不再做演示。</p>
+<h2 id="条件和循环"><a href="#条件和循环" class="headerlink" title="条件和循环"></a>条件和循环</h2><p>if语句语法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> expression:</span><br><span class="line">    exp_true_suite</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    exp_false_suite</span><br></pre></td></tr></table></figure>
+<p>Python支持elif关键字，用于表示else-if.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> expression1:</span><br><span class="line">    expr1_true_suite</span><br><span class="line"><span class="keyword">elif</span> expression2:</span><br><span class="line">    expr2_true_suite</span><br><span class="line">                <span class="comment">#.</span></span><br><span class="line">        		<span class="comment">#.</span></span><br><span class="line"><span class="keyword">elif</span> expressionN:</span><br><span class="line">    exprN_true_suite</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    none_of_the_above_suite    </span><br></pre></td></tr></table></figure>
+<p>条件表达式（三元操作符）语法：X if C else Y</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#C、C++、C#、Java 三元操作符示例</span><br><span class="line">int x = 1;</span><br><span class="line">int y = 2;</span><br><span class="line">int smaller = x &lt; y ? x : y;</span><br><span class="line"></span><br><span class="line">#Python 三元操作符示例</span><br><span class="line">x, y = 1, 2</span><br><span class="line">smaller = x if x &lt; y else y</span><br></pre></td></tr></table></figure>
+<p>while语句语法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> expression:</span><br><span class="line">    suite_to_repeat</span><br></pre></td></tr></table></figure>
+<p>for语句类似于C#中foreach，语法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> iter_var <span class="keyword">in</span> iterable:</span><br><span class="line">    suite_to_repeat</span><br></pre></td></tr></table></figure>
+<p>使用enumerate()函数可获取索引和项。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#enumerate()函数示例</span></span><br><span class="line">aList = [<span class="number">123</span>, <span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>, <span class="number">123.456</span>, <span class="string">&#x27;World&#x27;</span>]</span><br><span class="line"><span class="keyword">for</span> i, item <span class="keyword">in</span> <span class="built_in">enumerate</span>(aList):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Index:%d Item:%s&#x27;</span> % (i, item))    </span><br><span class="line">    <span class="comment">#Index:0 Item:123</span></span><br><span class="line">	<span class="comment">#Index:1 Item:Hello</span></span><br><span class="line">	<span class="comment">#Index:2 Item:abc</span></span><br><span class="line">	<span class="comment">#Index:3 Item:123.456</span></span><br><span class="line">	<span class="comment">#Index:4 Item:World</span></span><br></pre></td></tr></table></figure>
+<p>range()函数语法：range(start, end, step=1), range()会返回一个包含所有k的列表，start &lt;= k &lt; end, 从start到end,  k每次递增step. step不可为0.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">aList = <span class="built_in">range</span>(<span class="number">3</span>, <span class="number">19</span>, <span class="number">5</span>)</span><br><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> aList:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Value:%d&#x27;</span> % item)</span><br><span class="line">    <span class="comment">#Value:3</span></span><br><span class="line">    <span class="comment">#Value:8</span></span><br><span class="line">    <span class="comment">#Value:13</span></span><br><span class="line">    <span class="comment">#Value:18</span></span><br></pre></td></tr></table></figure>
+<p>Python中break和continue语句用法和其他语言类似。</p>
+<p>Python提供pass语句，它不做任何事情，用于开发调试。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pass语句示例</span></span><br><span class="line"><span class="keyword">if</span> age == <span class="number">5</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>Python支持迭代器，为类序列对象提供一个类序列的接口，类似C#中IEnumerator.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#iter()函数示例</span></span><br><span class="line">aList = [<span class="number">123</span>, <span class="string">&#x27;Hello&#x27;</span>, <span class="string">&#x27;abc&#x27;</span>, <span class="number">123.456</span>, <span class="string">&#x27;World&#x27;</span>]</span><br><span class="line">item = <span class="built_in">iter</span>(aList)</span><br><span class="line"><span class="built_in">print</span>(item.__next__())        <span class="comment">#123</span></span><br><span class="line"><span class="built_in">print</span>(item.__next__())        <span class="comment">#Hello</span></span><br><span class="line"><span class="built_in">print</span>(item.__next__())        <span class="comment">#abc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#备注：原文中使用的next()方法，在Python3中不存在。</span></span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Python/">Python</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/学习笔记/">学习笔记</a><a href="/tags/读书笔记/">读书笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018/05/24/CSharp-OPD-NET-BindByName/" title="探讨下C#使用OPD.NET参数绑定问题" itemprop="url">探讨下C#使用OPD.NET参数绑定问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2018-05-24T06:00:00.000Z" itemprop="datePublished"> Published 2018-05-24</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Oracle官方出的OPD.NET托管驱动对于ADO.NET的参数绑定方面，让人看不懂。<br>如下面这个代码，注意SAL、COMM、DEPTNO的值。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">	const string cmdText = @&quot;</span><br><span class="line">insert into emp (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) </span><br><span class="line">values (:EMPNO, :ENAME, :JOB, :MGR, :HIREDATE, :SAL, :COMM, :DEPTNO)&quot;;</span><br><span class="line"></span><br><span class="line">	var connStr = &quot;Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.1.170)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=ebos)));User ID=scott;Password=tiger;&quot;;</span><br><span class="line">	using (var conn = new OracleConnection(connStr))</span><br><span class="line">	&#123;</span><br><span class="line">		using (var cmd = conn.CreateCommand())</span><br><span class="line">		&#123;</span><br><span class="line">			cmd.CommandText = cmdText;</span><br><span class="line">			cmd.Parameters.Add(&quot;EMPNO&quot;, OracleDbType.Int16, 1, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;ENAME&quot;, OracleDbType.Varchar2, &quot;ENAME&quot;.ToArray(), ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;JOB&quot;, OracleDbType.Varchar2, &quot;JOB&quot;, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;MGR&quot;, OracleDbType.Int32, 1, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;HIREDATE&quot;, OracleDbType.Date, DateTime.Now, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;DEPTNO&quot;, OracleDbType.Int32, 30, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;COMM&quot;, OracleDbType.Decimal, 20, ParameterDirection.Input);</span><br><span class="line">			cmd.Parameters.Add(&quot;SAL&quot;, OracleDbType.Decimal, 10, ParameterDirection.Input);</span><br><span class="line"></span><br><span class="line">			conn.Open();</span><br><span class="line">			var result = cmd.ExecuteNonQuery() &gt; 0;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure><br>你想要的结果：SAL=10、COMM=20、DEPTNO=30。但实际上结果是这样的：<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-false.png" alt="默认情况下BindName为false"><br>很奇怪是吧，OPD.NET中默认情况下，参数绑定的不是依据名称而是根据顺序来传递的。<br>我们设置OracleCommand属性BindByName为true，再次执行插入语句代码。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmd.BindByName = true;</span><br></pre></td></tr></table></figure><br>EMPNO=2的行是我们想要的结果。<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-code.png" alt="设置OracleCommand属性BindByName为true"><br>那么每次通过设置BindByName=true，对于开发人员而言是一件痛苦的事情。当前不设置也没有关系，前提是你必须保证参数顺序的正确性。<br>有没有配置或全局属性可以将BindByName默认设置为true呢，Oracle官方考虑到这种情况，提供在web.config或app.config文件中设置默认值。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;configSections&gt;</span><br><span class="line">        &lt;section name=&quot;oracle.manageddataaccess.client&quot;</span><br><span class="line">          type=&quot;OracleInternal.Common.ODPMSectionHandler, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</span><br><span class="line">    &lt;/configSections&gt;</span><br><span class="line">    &lt;system.data&gt;</span><br><span class="line">        &lt;DbProviderFactories&gt;</span><br><span class="line">            &lt;remove invariant=&quot;Oracle.ManagedDataAccess.Client&quot;/&gt;</span><br><span class="line">            &lt;add name=&quot;ODP.NET, Managed Driver&quot; invariant=&quot;Oracle.ManagedDataAccess.Client&quot; description=&quot;Oracle Data Provider for .NET, Managed Driver&quot;</span><br><span class="line">              type=&quot;Oracle.ManagedDataAccess.Client.OracleClientFactory, Oracle.ManagedDataAccess, Version=4.122.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342&quot;/&gt;</span><br><span class="line">        &lt;/DbProviderFactories&gt;</span><br><span class="line">    &lt;/system.data&gt;</span><br><span class="line">    &lt;runtime&gt;</span><br><span class="line">        &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</span><br><span class="line">            &lt;dependentAssembly&gt;</span><br><span class="line">                &lt;publisherPolicy apply=&quot;no&quot;/&gt;</span><br><span class="line">                &lt;assemblyIdentity name=&quot;Oracle.ManagedDataAccess&quot; publicKeyToken=&quot;89b483f429c47342&quot; culture=&quot;neutral&quot;/&gt;</span><br><span class="line">                &lt;bindingRedirect oldVersion=&quot;4.121.0.0 - 4.65535.65535.65535&quot; newVersion=&quot;4.122.1.0&quot;/&gt;</span><br><span class="line">            &lt;/dependentAssembly&gt;</span><br><span class="line">        &lt;/assemblyBinding&gt;</span><br><span class="line">    &lt;/runtime&gt;</span><br><span class="line">    &lt;oracle.manageddataaccess.client&gt;</span><br><span class="line">        &lt;version number=&quot;*&quot;&gt;</span><br><span class="line">            &lt;settings&gt;</span><br><span class="line">                &lt;setting name=&quot;BindByName&quot; value=&quot;true&quot;/&gt;</span><br><span class="line">            &lt;/settings&gt;</span><br><span class="line">        &lt;/version&gt;</span><br><span class="line">    &lt;/oracle.manageddataaccess.client&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure><br>为了验证配置是否生效，注释代码cmd.BindByName=true, 再次运行代码，结果如下所示。<br><img src="https://raw.githubusercontent.com/yuanrui/blog/master/_images/2018-05-24/OPD-NET-BindName-true-by-config.png" alt="在配置文件中设置BindByName为true"><br>需要说明的是，代码中设置BindByName的优先级高于配置。</p>
+<p>参考链接：<br><a target="_blank" rel="noopener" href="https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160">https://docs.oracle.com/cd/E63277_01/win.121/e63268/InstallManagedConfig.htm#ODPNT8160</a><br><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8">https://docs.oracle.com/en/database/oracle/oracle-database/12.2/odpnt/CommandBindByName.html#GUID-609B7F20-2444-4CBF-AC8A-A19907A626C8</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/12/19/Js-easyui-timespinner-support-24hour-format/" title="让EasyUI timespinner支持24小时格式" itemprop="url">让EasyUI timespinner支持24小时格式</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-19T05:00:00.000Z" itemprop="datePublished"> Published 2017-12-19</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>EasyUI中timespinner最大值为23:59，项目中有一个需求需要显示24:00. 调试了下源代码，发现EasyUI，在赋值时调用parser函数先将字符串转换为Date对象，然后用获取到的Date对象与最大值和最小值进行比较。小于最小值时，将当前值设置为最小值，大于最大值时，当前值等于最大值。在获取到Date对象后，调用formatter函数进行格式转换。<br>最终的解决方案如下。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">$.fn.timespinner.defaults.formatter = function(_23) &#123;</span><br><span class="line">	if (!_23) &#123;</span><br><span class="line">		return &quot;&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">	var _24 = $(this).timespinner(&quot;options&quot;);</span><br><span class="line">	var tt = [_25(_23.getDay() * 24 + _23.getHours()), _25(_23.getMinutes())];</span><br><span class="line">	if (_24.showSeconds) &#123;</span><br><span class="line">		tt.push(_25(_23.getSeconds()));</span><br><span class="line">	&#125;</span><br><span class="line">	return tt.join(_24.separator);</span><br><span class="line">	function _25(_26) &#123;</span><br><span class="line">		return (_26 &lt; 10 ? &quot;0&quot;: &quot;&quot;) + _26;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">$.fn.timespinner.defaults.parser = function(s) &#123;</span><br><span class="line">	var _27 = $(this).timespinner(&quot;options&quot;);</span><br><span class="line">	var _28 = _29(s);</span><br><span class="line">	if (_28) &#123;</span><br><span class="line">		var min = _29(_27.min || &quot;00:00&quot;);</span><br><span class="line">		var max = _29(_27.max || &quot;24:00&quot;);</span><br><span class="line">		if (min &amp;&amp; min &gt; _28) &#123;</span><br><span class="line">			_28 = min;</span><br><span class="line">		&#125;</span><br><span class="line">		if (max &amp;&amp; max &lt; _28) &#123;</span><br><span class="line">			_28 = max;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return _28;</span><br><span class="line">	function _29(s) &#123;</span><br><span class="line">		if (!s) &#123;</span><br><span class="line">			return null;</span><br><span class="line">		&#125;</span><br><span class="line">		var tt = s.split(_27.separator);</span><br><span class="line">		return new Date(1900, 0, 0, parseInt(tt[0], 10) || 0, parseInt(tt[1], 10) || 0, parseInt(tt[2], 10) || 0);</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Javascript/">Javascript</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/11/21/AspNet-WebService-show-image/" title="在WebService中预览图片" itemprop="url">在WebService中预览图片</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-11-21T06:22:00.000Z" itemprop="datePublished"> Published 2017-11-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>项目中有这样一个需求，在通过请求第三方WebService接口的结果中，包含一个图片内容为base64的字符串。<br>由于经常需要查看图片内容，于是在考虑能不能在WebService的方法测试中提供传入一个图片base64的参数然后预览图片的功能。<br>分析了一下WebService的调试页面的请求和返回结果，返回的内容是一个xml结构。既然能够返回xml那么问题就好办了。<br>html也是xml。只要构造特定的html就可以了。于是第一版本的预览是这样的。构造html,body中构造一个img标签用base64显示图片。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">	//版本1 使用html预览显示</span><br><span class="line">	[WebMethod]</span><br><span class="line">	public void Base64ToImage(string @base64)</span><br><span class="line">	&#123;            </span><br><span class="line">		var result = string.Format(@&quot;&lt;!DOCTYPE HTML&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&#x27;UTF-8&#x27;&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;img src=&#x27;data:image/png;base64,&#123;0&#125;&#x27;/&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&quot;, @base64);</span><br><span class="line"></span><br><span class="line">		var context = HttpContext.Current;</span><br><span class="line">		if (context == null || context.Response == null)</span><br><span class="line">		&#123;</span><br><span class="line">			return;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		context.Response.Clear();</span><br><span class="line">		context.Response.ClearHeaders();</span><br><span class="line">		context.Response.Write(result);</span><br><span class="line">		context.Response.End();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是考虑到img标签中用base64字符串来显示图片，在低版本浏览器的兼容性问题以及渲染问题。更进一步的想到直接向http写入输出流的方式来显示图片。<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//版本2 直接输出image类型</span><br><span class="line">[WebMethod]</span><br><span class="line">public void Base64ToImage(string @base64)</span><br><span class="line">&#123;</span><br><span class="line">	byte[] data = Convert.FromBase64String(@base64);</span><br><span class="line">	var context = HttpContext.Current;</span><br><span class="line"></span><br><span class="line">	if (context == null || context.Response == null)</span><br><span class="line">	&#123;</span><br><span class="line">		return;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	context.Response.Clear();</span><br><span class="line">	context.Response.ClearHeaders();</span><br><span class="line">	context.Response.ContentType = &quot;image/jpeg&quot;;</span><br><span class="line">	context.Response.BinaryWrite(data);</span><br><span class="line">	context.Response.End();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/09/21/Oracle-crsctl-note/" title="Oracle crsctl命令笔记" itemprop="url">Oracle crsctl命令笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-09-21T09:00:00.000Z" itemprop="datePublished"> Published 2017-09-21</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>crsctl帮助命令<br>E:\app\11.2.0\grid\BIN&gt;crsctl -h<br>用法: crsctl add       - 添加资源, 类型或其他实体<br>       crsctl check     - 检查服务, 资源或其他实体<br>       crsctl config    - 输出自动启动配置<br>       crsctl debug     - 获取或修改调试状态<br>       crsctl delete    - 删除资源, 类型或其他实体<br>       crsctl disable   - 禁用自动启动<br>       crsctl enable    - 启用自动启动<br>       crsctl get       - 获取实体值<br>       crsctl getperm   - 获取实体权限<br>       crsctl lsmodules - 列出调试模块<br>       crsctl modify    - 修改资源, 类型或其他实体<br>       crsctl query     - 查询服务状态<br>       crsctl pin       - 在节点列表中固定节点<br>       crsctl relocate  - 重新定位资源, 服务器或其他实体<br>       crsctl replace   - 替换表决文件的位置<br>       crsctl setperm   - 设置实体权限<br>       crsctl set       - 设置实体值<br>       crsctl start     - 启动资源, 服务器或其他实体<br>       crsctl status    - 获取资源或其他实体的状态<br>       crsctl stop      - 停止资源, 服务器或其他实体<br>       crsctl unpin     - 在节点列表中取消固定节点<br>       crsctl unset     - 取消设置实体值, 还原其默认值</p>
+<p>开机启用Oracle High Availability Services<br>crsctl enable has<br>开机禁用<br>crsctl disable has<br>查看状态<br>crsctl config has</p>
+<p>参考 <a target="_blank" rel="noopener" href="http://blog.chinaunix.net/uid-20687159-id-1895010.html">http://blog.chinaunix.net/uid-20687159-id-1895010.html</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/06/28/Oracle-using-FAQ/" title="Oracle使用过程中的常见问题" itemprop="url">Oracle使用过程中的常见问题</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-28T07:00:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>Q:在命令行中执行存储过程后，存储过程中调用的dbms_output.put_line()方法中的内容未显示<br>A:需要执行命令: set serverout on;</p>
+<p>Q:执行存储过程或函数的过程中报错:ORA-20000: ORU-10027: buffer overflow, limit of 2000 bytes<br>A:serverout的size默认为2000，需要修改size, 命令: set serveroutput on size 1000000;</p>
+<p>Q:在Windows中登陆sqlplus时报:ORA-12560: TNS: 协议适配器错误<br>A:检查Oracle Net Manager中相关配置:监听程序和服务命名。测试服务命名的数据库连接是否可用。检查监听服务是否开启。<br>如果以上参数均正常，那么用sqlplus登陆的时候带上用户名、密码和服务名试试。eg:sqlplus scott/123456@local_instance ,这里的local_instance就是在Net Manager创建的服务命名。</p>
+<p>Q:Oracle与表相关的视图DBA_,All_,USER_开头的视图含义<br>A:DBA_开头的视图显示当前数据库所有表的信息，ALL_开头的视图显示当前用户可以访问的所有视图，USER_开头的视图只显示属于当前用户的视图。</p>
+<p>Q:在Windows安装Oracle Grid Infrastructure时报”PRCI-1113 : 目录 E:\app\11.2.0\grid 不存在”的错误提示。<br>A:打开目录C:\Program Files\Oracle\Inventory\ContentsXML删除inventory.xml文件。</p>
+<p>Q:在Windows安装Oracle Grid Infrastructure时报”[INS-20802] 网格基础结构配置 失败。” 原因 - 插件的执行方法失败<br>A:查看Grid的安装目录下的\cfgtoollogs\crsconfig，找到目录中节点文件安装日志。查看安装日志中内容。安装过程中发现如下日志：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">2017-09-25 09:56:34: ### Printing of configuration values complete ###</span><br><span class="line">2017-09-25 09:56:34: HKLM/Software/Oracle/ocr/ is NOT configured</span><br><span class="line"></span><br><span class="line">2017-09-25 09:56:34: HASH(0x4366ef8) registry key does not exist</span><br><span class="line">2017-09-25 09:56:34: HASH(0x4366ef8) registry key does not exist</span><br><span class="line">2017-09-25 09:56:34: Improper Oracle Clusterware configuration found on this host</span><br><span class="line">2017-09-25 09:56:34: Deconfigure the existing cluster configuration before starting</span><br><span class="line">2017-09-25 09:56:34: to configure a new Clusterware</span><br><span class="line">2017-09-25 09:56:34: run &#x27;E:\app\11.2.0\grid/crs/install/rootcrs.pl -deconfig&#x27; </span><br><span class="line">2017-09-25 09:56:34: to deconfigure existing failed configuration and then rerun root.bat</span><br></pre></td></tr></table></figure><br>/<em>发现在注册表的HKLM/Software/Oracle路径中无ocr项。添加ocr项，同时在ocr中添加字符串值local_only=FALSE和ocrconfig_loc=+DATA<br>原因：再次安装时，提示[INS-40417] 安装程序检测到系统中有未使用的 Oracle 集群注册表 (OCR) 位置注册表键 (HKEY_LOCAL_MACHINE\Software\Oracle\Ocr)。手动删除了Ocr项。</em>/<br>update:这种情况，还是重装系统吧。</p>
+<p>Q:Oracle RAC连接字符串设置<br>A:参考链接:<a target="_blank" rel="noopener" href="http://www.oracle.com/technetwork/cn/articles/database-performance/oracle-rac-connection-mgmt-1650424-zhs.html">http://www.oracle.com/technetwork/cn/articles/database-performance/oracle-rac-connection-mgmt-1650424-zhs.html</a></p>
+<p>Q:Oracle RAC节点启动提示：CRS-1013:ASM 磁盘组中的 OCR 位置不可访问。<br>A:解决过程：日志中提示ASM磁盘不可访问，首先查看防火墙是否启用，如果启用则关闭。检查LISTENER是否正常。<br>最后使用命令启动：crsctl start has</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/09/Nuget-package-source-urls/" title="Nuget程序包数据源" itemprop="url">Nuget程序包数据源</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-09T01:38:00.000Z" itemprop="datePublished"> Published 2017-05-09</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>公司电脑的开发环境是Vs 2010, 使用Nuget时老是安装超时，Nuget版本是:2.8.6<br>记得以前也遇到过这个问题，当时的解决办法是，添加多个可用程序包源。不过地址却忘记了，今天重新找了下。<br>地址如下:<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">https://www.nuget.org/api/v2/</span><br><span class="line">http://go.microsoft.com/fwlink/?LinkID=230477</span><br><span class="line">http://packages.nuget.org/v1/FeedService.svc/</span><br><span class="line">http://go.microsoft.com/fwlink/?LinkID=206669</span><br><span class="line">http://myget.org/F/myfeed</span><br></pre></td></tr></table></figure></p>
+<p>来源: <a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010">http://stackoverflow.com/questions/5693139/what-is-the-url-for-nuget-gallery-to-access-nuget-org-from-vs2010</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/08/AspNet-mvc3-update-to-mvc4/" title="Asp.Net Mvc 3升级到Mvc 4" itemprop="url">Asp.Net Mvc 3升级到Mvc 4</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-08T09:30:00.000Z" itemprop="datePublished"> Published 2017-05-08</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>本文的前提是安装了Asp.Net Mvc 3.0 RTM, 同时安装Mvc 4.0<br>新建一个Empty Mvc3项目, 创建HomeController控制器，并创建Index视图<br>使用nuget安装如下package:<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Install-Package Microsoft.AspNet.Razor -Version 2.0.30506</span><br><span class="line">Install-Package Microsoft.AspNet.WebPages -Version 2.0.30506</span><br><span class="line">Install-Package Microsoft.AspNet.Mvc -Version 4.0.40804</span><br><span class="line">Install-Package Microsoft.AspNet.Mvc.zh-Hans -Version 4.0.40804</span><br></pre></td></tr></table></figure><br>使用nuget完成安装dll后,需要修改根目录中的Web.config和Views文件夹中的Web.config<br>打开根目录中的Web.config,将System.Web.Helpers的版本修改为2.0.0.0, 将System.Web.Mvc的版本修改为4.0.0.1,将System.Web.WebPages的版本修改为2.0.0.0 </p>
+<p>&lt;system.web&gt;中的最终配置如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</span><br><span class="line">  &lt;assemblies&gt;</span><br><span class="line">	&lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">	&lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">	&lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">	&lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">	&lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">  &lt;/assemblies&gt;</span><br><span class="line">&lt;/compilation&gt;</span><br></pre></td></tr></table></figure><br>在<runtime>节点中添加如下配置<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</span><br><span class="line">	&lt;dependentAssembly&gt;</span><br><span class="line">		&lt;assemblyIdentity name=&quot;System.Web.Helpers&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</span><br><span class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</span><br><span class="line">	&lt;/dependentAssembly&gt;</span><br><span class="line">	&lt;dependentAssembly&gt;</span><br><span class="line">		&lt;assemblyIdentity name=&quot;System.Web.WebPages&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</span><br><span class="line">		&lt;bindingRedirect oldVersion=&quot;1.0.0.0&quot; newVersion=&quot;2.0.0.0&quot;/&gt;</span><br><span class="line">	&lt;/dependentAssembly&gt;</span><br><span class="line">	&lt;dependentAssembly&gt;</span><br><span class="line">		&lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</span><br><span class="line">		&lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</span><br><span class="line">	&lt;/dependentAssembly&gt;</span><br><span class="line">&lt;/assemblyBinding&gt;</span><br></pre></td></tr></table></figure><br>打开Views文件夹中的Web.config,将原先的configSections节点项中Razor版本修改为2.0.0.0, 同时将这个文件中的Mvc版本修改为4.0.0.1 </p>
+<p>根目录中的Web.config最终内容<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!--</span><br><span class="line">  有关如何配置 ASP.NET 应用程序的详细信息，请访问</span><br><span class="line">  http://go.microsoft.com/fwlink/?LinkId=152368</span><br><span class="line">  --&gt;</span><br><span class="line"></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;appSettings&gt;</span><br><span class="line">    &lt;add key=&quot;ClientValidationEnabled&quot; value=&quot;true&quot;/&gt; </span><br><span class="line">    &lt;add key=&quot;UnobtrusiveJavaScriptEnabled&quot; value=&quot;true&quot;/&gt; </span><br><span class="line">  &lt;/appSettings&gt;</span><br><span class="line">    </span><br><span class="line">  &lt;system.web&gt;</span><br><span class="line">    &lt;compilation debug=&quot;true&quot; targetFramework=&quot;4.0&quot;&gt;</span><br><span class="line">      &lt;assemblies&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;</span><br><span class="line">      &lt;/assemblies&gt;</span><br><span class="line">    &lt;/compilation&gt;</span><br><span class="line"></span><br><span class="line">    &lt;authentication mode=&quot;Forms&quot;&gt;</span><br><span class="line">      &lt;forms loginUrl=&quot;~/Account/LogOn&quot; timeout=&quot;2880&quot;/&gt;</span><br><span class="line">    &lt;/authentication&gt;</span><br><span class="line"></span><br><span class="line">    &lt;pages&gt;</span><br><span class="line">      &lt;namespaces&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Helpers&quot;/&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot;/&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot;/&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot;/&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Routing&quot;/&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.WebPages&quot;/&gt;</span><br><span class="line">      &lt;/namespaces&gt;</span><br><span class="line">    &lt;/pages&gt;</span><br><span class="line">  &lt;/system.web&gt;</span><br><span class="line"></span><br><span class="line">  &lt;system.webServer&gt;</span><br><span class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot;/&gt;</span><br><span class="line">    &lt;modules runAllManagedModulesForAllRequests=&quot;true&quot;/&gt;</span><br><span class="line">  &lt;/system.webServer&gt;</span><br><span class="line"></span><br><span class="line">  &lt;runtime&gt;</span><br><span class="line">    &lt;assemblyBinding xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;</span><br><span class="line">      &lt;dependentAssembly&gt;</span><br><span class="line">        &lt;assemblyIdentity name=&quot;System.Web.Mvc&quot; publicKeyToken=&quot;31bf3856ad364e35&quot;/&gt;</span><br><span class="line">        &lt;bindingRedirect oldVersion=&quot;3.0.0.0-4.0.0.1&quot; newVersion=&quot;4.0.0.1&quot;/&gt;</span><br><span class="line">      &lt;/dependentAssembly&gt;</span><br><span class="line">    &lt;/assemblyBinding&gt;</span><br><span class="line">  &lt;/runtime&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Views文件夹中的Web.config中的最终内容<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">  &lt;configSections&gt;</span><br><span class="line">    &lt;sectionGroup name=&quot;system.web.webPages.razor&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</span><br><span class="line">      &lt;section name=&quot;host&quot; type=&quot;System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</span><br><span class="line">      &lt;section name=&quot;pages&quot; type=&quot;System.Web.WebPages.Razor.Configuration.RazorPagesSection, System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; requirePermission=&quot;false&quot; /&gt;</span><br><span class="line">    &lt;/sectionGroup&gt;</span><br><span class="line">  &lt;/configSections&gt;</span><br><span class="line"></span><br><span class="line">  &lt;system.web.webPages.razor&gt;</span><br><span class="line">    &lt;host factoryType=&quot;System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;</span><br><span class="line">    &lt;pages pageBaseType=&quot;System.Web.Mvc.WebViewPage&quot;&gt;</span><br><span class="line">      &lt;namespaces&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc&quot; /&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc.Ajax&quot; /&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Mvc.Html&quot; /&gt;</span><br><span class="line">        &lt;add namespace=&quot;System.Web.Routing&quot; /&gt;</span><br><span class="line">      &lt;/namespaces&gt;</span><br><span class="line">    &lt;/pages&gt;</span><br><span class="line">  &lt;/system.web.webPages.razor&gt;</span><br><span class="line"></span><br><span class="line">  &lt;appSettings&gt;</span><br><span class="line">    &lt;add key=&quot;webpages:Enabled&quot; value=&quot;false&quot; /&gt;</span><br><span class="line">  &lt;/appSettings&gt;</span><br><span class="line"></span><br><span class="line">  &lt;system.web&gt;</span><br><span class="line">    &lt;httpHandlers&gt;</span><br><span class="line">      &lt;add path=&quot;*&quot; verb=&quot;*&quot; type=&quot;System.Web.HttpNotFoundHandler&quot;/&gt;</span><br><span class="line">    &lt;/httpHandlers&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!--</span><br><span class="line">        在视图页面中启用请求验证将导致验证在</span><br><span class="line">        控制器已对输入进行处理后发生。默认情况下，</span><br><span class="line">        MVC 在控制器处理输入前执行请求验证。</span><br><span class="line">        若要更改此行为，请对控制器或操作</span><br><span class="line">        应用 ValidateInputAttribute。</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;pages</span><br><span class="line">        validateRequest=&quot;false&quot;</span><br><span class="line">        pageParserFilterType=&quot;System.Web.Mvc.ViewTypeParserFilter, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</span><br><span class="line">        pageBaseType=&quot;System.Web.Mvc.ViewPage, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;</span><br><span class="line">        userControlBaseType=&quot;System.Web.Mvc.ViewUserControl, System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;&gt;</span><br><span class="line">      &lt;controls&gt;</span><br><span class="line">        &lt;add assembly=&quot;System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; namespace=&quot;System.Web.Mvc&quot; tagPrefix=&quot;mvc&quot; /&gt;</span><br><span class="line">      &lt;/controls&gt;</span><br><span class="line">    &lt;/pages&gt;</span><br><span class="line">  &lt;/system.web&gt;</span><br><span class="line"></span><br><span class="line">  &lt;system.webServer&gt;</span><br><span class="line">    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;handlers&gt;</span><br><span class="line">      &lt;remove name=&quot;BlockViewHandler&quot;/&gt;</span><br><span class="line">      &lt;add name=&quot;BlockViewHandler&quot; path=&quot;*&quot; verb=&quot;*&quot; preCondition=&quot;integratedMode&quot; type=&quot;System.Web.HttpNotFoundHandler&quot; /&gt;</span><br><span class="line">    &lt;/handlers&gt;</span><br><span class="line">  &lt;/system.webServer&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>重新编译后运行，自动跳转到/Home/Index</p>
+<p>Mvc 4的最新版本为4.0.0.1, 在Nuget上可以下载, 为了方便还原packages.config如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;packages&gt;</span><br><span class="line">  &lt;package id=&quot;Antlr&quot; version=&quot;3.5.0.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;jQuery&quot; version=&quot;1.12.4&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.Mvc&quot; version=&quot;4.0.40804.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.Mvc.zh-Hans&quot; version=&quot;4.0.40804.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.Razor&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.Razor.zh-Hans&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.Core&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.JS&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.Owin&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.SignalR.SystemWeb&quot; version=&quot;1.2.2&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.Web.Optimization&quot; version=&quot;1.1.3&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Client&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Client.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Core&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.Core.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.WebHost&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebApi.WebHost.zh-Hans&quot; version=&quot;4.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebPages&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.AspNet.WebPages.zh-Hans&quot; version=&quot;2.0.30506.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.Net.Http&quot; version=&quot;2.0.20710.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.Net.Http.zh-Hans&quot; version=&quot;2.0.20710.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.Owin.Host.SystemWeb&quot; version=&quot;1.0.1&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Microsoft.Web.Infrastructure&quot; version=&quot;1.0.0.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Newtonsoft.Json&quot; version=&quot;6.0.4&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;Owin&quot; version=&quot;1.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">  &lt;package id=&quot;WebGrease&quot; version=&quot;1.6.0&quot; targetFramework=&quot;net40&quot; /&gt;</span><br><span class="line">&lt;/packages&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Mvc漏洞安全公告:<a target="_blank" rel="noopener" href="https://technet.microsoft.com/zh-cn/library/security/ms14-059">https://technet.microsoft.com/zh-cn/library/security/ms14-059</a><br>Mvc补丁地址:<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-CN/download/details.aspx?id=44533">https://www.microsoft.com/zh-CN/download/details.aspx?id=44533</a><br>Mvc4发布说明:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes">https://docs.microsoft.com/en-us/aspnet/whitepapers/mvc4-release-notes</a><br>Mvc4安装包:<a target="_blank" rel="noopener" href="https://www.microsoft.com/zh-CN/download/details.aspx?id=30683">https://www.microsoft.com/zh-CN/download/details.aspx?id=30683</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Asp-Net/">Asp.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Asp-Net/">Asp.Net</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/05/04/CSharp-string-parse-exact-to-datetime/" title="C#特定格式字符串转换为DateTime" itemprop="url">C#特定格式字符串转换为DateTime</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-05-04T06:01:00.000Z" itemprop="datePublished"> Published 2017-05-04</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>将字符串”20170504112153”转换为DateTime类型时，调用DateTime.Parse方法，发现抛出FormatException：该字符串未被识别为有效的 DateTime。<br>难道只能将字符串转换为特定的格式，比如下面这样？<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153&quot;;</span><br><span class="line">DateTime time;</span><br><span class="line"></span><br><span class="line">if (input.Length &gt; 13)</span><br><span class="line">&#123;</span><br><span class="line">	var timeInput = input.Substring(0, 4) + &quot;-&quot; + input.Substring(4, 2) + &quot;-&quot;</span><br><span class="line">		+ input.Substring(6, 2) + &quot; &quot; + input.Substring(8, 2) + &quot;:&quot;</span><br><span class="line">		+ input.Substring(10, 2);</span><br><span class="line"></span><br><span class="line">	time = DateTime.Parse(timeInput);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>这种方式让人的感觉，不够优雅。有没有更好的方式？答案是有的，调用DateTime.ParseExact方法。<br>ParseExact方法可以指定DateTime类型的转换格式<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153&quot;;</span><br><span class="line">var time = DateTime.ParseExact(input, &quot;yyyyMMddHHmmss&quot;, System.Globalization.CultureInfo.CurrentCulture);</span><br></pre></td></tr></table></figure><br>但是，这个方法还是有局限性的，比如为input值加上毫秒时，再次转换时还是会抛出FormatException.<br>不过，ParseExact有一个重载的方法可以解决这个问题<br>public static DateTime ParseExact(string s, string[] formats, IFormatProvider provider, DateTimeStyles style);<br>参数formats表示：DateTime类型允许格式的数组，所以你可以这样写<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var input = &quot;20170504112153999&quot;;</span><br><span class="line">var date = DateTime.ParseExact(input</span><br><span class="line">	, new string[] &#123; &quot;yyyyMMddHHmmss&quot;, &quot;yyyyMMddHHmmssf&quot;, &quot;yyyyMMddHHmmssff&quot;, &quot;yyyyMMddHHmmssfff&quot; &#125;</span><br><span class="line">	, CultureInfo.CurrentCulture, DateTimeStyles.None);</span><br></pre></td></tr></table></figure><br>将毫秒的每种可能格式列举出来，方法有点笨，这也不失为一种解决办法。</p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Net/">.Net</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/">&lt;span&gt;&lt;&#x2F;span&gt;Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next&lt;span&gt;&lt;&#x2F;span&gt;</a>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+ </html>

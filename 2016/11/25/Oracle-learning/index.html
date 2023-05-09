@@ -1,0 +1,652 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Oracle学习笔记 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456;修改用户密码12--用户名test 密码testalter user test identified by test;为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablespac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle学习笔记">
+<meta property="og:url" content="http://yuanrui.github.io/2016/11/25/Oracle-learning/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="用户相关创建用户12--用户名test 密码123456create user test identified by 123456;修改用户密码12--用户名test 密码testalter user test identified by test;为用户指定默认表空间1234--默认表空间test_DB 临时表空间test_tempalter user testdefault tablespac">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-11-25T02:17:55.000Z">
+<meta property="article:modified_time" content="2018-08-14T05:25:02.588Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="开发笔记">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="Sql">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/25/Oracle-learning/" title="Oracle学习笔记" itemprop="url">Oracle学习笔记</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-25T02:17:55.000Z" itemprop="datePublished"> Published 2016-11-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">用户相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">表空间管理</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="用户相关"><a href="#用户相关" class="headerlink" title="用户相关"></a>用户相关</h3><p>创建用户<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码123456</span><br><span class="line">create user test identified by 123456;</span><br></pre></td></tr></table></figure><br>修改用户密码<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--用户名test 密码test</span><br><span class="line">alter user test identified by test;</span><br></pre></td></tr></table></figure><br>为用户指定默认表空间<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">--默认表空间test_DB 临时表空间test_temp</span><br><span class="line">alter user test</span><br><span class="line">default tablespace test_DB</span><br><span class="line">temporary tablespace test_temp;</span><br></pre></td></tr></table></figure><br>授予用户权限<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">grant </span><br><span class="line">　　CREATE SESSION, CREATE ANY TABLE, CREATE ANY VIEW ,CREATE ANY INDEX, CREATE ANY PROCEDURE,</span><br><span class="line">　　ALTER ANY TABLE, ALTER ANY PROCEDURE,</span><br><span class="line">　　DROP ANY TABLE, DROP ANY VIEW, DROP ANY INDEX, DROP ANY PROCEDURE,</span><br><span class="line">　　SELECT ANY TABLE, INSERT ANY TABLE, UPDATE ANY TABLE, DELETE ANY TABLE</span><br><span class="line">　　to test;</span><br><span class="line">grant resource, dba to test;</span><br></pre></td></tr></table></figure><br>回收权限<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">revoke resource, dba from test;</span><br></pre></td></tr></table></figure></p>
+<h3 id="表空间管理"><a href="#表空间管理" class="headerlink" title="表空间管理"></a>表空间管理</h3><p>表空间大小与数据块大小(db_block_size)有关</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">数据块大小</th>
+<th style="text-align:left">表空间文件最大值M</th>
+<th>表空间文件最大值G</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4k</td>
+<td style="text-align:left">16383M</td>
+<td>16G</td>
+</tr>
+<tr>
+<td style="text-align:left">8k</td>
+<td style="text-align:left">32767M</td>
+<td>32G</td>
+</tr>
+<tr>
+<td style="text-align:left">16k</td>
+<td style="text-align:left">65535M</td>
+<td>64G</td>
+</tr>
+<tr>
+<td style="text-align:left">32k</td>
+<td style="text-align:left">131072M</td>
+<td>128G</td>
+</tr>
+<tr>
+<td style="text-align:left">64k</td>
+<td style="text-align:left">262144M</td>
+<td>256G</td>
+</tr>
+</tbody>
+</table>
+<p>数据块是4k的数据库，单个表空间数据文件的限制是小于16G，而不是小于等于16G。</p>
+<p>查询数据块大小大小<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show parameter db_block_size</span><br></pre></td></tr></table></figure></p>
+<p>查询表空间使用情况<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">SELECT UPPER(F.TABLESPACE_NAME) AS &quot;表空间名称&quot;,</span><br><span class="line">       ROUND(D.AVAILB_BYTES,2) AS &quot;表空间大小(G)&quot;,</span><br><span class="line">       ROUND(D.MAX_BYTES,2) AS &quot;最终表空间大小(G)&quot;,</span><br><span class="line">       ROUND((D.AVAILB_BYTES - F.USED_BYTES),2) AS &quot;已使用空间(G)&quot;,</span><br><span class="line">       TO_CHAR(ROUND((D.AVAILB_BYTES - F.USED_BYTES) / D.AVAILB_BYTES * 100, 2), &#x27;999.99&#x27;) AS &quot;使用比&quot;,</span><br><span class="line">       ROUND(F.USED_BYTES, 6) AS &quot;空闲空间(G)&quot;,</span><br><span class="line">       F.MAX_BYTES AS &quot;最大块(M)&quot;</span><br><span class="line">FROM</span><br><span class="line">  ( SELECT TABLESPACE_NAME,</span><br><span class="line">           ROUND(SUM(BYTES) / (1024 * 1024 * 1024), 6) USED_BYTES,</span><br><span class="line">           ROUND(MAX(BYTES) / (1024 * 1024 * 1024), 6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_FREE_SPACE</span><br><span class="line">   GROUP BY TABLESPACE_NAME) F,</span><br><span class="line">  (SELECT DD.TABLESPACE_NAME,</span><br><span class="line">          ROUND(SUM(DD.BYTES) / (1024 * 1024 * 1024), 6) AVAILB_BYTES,</span><br><span class="line">          ROUND(SUM(DECODE(DD.MAXBYTES, 0, DD.BYTES, DD.MAXBYTES))/(1024*1024*1024),6) MAX_BYTES</span><br><span class="line">   FROM SYS.DBA_DATA_FILES DD</span><br><span class="line">   GROUP BY DD.TABLESPACE_NAME) D</span><br><span class="line">WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME</span><br><span class="line">ORDER BY 4 DESC</span><br></pre></td></tr></table></figure></p>
+<p>查询表空间文件地址、是否自动增长、数据文件最大值、自动增长值(8k block)<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select TABLESPACE_NAME,FILE_NAME,AUTOEXTENSIBLE,MAXBYTES / 1024 / 1024 / 1024,INCREMENT_BY*8192/1024/1024 from dba_data_files</span><br></pre></td></tr></table></figure><br>增加表空间数据文件<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">add datafile &#x27;D:\ORADB\test_DB_2.DBF&#x27; size 32M</span><br><span class="line">AUTOEXTEND ON</span><br><span class="line">NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure><br>调整数据文件大小<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &#x27;D:\ORADB\test_DB_2.DBF&#x27;</span><br><span class="line">RESIZE 64M;</span><br></pre></td></tr></table></figure><br>设置已存在数据文件为自动增长并设置最大值<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter database datafile &#x27;D:\ORADB\test_DB_2.DBF&#x27;</span><br><span class="line">AUTOEXTEND ON NEXT 32M MAXSIZE 32767M;</span><br></pre></td></tr></table></figure><br>删除数据文件<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alter tablespace test_DB</span><br><span class="line">drop datafile &#x27;D:\ORADB\test_DB_2.DBF&#x27;;</span><br></pre></td></tr></table></figure><br>移动表空间数据文件<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">--1.将表空间离线</span><br><span class="line">alter tablespace test_DB offline normal;</span><br><span class="line">--2.移动数据文件目录</span><br><span class="line">--3.重命名表空间文件</span><br><span class="line">alter database rename file &#x27;D:\ORADB\test_DB.DBF&#x27; to &#x27;D:\Oracle\Data\test_DB.DBF&#x27;;</span><br><span class="line">--4.表空间联机</span><br><span class="line">alter tablespace test_DB online;</span><br></pre></td></tr></table></figure></p>
+<p>查看表空间或索引占用的存储空间大小<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select segment_name, segment_type, sum(bytes)/1024/1024 MB</span><br><span class="line">from user_segments  </span><br><span class="line">group by segment_name, segment_type</span><br><span class="line">order by 3 desc </span><br></pre></td></tr></table></figure></p>
+<p>查询引用主键的外键以及外键表<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">select a.Owner 外键拥有者,</span><br><span class="line">    a.Table_Name 外键表,</span><br><span class="line">    c.Column_Name 外键列,</span><br><span class="line">    b.Owner 主键拥有者,</span><br><span class="line">    b.Table_Name 主键表,</span><br><span class="line">    d.Column_Name 主键列,</span><br><span class="line">    c.Constraint_Name 外键名,</span><br><span class="line">    d.Constraint_Name 主键名</span><br><span class="line">from User_Constraints a, </span><br><span class="line">    user_Constraints b, </span><br><span class="line">    user_Cons_Columns c, --外键表</span><br><span class="line">    user_Cons_Columns d  --主键表</span><br><span class="line">where a.r_Constraint_Name = b.Constraint_Name </span><br><span class="line">    and a.Constraint_Type = &#x27;R&#x27; </span><br><span class="line">    and b.Constraint_Type = &#x27;P&#x27; </span><br><span class="line">    and a.r_Owner = b.Owner </span><br><span class="line">    and a.Constraint_Name = c.Constraint_Name </span><br><span class="line">    and b.Constraint_Name = d.Constraint_Name </span><br><span class="line">    and a.Owner = c.Owner </span><br><span class="line">    and a.Table_Name = c.Table_Name </span><br><span class="line">    and b.Owner = d.Owner </span><br><span class="line">    and b.Table_Name = d.Table_Name</span><br><span class="line">    and b.Table_Name = &#x27;EMP&#x27;</span><br></pre></td></tr></table></figure></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2016/11/25/Oracle-learning/" data-title="Oracle学习笔记 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2017/02/08/Oracle-learning-CRUD/" title="Oracle学习笔记-CRUD">
+  <strong>上一篇：</strong><br/>
+  <span>
+  Oracle学习笔记-CRUD</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/11/22/Oracle-useful-hints/"  title="Oracle常用提示">
+ <strong>下一篇：</strong><br/> 
+ <span>Oracle常用提示
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%9B%B8%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">用户相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A1%A8%E7%A9%BA%E9%97%B4%E7%AE%A1%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">表空间管理</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,614 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Oracle常用sql(第二部分) | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="Sql大部分从《Expert Oracle Database Architecture》一书拷贝而来，http:&#x2F;&#x2F;www.apress.com&#x2F;9781430229469 查看当前数据库连接以及正在执行的Sql123456789101112131415select a.SID, a.SERIAL#,       &amp;#x27;alter system kill session &amp;#x27;&amp;#x2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle常用sql(第二部分)">
+<meta property="og:url" content="http://yuanrui.github.io/2016/08/19/Oracle-useful-sql-part-2/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="Sql大部分从《Expert Oracle Database Architecture》一书拷贝而来，http:&#x2F;&#x2F;www.apress.com&#x2F;9781430229469 查看当前数据库连接以及正在执行的Sql123456789101112131415select a.SID, a.SERIAL#,       &amp;#x27;alter system kill session &amp;#x27;&amp;#x2">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-08-19T07:50:00.000Z">
+<meta property="article:modified_time" content="2018-07-31T01:29:53.653Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="开发笔记">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="Sql">
+<meta property="article:tag" content="读书笔记">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/19/Oracle-useful-sql-part-2/" title="Oracle常用sql(第二部分)" itemprop="url">Oracle常用sql(第二部分)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-08-19T07:50:00.000Z" itemprop="datePublished"> Published 2016-08-19</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E4%BB%A5%E5%8F%8A%E6%AD%A3%E5%9C%A8%E6%89%A7%E8%A1%8C%E7%9A%84Sql"><span class="toc-number">1.</span> <span class="toc-text">查看当前数据库连接以及正在执行的Sql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E7%A9%BA%E9%97%B4"><span class="toc-number">2.</span> <span class="toc-text">查看表空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E7%BB%9F%E8%AE%A1"><span class="toc-number">3.</span> <span class="toc-text">执行统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%AF%BB%E5%92%8C%E7%89%A9%E7%90%86%E8%AF%BB%E7%BB%9F%E8%AE%A1"><span class="toc-number">4.</span> <span class="toc-text">逻辑读和物理读统计</span></a></li></ol>
+		
+		</div>
+		
+		<p>Sql大部分从《Expert Oracle Database Architecture》一书拷贝而来，<a target="_blank" rel="noopener" href="http://www.apress.com/9781430229469">http://www.apress.com/9781430229469</a></p>
+<h4 id="查看当前数据库连接以及正在执行的Sql"><a href="#查看当前数据库连接以及正在执行的Sql" class="headerlink" title="查看当前数据库连接以及正在执行的Sql"></a>查看当前数据库连接以及正在执行的Sql</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">select a.SID, a.SERIAL#,</span><br><span class="line">       &#x27;alter system kill session &#x27;&#x27;&#x27; || a.sid || &#x27;, &#x27; || a.serial# || &#x27;&#x27;&#x27;;&#x27; AS KILL_SESSION_SQL,</span><br><span class="line">       a.USERNAME, </span><br><span class="line">       b.Cpu_Time/1000000 AS CPU_TIME_SEC,</span><br><span class="line">       STATUS, </span><br><span class="line">       b.SQL_TEXT,</span><br><span class="line">       paddr, </span><br><span class="line">       b.SQL_ID,</span><br><span class="line">       a.OSUSER, </span><br><span class="line">       a.PROGRAM,</span><br><span class="line">       a.machine </span><br><span class="line">from V$SESSION a </span><br><span class="line">left join V$SQLAREA b on a.prev_sql_addr = b.ADDRESS</span><br><span class="line">left join v$process c on a.paddr = c.addr</span><br><span class="line">where a.username is not null</span><br></pre></td></tr></table></figure>
+<h4 id="查看表空间"><a href="#查看表空间" class="headerlink" title="查看表空间"></a>查看表空间</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line">create or replace procedure show_space</span><br><span class="line">( p_segname in varchar2,</span><br><span class="line">  p_owner   in varchar2 default user,</span><br><span class="line">  p_type    in varchar2 default &#x27;TABLE&#x27;,</span><br><span class="line">  p_partition in varchar2 default NULL )</span><br><span class="line">-- this procedure uses authid current user so it can query DBA_*</span><br><span class="line">-- views using privileges from a ROLE and so it can be installed</span><br><span class="line">-- once per database, instead of once per user that wanted to use it</span><br><span class="line">authid current_user</span><br><span class="line">as</span><br><span class="line">    l_free_blks                 number;</span><br><span class="line">    l_total_blocks              number;</span><br><span class="line">    l_total_bytes               number;</span><br><span class="line">    l_unused_blocks             number;</span><br><span class="line">    l_unused_bytes              number;</span><br><span class="line">    l_LastUsedExtFileId         number;</span><br><span class="line">    l_LastUsedExtBlockId        number;</span><br><span class="line">    l_LAST_USED_BLOCK           number;</span><br><span class="line">    l_segment_space_mgmt        varchar2(255);</span><br><span class="line">    l_unformatted_blocks number;</span><br><span class="line">    l_unformatted_bytes number;</span><br><span class="line">    l_fs1_blocks number; l_fs1_bytes number;</span><br><span class="line">    l_fs2_blocks number; l_fs2_bytes number;</span><br><span class="line">    l_fs3_blocks number; l_fs3_bytes number;</span><br><span class="line">    l_fs4_blocks number; l_fs4_bytes number;</span><br><span class="line">    l_full_blocks number; l_full_bytes number;</span><br><span class="line"></span><br><span class="line">	-- inline procedure to print out numbers nicely formatted</span><br><span class="line">	-- with a simple label</span><br><span class="line">    procedure p( p_label in varchar2, p_num in number )</span><br><span class="line">    is</span><br><span class="line">    begin</span><br><span class="line">        dbms_output.put_line( rpad(p_label,40,&#x27;.&#x27;) ||</span><br><span class="line">                              to_char(p_num,&#x27;999,999,999,999&#x27;) );</span><br><span class="line">    end;</span><br><span class="line">begin</span><br><span class="line">   -- this query is executed dynamically in order to allow this procedure</span><br><span class="line">   -- to be created by a user who has access to DBA_SEGMENTS/TABLESPACES</span><br><span class="line">   -- via a role as is customary.</span><br><span class="line">   -- NOTE: at runtime, the invoker MUST have access to these two</span><br><span class="line">   -- views!</span><br><span class="line">   -- this query determines if the object is a ASSM object or not</span><br><span class="line">   begin</span><br><span class="line">      execute immediate </span><br><span class="line">          &#x27;select ts.segment_space_management</span><br><span class="line">             from dba_segments seg, dba_tablespaces ts</span><br><span class="line">            where seg.segment_name      = :p_segname</span><br><span class="line">              and (:p_partition is null or </span><br><span class="line">                  seg.partition_name = :p_partition)</span><br><span class="line">              and seg.owner = :p_owner</span><br><span class="line">			  and seg.segment_type = :p_type</span><br><span class="line">              and seg.tablespace_name = ts.tablespace_name&#x27;</span><br><span class="line">             into l_segment_space_mgmt</span><br><span class="line">            using p_segname, p_partition, p_partition, p_owner, p_type;</span><br><span class="line">   exception</span><br><span class="line">       when too_many_rows then</span><br><span class="line">          dbms_output.put_line</span><br><span class="line">          ( &#x27;This must be a partitioned table, use p_partition =&gt; &#x27;);</span><br><span class="line">          return;</span><br><span class="line">   end;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   -- if the object is in an ASSM tablespace, we must use this API</span><br><span class="line">   -- call to get space information, else we use the FREE_BLOCKS</span><br><span class="line">   -- API for the user managed segments</span><br><span class="line">   if l_segment_space_mgmt = &#x27;AUTO&#x27;</span><br><span class="line">   then</span><br><span class="line">     dbms_space.space_usage </span><br><span class="line">     ( p_owner, p_segname, p_type, l_unformatted_blocks,</span><br><span class="line">       l_unformatted_bytes, l_fs1_blocks, l_fs1_bytes,</span><br><span class="line">       l_fs2_blocks, l_fs2_bytes, l_fs3_blocks, l_fs3_bytes,</span><br><span class="line">       l_fs4_blocks, l_fs4_bytes, l_full_blocks, l_full_bytes, p_partition);</span><br><span class="line">     </span><br><span class="line">     p( &#x27;Unformatted Blocks &#x27;, l_unformatted_blocks );</span><br><span class="line">     p( &#x27;FS1 Blocks (0-25)  &#x27;, l_fs1_blocks );</span><br><span class="line">     p( &#x27;FS2 Blocks (25-50) &#x27;, l_fs2_blocks );</span><br><span class="line">     p( &#x27;FS3 Blocks (50-75) &#x27;, l_fs3_blocks );</span><br><span class="line">     p( &#x27;FS4 Blocks (75-100)&#x27;, l_fs4_blocks );</span><br><span class="line">     p( &#x27;Full Blocks        &#x27;, l_full_blocks );</span><br><span class="line">  else</span><br><span class="line">     dbms_space.free_blocks(</span><br><span class="line">       segment_owner     =&gt; p_owner,</span><br><span class="line">       segment_name      =&gt; p_segname,</span><br><span class="line">       segment_type      =&gt; p_type,</span><br><span class="line">       freelist_group_id =&gt; 0,</span><br><span class="line">       free_blks         =&gt; l_free_blks);</span><br><span class="line">     </span><br><span class="line">     p( &#x27;Free Blocks&#x27;, l_free_blks );</span><br><span class="line">  end if;</span><br><span class="line"></span><br><span class="line">  -- and then the unused space API call to get the rest of the </span><br><span class="line">  -- information</span><br><span class="line">  dbms_space.unused_space</span><br><span class="line">  ( segment_owner     =&gt; p_owner,</span><br><span class="line">    segment_name      =&gt; p_segname,</span><br><span class="line">    segment_type      =&gt; p_type,</span><br><span class="line">    partition_name    =&gt; p_partition,</span><br><span class="line">    total_blocks      =&gt; l_total_blocks,</span><br><span class="line">    total_bytes       =&gt; l_total_bytes,</span><br><span class="line">    unused_blocks     =&gt; l_unused_blocks,</span><br><span class="line">    unused_bytes      =&gt; l_unused_bytes,</span><br><span class="line">    LAST_USED_EXTENT_FILE_ID =&gt; l_LastUsedExtFileId,</span><br><span class="line">    LAST_USED_EXTENT_BLOCK_ID =&gt; l_LastUsedExtBlockId,</span><br><span class="line">    LAST_USED_BLOCK =&gt; l_LAST_USED_BLOCK );</span><br><span class="line"></span><br><span class="line">    p( &#x27;Total Blocks&#x27;, l_total_blocks );</span><br><span class="line">    p( &#x27;Total Bytes&#x27;, l_total_bytes );</span><br><span class="line">    p( &#x27;Total MBytes&#x27;, trunc(l_total_bytes/1024/1024) );</span><br><span class="line">    p( &#x27;Unused Blocks&#x27;, l_unused_blocks );</span><br><span class="line">    p( &#x27;Unused Bytes&#x27;, l_unused_bytes );</span><br><span class="line">    p( &#x27;Last Used Ext FileId&#x27;, l_LastUsedExtFileId );</span><br><span class="line">    p( &#x27;Last Used Ext BlockId&#x27;, l_LastUsedExtBlockId );</span><br><span class="line">    p( &#x27;Last Used Block&#x27;, l_LAST_USED_BLOCK );</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
+<p>使用方式<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; set serveroutput on;</span><br><span class="line">SQL&gt; exec show_space(&#x27;table_name&#x27;);</span><br></pre></td></tr></table></figure></p>
+<h4 id="执行统计"><a href="#执行统计" class="headerlink" title="执行统计"></a>执行统计</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">set echo on</span><br><span class="line"></span><br><span class="line">drop table run_stats;</span><br><span class="line">create global temporary table run_stats </span><br><span class="line">( runid varchar2(15), </span><br><span class="line">  name varchar2(80), </span><br><span class="line">  value int )</span><br><span class="line">on commit preserve rows;</span><br><span class="line"></span><br><span class="line">grant select any table to ops$tkyte;</span><br><span class="line">create or replace view stats</span><br><span class="line">as select &#x27;STAT...&#x27; || a.name name, b.value</span><br><span class="line">      from v$statname a, v$mystat b</span><br><span class="line">     where a.statistic# = b.statistic#</span><br><span class="line">    union all</span><br><span class="line">    select &#x27;LATCH.&#x27; || name,  gets</span><br><span class="line">      from v$latch</span><br><span class="line">	union all</span><br><span class="line">	select &#x27;STAT...Elapsed Time&#x27;, hsecs from v$timer;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">delete from run_stats;</span><br><span class="line">commit;</span><br><span class="line"></span><br><span class="line">create or replace package runstats_pkg</span><br><span class="line">as</span><br><span class="line">    procedure rs_start;</span><br><span class="line">    procedure rs_middle;</span><br><span class="line">    procedure rs_stop( p_difference_threshold in number default 0 );</span><br><span class="line">end;</span><br><span class="line">/</span><br><span class="line"></span><br><span class="line">create or replace package body runstats_pkg</span><br><span class="line">as</span><br><span class="line"></span><br><span class="line">g_start number;</span><br><span class="line">g_run1  number;</span><br><span class="line">g_run2  number;</span><br><span class="line"></span><br><span class="line">procedure rs_start</span><br><span class="line">is </span><br><span class="line">begin</span><br><span class="line">    delete from run_stats;</span><br><span class="line"></span><br><span class="line">    insert into run_stats </span><br><span class="line">    select &#x27;before&#x27;, stats.* from stats;</span><br><span class="line">        </span><br><span class="line">    g_start := dbms_utility.get_cpu_time;</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">procedure rs_middle</span><br><span class="line">is</span><br><span class="line">begin</span><br><span class="line">    g_run1 := (dbms_utility.get_cpu_time-g_start);</span><br><span class="line"> </span><br><span class="line">    insert into run_stats </span><br><span class="line">    select &#x27;after 1&#x27;, stats.* from stats;</span><br><span class="line">    g_start := dbms_utility.get_cpu_time;</span><br><span class="line"></span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">procedure rs_stop(p_difference_threshold in number default 0)</span><br><span class="line">is</span><br><span class="line">begin</span><br><span class="line">    g_run2 := (dbms_utility.get_cpu_time-g_start);</span><br><span class="line"></span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( &#x27;Run1 ran in &#x27; || g_run1 || &#x27; cpu hsecs&#x27; );</span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( &#x27;Run2 ran in &#x27; || g_run2 || &#x27; cpu hsecs&#x27; );</span><br><span class="line">	if ( g_run2 &lt;&gt; 0 )</span><br><span class="line">	then</span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( &#x27;run 1 ran in &#x27; || round(g_run1/g_run2*100,2) || </span><br><span class="line">      &#x27;% of the time&#x27; );</span><br><span class="line">	end if;</span><br><span class="line">    dbms_output.put_line( chr(9) );</span><br><span class="line"></span><br><span class="line">    insert into run_stats </span><br><span class="line">    select &#x27;after 2&#x27;, stats.* from stats;</span><br><span class="line"></span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( rpad( &#x27;Name&#x27;, 30 ) || lpad( &#x27;Run1&#x27;, 12 ) || </span><br><span class="line">      lpad( &#x27;Run2&#x27;, 12 ) || lpad( &#x27;Diff&#x27;, 12 ) );</span><br><span class="line"></span><br><span class="line">    for x in </span><br><span class="line">    ( select rpad( a.name, 30 ) || </span><br><span class="line">             to_char( b.value-a.value, &#x27;999,999,999&#x27; ) || </span><br><span class="line">             to_char( c.value-b.value, &#x27;999,999,999&#x27; ) || </span><br><span class="line">             to_char( ( (c.value-b.value)-(b.value-a.value)), &#x27;999,999,999&#x27; ) data</span><br><span class="line">        from run_stats a, run_stats b, run_stats c</span><br><span class="line">       where a.name = b.name</span><br><span class="line">         and b.name = c.name</span><br><span class="line">         and a.runid = &#x27;before&#x27;</span><br><span class="line">         and b.runid = &#x27;after 1&#x27;</span><br><span class="line">         and c.runid = &#x27;after 2&#x27;</span><br><span class="line">         -- and (c.value-a.value) &gt; 0</span><br><span class="line">         and abs( (c.value-b.value) - (b.value-a.value) ) </span><br><span class="line">               &gt; p_difference_threshold</span><br><span class="line">       order by abs( (c.value-b.value)-(b.value-a.value))</span><br><span class="line">    ) loop</span><br><span class="line">        dbms_output.put_line( x.data );</span><br><span class="line">    end loop;</span><br><span class="line"></span><br><span class="line">    dbms_output.put_line( chr(9) );</span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( &#x27;Run1 latches total versus runs -- difference and pct&#x27; );</span><br><span class="line">    dbms_output.put_line</span><br><span class="line">    ( lpad( &#x27;Run1&#x27;, 12 ) || lpad( &#x27;Run2&#x27;, 12 ) || </span><br><span class="line">      lpad( &#x27;Diff&#x27;, 12 ) || lpad( &#x27;Pct&#x27;, 10 ) );</span><br><span class="line"></span><br><span class="line">    for x in </span><br><span class="line">    ( select to_char( run1, &#x27;999,999,999&#x27; ) ||</span><br><span class="line">             to_char( run2, &#x27;999,999,999&#x27; ) ||</span><br><span class="line">             to_char( diff, &#x27;999,999,999&#x27; ) ||</span><br><span class="line">             to_char( round( run1/decode( run2, 0, to_number(0), run2) *100,2 ), &#x27;99,999.99&#x27; ) || &#x27;%&#x27; data</span><br><span class="line">        from ( select sum(b.value-a.value) run1, sum(c.value-b.value) run2,</span><br><span class="line">                      sum( (c.value-b.value)-(b.value-a.value)) diff</span><br><span class="line">                 from run_stats a, run_stats b, run_stats c</span><br><span class="line">                where a.name = b.name</span><br><span class="line">                  and b.name = c.name</span><br><span class="line">                  and a.runid = &#x27;before&#x27;</span><br><span class="line">                  and b.runid = &#x27;after 1&#x27;</span><br><span class="line">                  and c.runid = &#x27;after 2&#x27;</span><br><span class="line">                  and a.name like &#x27;LATCH%&#x27;</span><br><span class="line">                )</span><br><span class="line">    ) loop</span><br><span class="line">        dbms_output.put_line( x.data );</span><br><span class="line">    end loop;</span><br><span class="line">end;</span><br><span class="line"></span><br><span class="line">end;</span><br><span class="line">/</span><br></pre></td></tr></table></figure>
+<p>调用示例<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">exec runStats_pkg.rs_start;</span><br><span class="line">exec runStats_pkg.rs_middle;</span><br><span class="line">exec runStats_pkg.rs_stop;</span><br><span class="line">*/</span><br><span class="line"></span><br><span class="line">set echo off</span><br><span class="line">set verify off</span><br><span class="line">column diff format a18</span><br><span class="line">select a.name, b.value Value, to_char(b.value-&amp;V,&#x27;999,999,999,999&#x27;) diff</span><br><span class="line">from v$statname a, v$mystat b</span><br><span class="line">where a.statistic# = b.statistic#</span><br><span class="line">and lower(a.name) like &#x27;%&#x27; || lower(&#x27;&amp;S&#x27;)||&#x27;%&#x27;</span><br><span class="line">/</span><br><span class="line">set echo on</span><br></pre></td></tr></table></figure></p>
+<h4 id="逻辑读和物理读统计"><a href="#逻辑读和物理读统计" class="headerlink" title="逻辑读和物理读统计"></a>逻辑读和物理读统计</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">select ses.username, ses.sid, ses.status,    </span><br><span class="line">    max(decode(sta.name, &#x27;session logical reads&#x27;, sest.value)) as &quot;LogicalRead&quot;,</span><br><span class="line">    max(decode(sta.name, &#x27;physical reads&#x27;, sest.value)) as &quot;PhysicalRead&quot;,</span><br><span class="line">    round(max(decode(sta.name, &#x27;session logical reads&#x27;, sest.value)) /</span><br><span class="line">        (3600 * 24 * (sysdate - ses.logon_time)), 2) as &quot;LogicalRead/S&quot;,</span><br><span class="line">    round(max(decode(sta.name, &#x27;physical reads&#x27;, sest.value)) /</span><br><span class="line">        (3600 * 24 * (sysdate - ses.logon_time)), 2) as &quot;PhysicalRead/S&quot;,</span><br><span class="line">    trunc(60 * 24 * (sysdate - ses.logon_time)) as &quot;Minutes&quot;</span><br><span class="line">from v$session ses, v$sesstat sest, v$statname sta, v$sqlarea sarea</span><br><span class="line">where ses.sid = sest.sid and sest.statistic# = sta.statistic# </span><br><span class="line">and sta.name in (&#x27;session logical reads&#x27;, &#x27;physical reads&#x27;)</span><br><span class="line">and ses.username is not null</span><br><span class="line">group by ses.username, ses.sid, ses.status, ses.logon_time</span><br><span class="line">order by 1, 2;</span><br></pre></td></tr></table></figure>
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2016/08/19/Oracle-useful-sql-part-2/" data-title="Oracle常用sql(第二部分) | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/10/18/Resolve-asp-net-config-error/" title="解决Asp.Net配置异常杂记">
+  <strong>上一篇：</strong><br/>
+  <span>
+  解决Asp.Net配置异常杂记</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/08/10/AspNet-js-css-version/"  title="为Asp.Net Mvc项目的Js和Css添加版本号处理">
+ <strong>下一篇：</strong><br/> 
+ <span>为Asp.Net Mvc项目的Js和Css添加版本号处理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5%E4%BB%A5%E5%8F%8A%E6%AD%A3%E5%9C%A8%E6%89%A7%E8%A1%8C%E7%9A%84Sql"><span class="toc-number">1.</span> <span class="toc-text">查看当前数据库连接以及正在执行的Sql</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E8%A1%A8%E7%A9%BA%E9%97%B4"><span class="toc-number">2.</span> <span class="toc-text">查看表空间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E7%BB%9F%E8%AE%A1"><span class="toc-number">3.</span> <span class="toc-text">执行统计</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%AF%BB%E5%92%8C%E7%89%A9%E7%90%86%E8%AF%BB%E7%BB%9F%E8%AE%A1"><span class="toc-number">4.</span> <span class="toc-text">逻辑读和物理读统计</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

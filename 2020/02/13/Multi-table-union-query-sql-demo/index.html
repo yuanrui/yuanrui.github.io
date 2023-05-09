@@ -1,0 +1,732 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>一个多表联合查询需求 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个多表联合查询需求">
+<meta property="og:url" content="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-sql-demo/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="朋友做一个项目，遇到一个多表联合查询的需求。  A表SYSTEM_ID和B表SYSTEM_ID关联； C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；  需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy. T_TABLE_">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-02-13T14:10:00.000Z">
+<meta property="article:modified_time" content="2020-12-16T09:03:16.213Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="Sql">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2020/02/13/Multi-table-union-query-sql-demo/" title="一个多表联合查询需求" itemprop="url">一个多表联合查询需求</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<p>朋友做一个项目，遇到一个多表联合查询的需求。</p>
+<ul>
+<li>A表SYSTEM_ID和B表SYSTEM_ID关联；</li>
+<li>C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；</li>
+</ul>
+<p>需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy.</p>
+<p>T_TABLE_A表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>SYSTEM_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>123</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>234</td>
+</tr>
+</tbody>
+</table>
+<p>T_TABLE_B表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>SYSTEM_ID</th>
+<th>ROLE_ID</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>222</td>
+<td>667</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>123</code></td>
+<td><code>555</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>123</code></td>
+<td><code>777</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>234</td>
+<td>567</td>
+</tr>
+<tr>
+<td>5</td>
+<td>234</td>
+<td>231</td>
+</tr>
+</tbody>
+</table>
+<p>T_TABLE_C表</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+<th>ROLE_LIST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>james</code></td>
+<td>667,<code>777</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>lucy</code></td>
+<td>223,<code>555</code>,823</td>
+</tr>
+<tr>
+<td>3</td>
+<td>tom</td>
+<td>253,231</td>
+</tr>
+<tr>
+<td>4</td>
+<td>max</td>
+<td>123,712</td>
+</tr>
+<tr>
+<td>5</td>
+<td>min</td>
+<td>123,567</td>
+</tr>
+</tbody>
+</table>
+<p>最终提供的sql如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> t_table_c c</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</span><br><span class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</span><br><span class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id <span class="operator">=</span> b.system_id</span><br><span class="line">	<span class="keyword">where</span> a.system_id <span class="operator">=</span> <span class="number">123</span></span><br><span class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">&#x27;%&#x27;</span> <span class="operator">||</span> b.role_id <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>上面的查询sql采用的exists子句的方式，采用连接的方式也能完成相同的功能，具体实现见文末附录Sql.</p>
+<p>从给的脱敏数据可以推测出各个表的功能。</p>
+<ul>
+<li>A表是权限（资源）表；</li>
+<li>B表是角色权限（资源）表；</li>
+<li>C表用户表；</li>
+</ul>
+<p>一般使用单独的表来存储用户和角色的关联信息，这里很巧妙的采用以逗号分隔的方式存储多个角色编号。采用这种方式可以减少表连接，但处理存储和查询的复杂度更高。</p>
+<p>单纯从数据上来看，由于采用的模糊查询，有可能出现错误的查询结果。</p>
+<p>假设C表中存在以下数据。</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+<th>ROLE_LIST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>kim</td>
+<td><code>1777</code>,2211</td>
+</tr>
+<tr>
+<td>7</td>
+<td>kenv</td>
+<td>220,<code>1555</code>,800</td>
+</tr>
+</tbody>
+</table>
+<p>重新执行sql，你会发现查询结果里面包含：kim和kenv. 造成这个结果的原因是，模糊查询可以匹配ROLE_LIST列中部分数据，1777和1555分别包含777和555. </p>
+<p>通过这个简单示例，可以发现存储多个值时确实包含一些局限性。我们既想一列存储多个数值，又想消除歧义，那么怎么解决这个问题呢？</p>
+<p>给存储的值添加一个前缀，也许是一个好办法，比如：r555,r777,r1777,r1555，前缀采用代表特定含义的单词或字母，加上实际的数值，可以构造出一个特殊的字符串。条件子语句：like ‘%r555’. 可以避免示例数据中的错误查询结果问题。</p>
+<p>等等，好像还是有点问题。如果字符串为：r55,r555,r1555，何解。</p>
+<p>当然如果存在这种情况，我们还有一个终极解决办法（适用于任何情况）：前缀+值+后缀</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前缀+值+后缀</span><br><span class="line"></span><br><span class="line">列存储示例：[55],[555],[1555]</span><br><span class="line">条件子语句：like &#x27;%[55]%&#x27;，这里前缀=&#x27;[&#x27;、值=&#x27;55&#x27;、后缀=&#x27;]&#x27;</span><br></pre></td></tr></table></figure>
+<p>一般情况下，使用特定单词或字母作为特殊前缀加取值可以满级绝大多数情况，这种方式可读信更高。而需要严格意义上的避免误查询，可以采用：前缀+值+后缀。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">--附录Sql</span><br><span class="line"></span><br><span class="line">create table t_table_a</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_b</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int,</span><br><span class="line">    role_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_c</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    name varchar2(20),</span><br><span class="line">    role_list varchar2(200)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">insert into t_table_a values(1, 123);</span><br><span class="line">insert into t_table_a values(2, 234);</span><br><span class="line">insert into t_table_a values(3, 100);</span><br><span class="line"></span><br><span class="line">insert into t_table_b values(1, 222, 667);</span><br><span class="line">insert into t_table_b values(2, 123, 555);</span><br><span class="line">insert into t_table_b values(3, 123, 777);</span><br><span class="line">insert into t_table_b values(4, 234, 567);</span><br><span class="line">insert into t_table_b values(5, 234, 231);</span><br><span class="line"></span><br><span class="line">insert into t_table_c values(1, &#x27;james&#x27;, &#x27;667,777&#x27;);</span><br><span class="line">insert into t_table_c values(2, &#x27;lucy&#x27;, &#x27;223,555,823&#x27;);</span><br><span class="line">insert into t_table_c values(3, &#x27;tom&#x27;, &#x27;253,231&#x27;);</span><br><span class="line">insert into t_table_c values(4, &#x27;max&#x27;, &#x27;123,712&#x27;);</span><br><span class="line">insert into t_table_c values(5, &#x27;min&#x27;, &#x27;123,567&#x27;);</span><br><span class="line">insert into t_table_c values(6, &#x27;kim&#x27;, &#x27;1777,2211&#x27;);</span><br><span class="line">insert into t_table_c values(7, &#x27;kenv&#x27;, &#x27;220,1555,800&#x27;);</span><br><span class="line"></span><br><span class="line">select name from t_table_c c</span><br><span class="line">where exists (</span><br><span class="line">	select 1 from t_table_a a</span><br><span class="line">	inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">	where a.system_id = 123</span><br><span class="line">    and c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
+<p>On more thing. </p>
+<p>这sql在Oracle中跑起来，没有任何问题。但是朋友拿去改造后在mysql中运行，出现的查询结果依旧不正常。排查了很长一段时间，才找到原因：在mysql中 ‘%’ || ‘S001’ || ‘%’ 显示打印为：1. 正确的方式是使用concat函数。所以如果你在mysql中运行，需要这样构造sql.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like concat(&#x27;%&#x27;, b.role_id, &#x27;%&#x27;) </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Sql/">Sql</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2020/02/13/Multi-table-union-query-sql-demo/" data-title="一个多表联合查询需求 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2020/08/19/Schedule-analysis-of-duty-management/" title="勤务管理之排班分析">
+  <strong>上一篇：</strong><br/>
+  <span>
+  勤务管理之排班分析</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2020/02/06/Core-Python-Programming-Learning/"  title="Python核心编程学习笔记">
+ <strong>下一篇：</strong><br/> 
+ <span>Python核心编程学习笔记
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

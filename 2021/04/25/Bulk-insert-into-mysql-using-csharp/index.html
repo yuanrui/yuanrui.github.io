@@ -1,0 +1,713 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>C#实现MySql批量导入 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="前言随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。 环境准备本文使用的MySql数据库版本是：5.7，数据库连接驱动采用nuget.org的最新中间件MySql.Data，安装方式如下： 1Install-Package MySql.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C#实现MySql批量导入">
+<meta property="og:url" content="http://yuanrui.github.io/2021/04/25/Bulk-insert-into-mysql-using-csharp/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="前言随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。 环境准备本文使用的MySql数据库版本是：5.7，数据库连接驱动采用nuget.org的最新中间件MySql.Data，安装方式如下： 1Install-Package MySql.">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-04-25T02:16:00.000Z">
+<meta property="article:modified_time" content="2021-04-28T05:14:11.738Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content=".Net">
+<meta property="article:tag" content="Ado.Net">
+<meta property="article:tag" content="MySql">
+<meta property="article:tag" content="Sql">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2021/04/25/Bulk-insert-into-mysql-using-csharp/" title="C#实现MySql批量导入" itemprop="url">C#实现MySql批量导入</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2021-04-25T02:16:00.000Z" itemprop="datePublished"> Published 2021-04-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">循环执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0"><span class="toc-number">4.</span> <span class="toc-text">适配器批量更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%8B%BC%E6%8E%A5SQL%E8%AF%AD%E5%8F%A5"><span class="toc-number">5.</span> <span class="toc-text">执行拼接SQL语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8MySqlBulkLoader"><span class="toc-number">6.</span> <span class="toc-text">使用MySqlBulkLoader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>随着数据库的存储规模的增长，需要选择合适的数据批量写入技术。在MySql中实现批量导入，是指一次性的在数据表中插入很多记录，一般用于解决数据库写入性能。本文主要介绍C#中实现批量导入的MySql数据库的几种方法。</p>
+<h3 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h3><p>本文使用的MySql数据库版本是：5.7，数据库连接驱动采用<a target="_blank" rel="noopener" href="https://www.nuget.org/packages/MySql.Data/">nuget.org</a>的最新中间件MySql.Data，安装方式如下：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Install-Package</span> MySql.Data <span class="literal">-Version</span> <span class="number">8.0</span>.<span class="number">24</span></span><br></pre></td></tr></table></figure>
+<p>我们将通过详细的代码示例研究这些方法，首先我们定义用于测试的数据表结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS t_vehicle_pass_record;</span><br><span class="line">CREATE TABLE t_vehicle_pass_record (</span><br><span class="line">  id bigint NOT NULL AUTO_INCREMENT,</span><br><span class="line">  plate_no varchar(10) NOT NULL DEFAULT &#x27;&#x27;,</span><br><span class="line">  plate_color varchar(6) NOT NULL DEFAULT &#x27;&#x27;,</span><br><span class="line">  pass_time datetime NOT NULL DEFAULT now(),</span><br><span class="line">  equip_id varchar(20) NOT NULL,</span><br><span class="line">  created_at datetime NOT NULL DEFAULT now(),</span><br><span class="line">  PRIMARY KEY (id)</span><br><span class="line">) ENGINE=InnoDB;</span><br></pre></td></tr></table></figure>
+<p>然后定义代码所引用的C#模型代码：</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">VehiclePassModel</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> Int64 Id &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> PlateNO &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> PlateColor &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> DateTime PassTime &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> EquipId &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> DateTime CreatedAt &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="循环执行命令"><a href="#循环执行命令" class="headerlink" title="循环执行命令"></a>循环执行命令</h3><p>循环执行命令（MySqlCommand）是一种常规的方式，一般步骤是：创建连接-&gt;打开数据库连接-&gt;创建事务-&gt;创建命令-&gt;循环执行命令-&gt;提交事务-&gt;关闭连接，结束。小提示：循环执行命令时，需要将绑定的参数清空后重新绑定，避免抛出参数已经定义的异常。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">DoInsertList1</span>(<span class="params">IEnumerable&lt;VehiclePassModel&gt; list</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">string</span> sql = <span class="string">&quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values (?id, ?plate_no, ?plate_color, ?pass_time, ?equip_id, now());&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> connStr = ConfigurationManager.ConnectionStrings[<span class="string">&quot;DefaultConnectionString&quot;</span>].ConnectionString;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> conn = <span class="keyword">new</span> MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        <span class="keyword">using</span> (<span class="keyword">var</span> tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (<span class="keyword">var</span> cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">foreach</span> (<span class="keyword">var</span> model <span class="keyword">in</span> list)</span><br><span class="line">                &#123;</span><br><span class="line">                    cmd.Parameters.Clear();</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">&quot;id&quot;</span>, model.Id);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">&quot;plate_no&quot;</span>, model.PlateNO);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">&quot;plate_color&quot;</span>, model.PlateColor);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">&quot;pass_time&quot;</span>, model.PassTime);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">&quot;equip_id&quot;</span>, model.EquipId);</span><br><span class="line"></span><br><span class="line">                    result += cmd.ExecuteNonQuery(); <span class="comment">//执行sql语句</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="适配器批量更新"><a href="#适配器批量更新" class="headerlink" title="适配器批量更新"></a>适配器批量更新</h3><p>使用此方法执行插入语句，内部实现同样采用循环执行原理，不同的是适配器(MySqlDataAdapter)会根据UpdateBatchSize参数进行分组后循环执行。适配器包含4个执行命令：UpdateCommand、SelectCommand、InsertCommand、DeleteCommand，用于数据的更新、查询、插入、删除操作。批量插入时应当使用InsertCommand，同时不要给其他执行命令赋值，因为给其他执行命令赋值会造成不必要的执行。适配器包含一个UpdateBatchSize属性，用于将DataTable中的Rows拆分按照数量拆分成多个（Rows.Count / UpdateBatchSize）执行命令；UpdateBatchSize未设置或者小于1时，UpdateBatchSize等于DataTable行数，此时只有一个执行命令。</p>
+<p>适配器的Update方法，提供多个方法重载，推荐使用传入DataTable类型，并设置表名称。传入DataSet类型时方法内部会转换为DataTable，并调用UpdateFromDataTable(DataTable dataTable, DataTableMapping tableMapping)方法，因此传入DataTable类型的方法更高效。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">DoInsertList2</span>(<span class="params">IEnumerable&lt;VehiclePassModel&gt; list</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">string</span> sql = <span class="string">&quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values (?id, ?plate_no, ?plate_color, ?pass_time, ?equip_id, now());&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> connStr = ConfigurationManager.ConnectionStrings[<span class="string">&quot;DefaultConnectionString&quot;</span>].ConnectionString;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> table = <span class="keyword">new</span> DataTable(<span class="string">&quot;t_vehicle_pass_record&quot;</span>);</span><br><span class="line">    table.Columns.Add(<span class="string">&quot;id&quot;</span>, <span class="keyword">typeof</span>(Int64));</span><br><span class="line">    table.Columns.Add(<span class="string">&quot;plate_no&quot;</span>, <span class="keyword">typeof</span>(<span class="built_in">string</span>));</span><br><span class="line">    table.Columns.Add(<span class="string">&quot;plate_color&quot;</span>, <span class="keyword">typeof</span>(<span class="built_in">string</span>));</span><br><span class="line">    table.Columns.Add(<span class="string">&quot;pass_time&quot;</span>, <span class="keyword">typeof</span>(DateTime));</span><br><span class="line">    table.Columns.Add(<span class="string">&quot;equip_id&quot;</span>, <span class="keyword">typeof</span>(<span class="built_in">string</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (<span class="keyword">var</span> model <span class="keyword">in</span> list)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> row = table.NewRow();</span><br><span class="line">        row[<span class="string">&quot;id&quot;</span>] = model.Id;</span><br><span class="line">        row[<span class="string">&quot;plate_no&quot;</span>] = model.PlateNO;</span><br><span class="line">        row[<span class="string">&quot;plate_color&quot;</span>] = model.PlateColor;</span><br><span class="line">        row[<span class="string">&quot;pass_time&quot;</span>] = model.PassTime;</span><br><span class="line">        row[<span class="string">&quot;equip_id&quot;</span>] = model.EquipId;</span><br><span class="line"></span><br><span class="line">        table.Rows.Add(row);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> conn = <span class="keyword">new</span> MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        <span class="keyword">using</span> (<span class="keyword">var</span> tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (<span class="keyword">var</span> cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">using</span> (<span class="keyword">var</span> adapter = <span class="keyword">new</span> MySqlDataAdapter())</span><br><span class="line">                &#123;</span><br><span class="line">                    adapter.InsertCommand = cmd;</span><br><span class="line">                    </span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(<span class="string">&quot;?id&quot;</span>, MySqlDbType.Int64, <span class="number">21</span>, <span class="string">&quot;id&quot;</span>);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(<span class="string">&quot;?plate_no&quot;</span>, MySqlDbType.VarChar, <span class="number">10</span>, <span class="string">&quot;plate_no&quot;</span>);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(<span class="string">&quot;?plate_color&quot;</span>, MySqlDbType.VarChar, <span class="number">6</span>, <span class="string">&quot;plate_color&quot;</span>);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(<span class="string">&quot;?pass_time&quot;</span>, MySqlDbType.DateTime, <span class="number">8</span>, <span class="string">&quot;pass_time&quot;</span>);</span><br><span class="line">                    adapter.InsertCommand.Parameters.Add(<span class="string">&quot;?equip_id&quot;</span>, MySqlDbType.VarChar, <span class="number">20</span>, <span class="string">&quot;equip_id&quot;</span>);</span><br><span class="line"></span><br><span class="line">                    adapter.InsertCommand.UpdatedRowSource = UpdateRowSource.None;</span><br><span class="line"></span><br><span class="line">                    adapter.UpdateBatchSize = <span class="number">1000</span>;</span><br><span class="line">                    result = adapter.Update(table); <span class="comment">//执行sql语句</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="执行拼接SQL语句"><a href="#执行拼接SQL语句" class="headerlink" title="执行拼接SQL语句"></a>执行拼接SQL语句</h3><p>MySql的<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/insert.html"><code>INSERT ... VALUES</code></a> 语法中提供插入多个值列表的功能。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INSERT INTO tbl_name (a,b,c) VALUES(1,2,3),(4,5,6),(7,8,9);</span><br></pre></td></tr></table></figure>
+<p>此方法的核心在于拼接SQL语句，绑定参数变量列表，然后执行SQL.</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">DoInsertList3</span>(<span class="params">IEnumerable&lt;VehiclePassModel&gt; list</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="built_in">string</span> insertIntoClause = <span class="string">&quot;insert into t_vehicle_pass_record (id, plate_no, plate_color, pass_time, equip_id, created_at) values &quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> connStr = ConfigurationManager.ConnectionStrings[<span class="string">&quot;DefaultConnectionString&quot;</span>].ConnectionString;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> valueClauses = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;(list.Count());</span><br><span class="line">    <span class="keyword">var</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> conn = <span class="keyword">new</span> MySqlConnection(connStr))</span><br><span class="line">    &#123;</span><br><span class="line">        conn.Open();</span><br><span class="line">        <span class="keyword">using</span> (<span class="keyword">var</span> tran = conn.BeginTransaction())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">using</span> (<span class="keyword">var</span> cmd = conn.CreateCommand())</span><br><span class="line">            &#123;</span><br><span class="line">                cmd.Transaction = tran;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//foreach (var model in list)</span></span><br><span class="line">                <span class="comment">//&#123;</span></span><br><span class="line">                <span class="comment">//    var suffix = Convert.ToString(index, 16);</span></span><br><span class="line">                <span class="comment">//    var clause = $&quot;(?a&#123;suffix&#125;, ?b&#123;suffix&#125;, ?c&#123;suffix&#125;, ?d&#123;suffix&#125;, ?e&#123;suffix&#125;, now())&quot;;</span></span><br><span class="line">                <span class="comment">//    valueClauses.Add(clause);</span></span><br><span class="line">                <span class="comment">//    cmd.Parameters.AddWithValue($&quot;a&#123;suffix&#125;&quot;, model.Id);</span></span><br><span class="line">                <span class="comment">//    cmd.Parameters.AddWithValue($&quot;b&#123;suffix&#125;&quot;, model.PlateNO);</span></span><br><span class="line">                <span class="comment">//    cmd.Parameters.AddWithValue($&quot;c&#123;suffix&#125;&quot;, model.PlateColor);</span></span><br><span class="line">                <span class="comment">//    cmd.Parameters.AddWithValue($&quot;d&#123;suffix&#125;&quot;, model.PassTime);</span></span><br><span class="line">                <span class="comment">//    cmd.Parameters.AddWithValue($&quot;e&#123;suffix&#125;&quot;, model.EquipId);</span></span><br><span class="line">                <span class="comment">//    index++;</span></span><br><span class="line">                <span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">foreach</span> (<span class="keyword">var</span> model <span class="keyword">in</span> list)</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="keyword">var</span> clause = <span class="string">$&quot;(?id_<span class="subst">&#123;index&#125;</span>, ?plate_no_<span class="subst">&#123;index&#125;</span>, ?plate_color_<span class="subst">&#123;index&#125;</span>, ?pass_time_<span class="subst">&#123;index&#125;</span>, ?equip_id_<span class="subst">&#123;index&#125;</span>, now())&quot;</span>;</span><br><span class="line">                    valueClauses.Add(clause);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">$&quot;id_<span class="subst">&#123;index&#125;</span>&quot;</span>, model.Id);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">$&quot;plate_no_<span class="subst">&#123;index&#125;</span>&quot;</span>, model.PlateNO);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">$&quot;plate_color_<span class="subst">&#123;index&#125;</span>&quot;</span>, model.PlateColor);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">$&quot;pass_time_<span class="subst">&#123;index&#125;</span>&quot;</span>, model.PassTime);</span><br><span class="line">                    cmd.Parameters.AddWithValue(<span class="string">$&quot;equip_id_<span class="subst">&#123;index&#125;</span>&quot;</span>, model.EquipId);</span><br><span class="line">                    index++;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">var</span> sql = insertIntoClause + <span class="built_in">string</span>.Join(<span class="string">&quot;,&quot;</span>, valueClauses) + <span class="string">&quot;;&quot;</span>;</span><br><span class="line">                cmd.CommandText = sql;</span><br><span class="line"></span><br><span class="line">                Console.WriteLine(sql.Length);</span><br><span class="line">                Console.WriteLine(Encoding.UTF8.GetBytes(sql).Length);</span><br><span class="line"></span><br><span class="line">                result = cmd.ExecuteNonQuery(); <span class="comment">//执行sql语句</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            tran.Commit();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用MySqlBulkLoader"><a href="#使用MySqlBulkLoader" class="headerlink" title="使用MySqlBulkLoader"></a>使用MySqlBulkLoader</h3><p>MySqlBulkLoader主要包装MySql的语法 <a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/load-data.html"><code>LOAD DATA INFILE</code></a>，提供将数据文件从本地或远程保存到数据库。使用参数详解：</p>
+<ol>
+<li>Local表示要加载的文件是否在客户端本地，默认值为false（如果导入程序和数据库在同一台服务器，此参数可以设置为false），使用时应当设置为true；</li>
+<li>TableName为待导入的数据表名，为必传参数；</li>
+<li>FileName为导入的文本文件路径，导入的格式可以为后缀为：.txt、.csv的UTF-8文本文件。推荐使用csv格式，将FieldTerminator设置为”,”，LineTerminator设置为Environment.NewLine；</li>
+<li>导入的文本文件包含中文字符时，文本保存的格式应当设置为UTF-8，同时将CharacterSet属性设置为”utf8mb4”;</li>
+<li>NumberOfLinesToSkip表示跳过多少条文本开始导入，主要用于跳过表头设置。标准的csv文件格式带有一行表头，所以此处应当设置为1;</li>
+<li>Columns用于指定待导入的数据字段，字段名称和数据表中字段名称保持一致，字段顺序和内容需一一对应。通过此参数可以设置只导入部分字段内容，未设置时，需要将文本文件设置为全表字段内容。</li>
+</ol>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="built_in">int</span> <span class="title">DoInsertList4</span>(<span class="params">IEnumerable&lt;VehiclePassModel&gt; list</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> connStr = ConfigurationManager.ConnectionStrings[<span class="string">&quot;DefaultConnectionString&quot;</span>].ConnectionString;</span><br><span class="line">    <span class="keyword">var</span> path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Guid.NewGuid().ToString() + <span class="string">&quot;.csv&quot;</span>);</span><br><span class="line">    <span class="keyword">var</span> head = <span class="string">&quot;id,plate_color,plate_no,pass_time,equip_id&quot;</span>;</span><br><span class="line">    <span class="keyword">using</span> (<span class="keyword">var</span> writer = File.CreateText(path))</span><br><span class="line">    &#123;</span><br><span class="line">        writer.WriteLine(head);<span class="comment">//注释掉此行后, loader.NumberOfLinesToSkip可以设置为0</span></span><br><span class="line">        <span class="keyword">foreach</span> (<span class="keyword">var</span> item <span class="keyword">in</span> list)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">var</span> content = <span class="string">$&quot;<span class="subst">&#123;item.Id&#125;</span>,<span class="subst">&#123;item.PlateColor&#125;</span>,<span class="subst">&#123;item.PlateNO&#125;</span>,<span class="subst">&#123;item.PassTime.ToString(<span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>)&#125;</span>,<span class="subst">&#123;item.EquipId&#125;</span>&quot;</span>;</span><br><span class="line">            writer.WriteLine(content);</span><br><span class="line">        &#125;</span><br><span class="line">        writer.Flush();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">using</span> (<span class="keyword">var</span> conn = <span class="keyword">new</span> MySqlConnection(connStr))</span><br><span class="line">        &#123;</span><br><span class="line">            conn.Open();</span><br><span class="line">            MySqlBulkLoader loader = <span class="keyword">new</span> MySqlBulkLoader(conn);</span><br><span class="line">            loader.Local = <span class="literal">true</span>;</span><br><span class="line">            loader.FieldTerminator = <span class="string">&quot;,&quot;</span>;</span><br><span class="line">            loader.LineTerminator = Environment.NewLine;</span><br><span class="line">            loader.FileName = path;</span><br><span class="line">            loader.NumberOfLinesToSkip = <span class="number">1</span>;</span><br><span class="line">            loader.CharacterSet = <span class="string">&quot;utf8mb4&quot;</span>;</span><br><span class="line"></span><br><span class="line">            loader.TableName = <span class="string">&quot;t_vehicle_pass_record&quot;</span>;</span><br><span class="line">            loader.Columns.AddRange(head.Split(<span class="keyword">new</span>[] &#123; <span class="string">&#x27;,&#x27;</span> &#125;, StringSplitOptions.RemoveEmptyEntries));</span><br><span class="line"></span><br><span class="line">            result = loader.Load();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">finally</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (File.Exists(path))</span><br><span class="line">        &#123;</span><br><span class="line">            File.Delete(path);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>使用适配器更新时，第一次验证未设置UpdateBatchSize参数测试结果和循环执行差不多，设置为1000后，性能有着明显的提升。</p>
+<p>在导入数量超过10w时，执行拼接SQL语句异常。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MySql.Data.MySqlClient.MySqlException (0x80004005): Packets larger than max_allowed_packet are not allowed.</span><br><span class="line">   在 MySql.Data.MySqlClient.MySqlStream.SendPacket(MySqlPacket packet)</span><br><span class="line">   在 MySql.Data.MySqlClient.NativeDriver.ExecutePacket(MySqlPacket packetToExecute)</span><br><span class="line">   在 MySql.Data.MySqlClient.NativeDriver.SendQuery(MySqlPacket queryPacket)</span><br><span class="line">   在 MySql.Data.MySqlClient.Driver.SendQuery(MySqlPacket p)</span><br><span class="line">   在 MySql.Data.MySqlClient.Statement.ExecuteNext()</span><br><span class="line">   在 MySql.Data.MySqlClient.PreparableStatement.Execute()</span><br><span class="line">   在 MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)</span><br><span class="line">   在 MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()</span><br></pre></td></tr></table></figure>
+<p>异常原因是客户端传输的数据包消息长度超过了4MB，解决方案是：修改数据库max_allowed_packet参数，或分批执行SQL，或修改SQL缩小语句长度和变量参数名称长度。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span> (<span class="keyword">var</span> model <span class="keyword">in</span> list)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> suffix = Convert.ToString(index, <span class="number">16</span>);</span><br><span class="line">    <span class="keyword">var</span> clause = <span class="string">$&quot;(?a<span class="subst">&#123;suffix&#125;</span>, ?b<span class="subst">&#123;suffix&#125;</span>, ?c<span class="subst">&#123;suffix&#125;</span>, ?d<span class="subst">&#123;suffix&#125;</span>, ?e<span class="subst">&#123;suffix&#125;</span>, now())&quot;</span>;</span><br><span class="line">    valueClauses.Add(clause);</span><br><span class="line">    cmd.Parameters.AddWithValue(<span class="string">$&quot;a<span class="subst">&#123;suffix&#125;</span>&quot;</span>, model.Id);</span><br><span class="line">    cmd.Parameters.AddWithValue(<span class="string">$&quot;b<span class="subst">&#123;suffix&#125;</span>&quot;</span>, model.PlateNO);</span><br><span class="line">    cmd.Parameters.AddWithValue(<span class="string">$&quot;c<span class="subst">&#123;suffix&#125;</span>&quot;</span>, model.PlateColor);</span><br><span class="line">    cmd.Parameters.AddWithValue(<span class="string">$&quot;d<span class="subst">&#123;suffix&#125;</span>&quot;</span>, model.PassTime);</span><br><span class="line">    cmd.Parameters.AddWithValue(<span class="string">$&quot;e<span class="subst">&#123;suffix&#125;</span>&quot;</span>, model.EquipId);</span><br><span class="line">    index++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际运用时，还可以做更进一步的导入优化：</p>
+<ul>
+<li>缩小SQL绑定变量的大小，减少网络传输的消耗；</li>
+<li>确保待执行的SQL在85k以内避免产生内存大对象；</li>
+<li>设置合适的批次执行的数量，以达到最优解；</li>
+</ul>
+<p>批量导入的耗时是评价导入性能的参照标准之一，这里我们分别导入100、1000、10000、50000、10000条数据测试本地MySql数据库的平均耗时，供读者参考。</p>
+<table>
+<thead>
+<tr>
+<th>导入数量</th>
+<th>循环执行命令</th>
+<th>适配器批量更新</th>
+<th>执行拼接SQL语句</th>
+<th>使用MySqlBulkLoader</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>121ms</td>
+<td>149ms</td>
+<td>124ms</td>
+<td>95ms</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>509ms</td>
+<td>430ms</td>
+<td>296ms</td>
+<td>210ms</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>2.87s</td>
+<td>1.74s</td>
+<td>787ms</td>
+<td>387ms</td>
+</tr>
+<tr>
+<td>50000</td>
+<td>14.21s</td>
+<td>9.12s</td>
+<td>2.92s</td>
+<td>2.21s</td>
+</tr>
+<tr>
+<td>100000</td>
+<td>27.73s</td>
+<td>27.77s</td>
+<td>异常</td>
+<td>3.45s</td>
+</tr>
+</tbody>
+</table>
+<p>从测试结果来看排名：</p>
+<ol>
+<li><p>MySqlBulkLoader，缺点是会生成临时文件，优点是速度最快性能最好，推荐使用；</p>
+</li>
+<li><p>拼接SQL语句，性能次之，编码方便，数据量不大情况推荐使用。</p>
+</li>
+<li><p>适配器批量更新，适配器的核心在于设置UpdateBatchSize参数，需手动调优，少量数据时使用；</p>
+</li>
+<li><p>循环执行，简单方案，少量数据时使用；</p>
+</li>
+</ol>
+<hr>
+<p>参考信息：</p>
+<p><a target="_blank" rel="noopener" href="https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/Common/DbDataAdapter.cs">https://referencesource.microsoft.com/#System.Data/fx/src/data/System/Data/Common/DbDataAdapter.cs</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/insert.html">https://dev.mysql.com/doc/refman/5.7/en/insert.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/connector-net/en/connector-net-programming-bulk-loader.html">https://dev.mysql.com/doc/connector-net/en/connector-net-programming-bulk-loader.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/dev/connector-net/8.0/html/T_MySql_Data_MySqlClient_MySqlBulkLoader.htm">https://dev.mysql.com/doc/dev/connector-net/8.0/html/T_MySql_Data_MySqlClient_MySqlBulkLoader.htm</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/replication-features-max-allowed-packet.html">https://dev.mysql.com/doc/refman/5.7/en/replication-features-max-allowed-packet.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_max_allowed_packet">https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_max_allowed_packet</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Net/">.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/">Ado.Net</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/">MySql</a>►<a class="article-category-link" href="/categories/Net/Ado-Net/MySql/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Net/">.Net</a><a href="/tags/Ado-Net/">Ado.Net</a><a href="/tags/MySql/">MySql</a><a href="/tags/Sql/">Sql</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2021/04/25/Bulk-insert-into-mysql-using-csharp/" data-title="C#实现MySql批量导入 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2021/04/27/MySql-insert-or-update-syntax/" title="MySql SQL语句实现数据表插入或更新">
+  <strong>上一篇：</strong><br/>
+  <span>
+  MySql SQL语句实现数据表插入或更新</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2021/04/01/MySql-create-sequence-like-oracle/"  title="MySql实现生成序列值">
+ <strong>下一篇：</strong><br/> 
+ <span>MySql实现生成序列值
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.</span> <span class="toc-text">环境准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">循环执行命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%89%B9%E9%87%8F%E6%9B%B4%E6%96%B0"><span class="toc-number">4.</span> <span class="toc-text">适配器批量更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%8B%BC%E6%8E%A5SQL%E8%AF%AD%E5%8F%A5"><span class="toc-number">5.</span> <span class="toc-text">执行拼接SQL语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8MySqlBulkLoader"><span class="toc-number">6.</span> <span class="toc-text">使用MySqlBulkLoader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">7.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

@@ -1,0 +1,611 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Oracle中的导入导出 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。如果不了解详细的命令参数，可以使用exp help&#x3D;y，imp help&#x3D;y进行查询。 数据导出导入示例数据导出.bat12exp 用户名&#x2F;密码 file&#x3D;&amp;#x27;文件绝对路径.dmp&amp;#x27; f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle中的导入导出">
+<meta property="og:url" content="http://yuanrui.github.io/2016/06/16/Oracle-exp-imp-empdp-impdp/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。如果不了解详细的命令参数，可以使用exp help&#x3D;y，imp help&#x3D;y进行查询。 数据导出导入示例数据导出.bat12exp 用户名&#x2F;密码 file&#x3D;&amp;#x27;文件绝对路径.dmp&amp;#x27; f">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-06-16T01:28:34.000Z">
+<meta property="article:modified_time" content="2016-10-14T06:26:13.294Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="开发笔记">
+<meta property="article:tag" content="Oracle">
+<meta property="article:tag" content="Sql">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/06/16/Oracle-exp-imp-empdp-impdp/" title="Oracle中的导入导出" itemprop="url">Oracle中的导入导出</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2016-06-16T01:28:34.000Z" itemprop="datePublished"> Published 2016-06-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%AF%BC%E5%85%A5%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.</span> <span class="toc-text">数据导出导入示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exp%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">exp相关参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#imp%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">imp相关参数</span></a></li></ol>
+		
+		</div>
+		
+		<p>需要将Oracle中的数据进行导入导出时，可以使用imp和exp命令进行操作。exp命令可以将数据库服务器端的数据导出到本地的.dmp文件中，而imp命令可以将.dmp文件中的数据还原到数据库中。<br>如果不了解详细的命令参数，可以使用exp help=y，imp help=y进行查询。</p>
+<h4 id="数据导出导入示例"><a href="#数据导出导入示例" class="headerlink" title="数据导出导入示例"></a>数据导出导入示例</h4><p>数据导出.bat<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exp 用户名/密码 file=&#x27;文件绝对路径.dmp&#x27; filesize=10G tables=数据表1,数据表2,数据表3 grants=n indexes=n triggers=n record=n constraints=n rows=y feedback=10000</span><br><span class="line">pause;</span><br></pre></td></tr></table></figure><br>文件导入.bat<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">imp 用户名/密码 file=&#x27;文件绝对路径.dmp&#x27; tables=数据表1,数据表2,数据表3 DATA_ONLY=y</span><br><span class="line">pause;</span><br></pre></td></tr></table></figure></p>
+<h4 id="exp相关参数"><a href="#exp相关参数" class="headerlink" title="exp相关参数"></a>exp相关参数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;exp help=y</span><br><span class="line"></span><br><span class="line">Export: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:02:16 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 EXP 命令和您的用户名/口令, 导出</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: EXP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 您也可以通过输入跟有各种参数的 EXP 命令来控制导出</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  EXP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: EXP SCOTT/TIGER GRANTS=Y TABLES=(EMP,DEPT,MGR)</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)         关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL        导出整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        OWNER        所有者用户名列表</span><br><span class="line">FILE     输出文件 (EXPDAT.DMP)  TABLES     表名列表</span><br><span class="line">COMPRESS  导入到一个区 (Y)   RECORDLENGTH   IO 记录的长度</span><br><span class="line">GRANTS    导出权限 (Y)          INCTYPE     增量导出类型</span><br><span class="line">INDEXES   导出索引 (Y)         RECORD       跟踪增量导出 (Y)</span><br><span class="line">DIRECT    直接路径 (N)         TRIGGERS     导出触发器 (Y)</span><br><span class="line">LOG      屏幕输出的日志文件    STATISTICS    分析对象 (ESTIMATE)</span><br><span class="line">ROWS      导出数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">CONSISTENT 交叉表的一致性 (N)   CONSTRAINTS  导出的约束条件 (Y)</span><br><span class="line"></span><br><span class="line">OBJECT_CONSISTENT    只在对象导出期间设置为只读的事务处理 (N)</span><br><span class="line">FEEDBACK             每 x 行显示进度 (0)</span><br><span class="line">FILESIZE             每个转储文件的最大大小</span><br><span class="line">FLASHBACK_SCN        用于将会话快照设置回以前状态的 SCN</span><br><span class="line">FLASHBACK_TIME       用于获取最接近指定时间的 SCN 的时间</span><br><span class="line">QUERY                用于导出表的子集的 select 子句</span><br><span class="line">RESUMABLE            遇到与空格相关的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME       用于标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT    RESUMABLE 的等待时间</span><br><span class="line">TTS_FULL_CHECK       对 TTS 执行完整或部分相关性检查</span><br><span class="line">TABLESPACES          要导出的表空间列表</span><br><span class="line">TRANSPORT_TABLESPACE 导出可传输的表空间元数据 (N)</span><br><span class="line">TEMPLATE             调用 iAS 模式导出的模板名</span><br><span class="line"></span><br><span class="line">成功终止导出, 没有出现警告。</span><br></pre></td></tr></table></figure>
+<h4 id="imp相关参数"><a href="#imp相关参数" class="headerlink" title="imp相关参数"></a>imp相关参数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Administrator&gt;imp help=y</span><br><span class="line"></span><br><span class="line">Import: Release 11.2.0.1.0 - Production on 星期四 6月 16 10:22:54 2016</span><br><span class="line"></span><br><span class="line">Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">通过输入 IMP 命令和您的用户名/口令, 导入</span><br><span class="line">操作将提示您输入参数:</span><br><span class="line"></span><br><span class="line">     例如: IMP SCOTT/TIGER</span><br><span class="line"></span><br><span class="line">或者, 可以通过输入 IMP 命令和各种参数来控制导入</span><br><span class="line">的运行方式。要指定参数, 您可以使用关键字:</span><br><span class="line"></span><br><span class="line">     格式:  IMP KEYWORD=value 或 KEYWORD=(value1,value2,...,valueN)</span><br><span class="line">     例如: IMP SCOTT/TIGER IGNORE=Y TABLES=(EMP,DEPT) FULL=N</span><br><span class="line">               或 TABLES=(T1:P1,T1:P2), 如果 T1 是分区表</span><br><span class="line"></span><br><span class="line">USERID 必须是命令行中的第一个参数。</span><br><span class="line"></span><br><span class="line">关键字   说明 (默认值)        关键字      说明 (默认值)</span><br><span class="line">--------------------------------------------------------------------------</span><br><span class="line">USERID   用户名/口令           FULL       导入整个文件 (N)</span><br><span class="line">BUFFER   数据缓冲区大小        FROMUSER    所有者用户名列表</span><br><span class="line">FILE     输入文件 (EXPDAT.DMP)  TOUSER     用户名列表</span><br><span class="line">SHOW     只列出文件内容 (N)     TABLES      表名列表</span><br><span class="line">IGNORE   忽略创建错误 (N)    RECORDLENGTH  IO 记录的长度</span><br><span class="line">GRANTS   导入权限 (Y)          INCTYPE     增量导入类型</span><br><span class="line">INDEXES   导入索引 (Y)         COMMIT       提交数组插入 (N)</span><br><span class="line">ROWS     导入数据行 (Y)        PARFILE      参数文件名</span><br><span class="line">LOG     屏幕输出的日志文件    CONSTRAINTS    导入限制 (Y)</span><br><span class="line">DESTROY                覆盖表空间数据文件 (N)</span><br><span class="line">INDEXFILE              将表/索引信息写入指定的文件</span><br><span class="line">SKIP_UNUSABLE_INDEXES  跳过不可用索引的维护 (N)</span><br><span class="line">FEEDBACK               每 x 行显示进度 (0)</span><br><span class="line">TOID_NOVALIDATE        跳过指定类型 ID 的验证</span><br><span class="line">FILESIZE               每个转储文件的最大大小</span><br><span class="line">STATISTICS             始终导入预计算的统计信息</span><br><span class="line">RESUMABLE              在遇到有关空间的错误时挂起 (N)</span><br><span class="line">RESUMABLE_NAME         用来标识可恢复语句的文本字符串</span><br><span class="line">RESUMABLE_TIMEOUT      RESUMABLE 的等待时间</span><br><span class="line">COMPILE                编译过程, 程序包和函数 (Y)</span><br><span class="line">STREAMS_CONFIGURATION  导入流的一般元数据 (Y)</span><br><span class="line">STREAMS_INSTANTIATION  导入流实例化元数据 (N)</span><br><span class="line">DATA_ONLY              仅导入数据 (N)</span><br><span class="line"></span><br><span class="line">下列关键字仅用于可传输的表空间</span><br><span class="line">TRANSPORT_TABLESPACE 导入可传输的表空间元数据 (N)</span><br><span class="line">TABLESPACES 将要传输到数据库的表空间</span><br><span class="line">DATAFILES 将要传输到数据库的数据文件</span><br><span class="line">TTS_OWNERS 拥有可传输表空间集中数据的用户</span><br><span class="line"></span><br><span class="line">成功终止导入, 没有出现警告。</span><br></pre></td></tr></table></figure>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yuanrui.github.io/2016/06/16/Oracle-exp-imp-empdp-impdp/" data-title="Oracle中的导入导出 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/06/22/EntLib5-Logging-no-log-reason/" title="EntLib5日志组件无法记录日志的可能原因">
+  <strong>上一篇：</strong><br/>
+  <span>
+  EntLib5日志组件无法记录日志的可能原因</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/05/18/Resolve-string-exceeds-maxJsonLength/"  title="解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常">
+ <strong>下一篇：</strong><br/> 
+ <span>解决Asp.Net Mvc下Json字符串的长度超过了maxJsonLength的异常
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA%E5%AF%BC%E5%85%A5%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.</span> <span class="toc-text">数据导出导入示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exp%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0"><span class="toc-number">2.</span> <span class="toc-text">exp相关参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#imp%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">imp相关参数</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
