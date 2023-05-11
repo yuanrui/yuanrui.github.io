@@ -2,15 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://yuanrui.github.io/2022/03/08/VS-project-build-nuget-package-push-to-BaGet/</loc>
-    
-    <lastmod>2022-03-08</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://yuanrui.github.io/2021/08/19/Choose-Environment-NewLine-carefully/</loc>
     
     <lastmod>2021-09-06</lastmod>
@@ -346,7 +337,7 @@
 
   <url>
     <loc>https://yuanrui.github.io/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -354,98 +345,98 @@
   
   <url>
     <loc>https://yuanrui.github.io/tags/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Java/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Oracle/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Asp-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Ado-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/MySql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Sql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/%E8%B5%84%E6%96%99%E6%96%87%E6%A1%A3/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Markdown/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/tags/Spring/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -454,126 +445,126 @@
   
   <url>
     <loc>https://yuanrui.github.io/categories/Oracle/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Mvc/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Asp-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Net/Asp-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/</loc>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Mvc/Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Python/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Hexo/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Net/Ado-Net/MySql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Javascript/</loc>
-    <lastmod>2023-05-09</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuanrui.github.io/categories/Sql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Mvc/Net/Asp-Net/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://yuanrui.github.io/categories/Sql/</loc>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/MySql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Oracle/Sql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Net/Ado-Net/MySql/Sql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/Sql/MySql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://yuanrui.github.io/categories/MySql/Sql/</loc>
-    <lastmod>2023-05-09</lastmod>
+    <lastmod>2023-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

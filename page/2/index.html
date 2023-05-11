@@ -83,217 +83,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2020/02/13/Multi-table-union-query-sql-demo/" title="一个多表联合查询需求" itemprop="url">一个多表联合查询需求</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>朋友做一个项目，遇到一个多表联合查询的需求。</p>
-<ul>
-<li>A表SYSTEM_ID和B表SYSTEM_ID关联；</li>
-<li>C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；</li>
-</ul>
-<p>需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy.</p>
-<p>T_TABLE_A表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>SYSTEM_ID</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>123</code></td>
-</tr>
-<tr>
-<td>2</td>
-<td>234</td>
-</tr>
-</tbody>
-</table>
-<p>T_TABLE_B表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>SYSTEM_ID</th>
-<th>ROLE_ID</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>222</td>
-<td>667</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>123</code></td>
-<td><code>555</code></td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>123</code></td>
-<td><code>777</code></td>
-</tr>
-<tr>
-<td>4</td>
-<td>234</td>
-<td>567</td>
-</tr>
-<tr>
-<td>5</td>
-<td>234</td>
-<td>231</td>
-</tr>
-</tbody>
-</table>
-<p>T_TABLE_C表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>NAME</th>
-<th>ROLE_LIST</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>james</code></td>
-<td>667,<code>777</code></td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>lucy</code></td>
-<td>223,<code>555</code>,823</td>
-</tr>
-<tr>
-<td>3</td>
-<td>tom</td>
-<td>253,231</td>
-</tr>
-<tr>
-<td>4</td>
-<td>max</td>
-<td>123,712</td>
-</tr>
-<tr>
-<td>5</td>
-<td>min</td>
-<td>123,567</td>
-</tr>
-</tbody>
-</table>
-<p>最终提供的sql如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> t_table_c c</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</span><br><span class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</span><br><span class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id <span class="operator">=</span> b.system_id</span><br><span class="line">	<span class="keyword">where</span> a.system_id <span class="operator">=</span> <span class="number">123</span></span><br><span class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">&#x27;%&#x27;</span> <span class="operator">||</span> b.role_id <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>上面的查询sql采用的exists子句的方式，采用连接的方式也能完成相同的功能，具体实现见文末附录Sql.</p>
-<p>从给的脱敏数据可以推测出各个表的功能。</p>
-<ul>
-<li>A表是权限（资源）表；</li>
-<li>B表是角色权限（资源）表；</li>
-<li>C表用户表；</li>
-</ul>
-<p>一般使用单独的表来存储用户和角色的关联信息，这里很巧妙的采用以逗号分隔的方式存储多个角色编号。采用这种方式可以减少表连接，但处理存储和查询的复杂度更高。</p>
-<p>单纯从数据上来看，由于采用的模糊查询，有可能出现错误的查询结果。</p>
-<p>假设C表中存在以下数据。</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>NAME</th>
-<th>ROLE_LIST</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>6</td>
-<td>kim</td>
-<td><code>1777</code>,2211</td>
-</tr>
-<tr>
-<td>7</td>
-<td>kenv</td>
-<td>220,<code>1555</code>,800</td>
-</tr>
-</tbody>
-</table>
-<p>重新执行sql，你会发现查询结果里面包含：kim和kenv. 造成这个结果的原因是，模糊查询可以匹配ROLE_LIST列中部分数据，1777和1555分别包含777和555. </p>
-<p>通过这个简单示例，可以发现存储多个值时确实包含一些局限性。我们既想一列存储多个数值，又想消除歧义，那么怎么解决这个问题呢？</p>
-<p>给存储的值添加一个前缀，也许是一个好办法，比如：r555,r777,r1777,r1555，前缀采用代表特定含义的单词或字母，加上实际的数值，可以构造出一个特殊的字符串。条件子语句：like ‘%r555’. 可以避免示例数据中的错误查询结果问题。</p>
-<p>等等，好像还是有点问题。如果字符串为：r55,r555,r1555，何解。</p>
-<p>当然如果存在这种情况，我们还有一个终极解决办法（适用于任何情况）：前缀+值+后缀</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前缀+值+后缀</span><br><span class="line"></span><br><span class="line">列存储示例：[55],[555],[1555]</span><br><span class="line">条件子语句：like &#x27;%[55]%&#x27;，这里前缀=&#x27;[&#x27;、值=&#x27;55&#x27;、后缀=&#x27;]&#x27;</span><br></pre></td></tr></table></figure>
-<p>一般情况下，使用特定单词或字母作为特殊前缀加取值可以满级绝大多数情况，这种方式可读信更高。而需要严格意义上的避免误查询，可以采用：前缀+值+后缀。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">--附录Sql</span><br><span class="line"></span><br><span class="line">create table t_table_a</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_b</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int,</span><br><span class="line">    role_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_c</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    name varchar2(20),</span><br><span class="line">    role_list varchar2(200)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">insert into t_table_a values(1, 123);</span><br><span class="line">insert into t_table_a values(2, 234);</span><br><span class="line">insert into t_table_a values(3, 100);</span><br><span class="line"></span><br><span class="line">insert into t_table_b values(1, 222, 667);</span><br><span class="line">insert into t_table_b values(2, 123, 555);</span><br><span class="line">insert into t_table_b values(3, 123, 777);</span><br><span class="line">insert into t_table_b values(4, 234, 567);</span><br><span class="line">insert into t_table_b values(5, 234, 231);</span><br><span class="line"></span><br><span class="line">insert into t_table_c values(1, &#x27;james&#x27;, &#x27;667,777&#x27;);</span><br><span class="line">insert into t_table_c values(2, &#x27;lucy&#x27;, &#x27;223,555,823&#x27;);</span><br><span class="line">insert into t_table_c values(3, &#x27;tom&#x27;, &#x27;253,231&#x27;);</span><br><span class="line">insert into t_table_c values(4, &#x27;max&#x27;, &#x27;123,712&#x27;);</span><br><span class="line">insert into t_table_c values(5, &#x27;min&#x27;, &#x27;123,567&#x27;);</span><br><span class="line">insert into t_table_c values(6, &#x27;kim&#x27;, &#x27;1777,2211&#x27;);</span><br><span class="line">insert into t_table_c values(7, &#x27;kenv&#x27;, &#x27;220,1555,800&#x27;);</span><br><span class="line"></span><br><span class="line">select name from t_table_c c</span><br><span class="line">where exists (</span><br><span class="line">	select 1 from t_table_a a</span><br><span class="line">	inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">	where a.system_id = 123</span><br><span class="line">    and c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
-<p>On more thing. </p>
-<p>这sql在Oracle中跑起来，没有任何问题。但是朋友拿去改造后在mysql中运行，出现的查询结果依旧不正常。排查了很长一段时间，才找到原因：在mysql中 ‘%’ || ‘S001’ || ‘%’ 显示打印为：1. 正确的方式是使用concat函数。所以如果你在mysql中运行，需要这样构造sql.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like concat(&#x27;%&#x27;, b.role_id, &#x27;%&#x27;) </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-		<script>
-		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
-	    gitalkConfig.id = md5(location.pathname);
-		var gitalk = new Gitalk(gitalkConfig);
-	    gitalk.render("gitalk-container");
-	    </script>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Sql/">Sql</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Sql/">Sql</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
       <a href="/2020/02/06/Core-Python-Programming-Learning/" title="Python核心编程学习笔记" itemprop="url">Python核心编程学习笔记</a>
   </h1>
   <p class="article-author">By
@@ -1284,6 +1073,206 @@
 
 
 
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/04/28/Oracle-sql-recursion/" title="Oracle Sql递归" itemprop="url">Oracle Sql递归</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2017-04-28T09:55:00.000Z" itemprop="datePublished"> Published 2017-04-28</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <p>最近在做一个用户管理方面的需求，用户只能修改自己创建的用户以及派生用户，提交保存时需要对用户进行判断和识别是否为派生用户<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">--测试用脚本</span><br><span class="line">create table T_SYS_USER</span><br><span class="line">(</span><br><span class="line">  id         INTEGER,</span><br><span class="line">  name       VARCHAR2(20),</span><br><span class="line">  password   VARCHAR2(20),</span><br><span class="line">  created_by VARCHAR2(20)</span><br><span class="line">);</span><br><span class="line">/</span><br><span class="line">--id为主键 name唯一</span><br><span class="line">insert into T_SYS_USER values (1, &#x27;admin&#x27;, &#x27;&#x27;, &#x27;admin&#x27;);</span><br><span class="line">insert into T_SYS_USER values (2, &#x27;root&#x27;, &#x27;&#x27;, &#x27;admin&#x27;);</span><br><span class="line">insert into T_SYS_USER values (3, &#x27;user&#x27;, &#x27;&#x27;, &#x27;root&#x27;);</span><br><span class="line">insert into T_SYS_USER values (4, &#x27;dba&#x27;, &#x27;&#x27;, &#x27;user&#x27;);</span><br><span class="line">insert into T_SYS_USER values (5, &#x27;yuanrui&#x27;, &#x27;&#x27;, &#x27;dba&#x27;);</span><br><span class="line">insert into T_SYS_USER values (6, &#x27;banana&#x27;, &#x27;&#x27;, &#x27;yuanrui&#x27;);</span><br><span class="line">insert into T_SYS_USER values (7, &#x27;dog&#x27;, &#x27;&#x27;, &#x27;banana&#x27;);</span><br><span class="line">insert into T_SYS_USER values (8, &#x27;cat&#x27;, &#x27;&#x27;, &#x27;dog&#x27;);</span><br><span class="line">insert into T_SYS_USER values (9, &#x27;pig&#x27;, &#x27;&#x27;, &#x27;cat&#x27;);</span><br><span class="line">insert into T_SYS_USER values (10, &#x27;fish&#x27;, &#x27;&#x27;, &#x27;pig&#x27;);</span><br><span class="line"></span><br><span class="line">commit</span><br><span class="line">/</span><br></pre></td></tr></table></figure></p>
+<p>查询用户yuanrui的子账户<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(name) = UPPER(created_by)</span><br></pre></td></tr></table></figure><br>结果</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">LEVLE</th>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">NAME</th>
+<th>CREATED_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">yuanrui</td>
+<td>dba</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">banana</td>
+<td>yuanrui</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">7</td>
+<td style="text-align:left">dog</td>
+<td>banana</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">8</td>
+<td style="text-align:left">cat</td>
+<td>dog</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">9</td>
+<td style="text-align:left">pig</td>
+<td>cat</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">fish</td>
+<td>pig</td>
+</tr>
+</tbody>
+</table>
+<p>查询用户yuanrui的父账户<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure><br>结果</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">LEVLE</th>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">NAME</th>
+<th>CREATED_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">yuanrui</td>
+<td>dba</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">dba</td>
+<td>user</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">user</td>
+<td>root</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">root</td>
+<td>admin</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">admin</td>
+<td>　</td>
+</tr>
+</tbody>
+</table>
+<p>在实际使用情况中，递归查询有时候还是会抛出异常，主要原因是数据不正确造成的。<br>举个例子<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">update T_SYS_USER</span><br><span class="line">set created_by = name</span><br><span class="line">where id = 1;</span><br><span class="line">commit</span><br><span class="line">/</span><br><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure><br>执行时会抛出异常:ORA-01436:用户数据中的 CONNECT BY 循环<br>在CONNECT BY后加上nocycle可以结束循环调用<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select  level, id, name, created_by </span><br><span class="line">from T_SYS_USER</span><br><span class="line">start with id = 5</span><br><span class="line">connect by prior UPPER(created_by) = UPPER(name)</span><br></pre></td></tr></table></figure><br>注意结果有所变化，编号为1的数据行被排除掉了</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">LEVLE</th>
+<th style="text-align:left">ID</th>
+<th style="text-align:left">NAME</th>
+<th>CREATED_BY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">yuanrui</td>
+<td>dba</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">dba</td>
+<td>user</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left">user</td>
+<td>root</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">root</td>
+<td>admin</td>
+</tr>
+</tbody>
+</table>
+<p>以前玩MS SQL的时候，玩过用公用表表达式(Common Table Expressions)做递归。网上查找Oracle Sql递归大多数结果都是关于用CONNECT BY来实现的，在Oracle中其实也可以用CTE来做递归。注意版本问题，本地测试环境Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production可用，听说11g r2之前的版本不支持，求证？<br>给一个CTE版本查询示例，查询结果是差不多的<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">--查询用户yuanrui的子账户</span><br><span class="line">with userCte(level_, id, name, created_by) as</span><br><span class="line">(</span><br><span class="line">     select 1 as level_, id, name, created_by</span><br><span class="line">     from T_SYS_USER</span><br><span class="line">     where id =5</span><br><span class="line">     union all</span><br><span class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</span><br><span class="line">     from T_SYS_USER a, userCte b</span><br><span class="line">     where UPPER(a.created_by) = UPPER(b.name) </span><br><span class="line">     and a.created_by &lt;&gt; a.name</span><br><span class="line">)</span><br><span class="line">select * from userCte;</span><br><span class="line"></span><br><span class="line">--查询用户yuanrui的父账户</span><br><span class="line">with userCte(level_, id, name, created_by) as</span><br><span class="line">(</span><br><span class="line">     select 1 as level_, id, name, created_by</span><br><span class="line">     from T_SYS_USER</span><br><span class="line">     where id =5</span><br><span class="line">     union all</span><br><span class="line">     select b.level_ + 1 as level_, a.id, a.name, a.created_by</span><br><span class="line">     from T_SYS_USER a, userCte b</span><br><span class="line">     where UPPER(a.name) = UPPER(b.created_by) </span><br><span class="line">     and a.created_by &lt;&gt; a.name</span><br><span class="line">)</span><br><span class="line">select * from userCte;</span><br></pre></td></tr></table></figure><br>where id=5为起始条件，union all 后面的子查询where UPPER(a.name) = UPPER(b.created_by) 为连接条件<br>注意where条件中的and a.created_by &lt;&gt; a.name, 这个条件主要用于结束循环(对应上文中的nocycle)</p>
+<p>其他参考:<a target="_blank" rel="noopener" href="http://www.cnblogs.com/yingsong/p/5035907.html">http://www.cnblogs.com/yingsong/p/5035907.html</a></p>
+
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Oracle/">Oracle</a><a href="/tags/Sql/">Sql</a><a href="/tags/读书笔记/">读书笔记</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
 
   <nav id="page-nav" class="clearfix">
     <a class="extend prev" rel="prev" href="/">&lt;span&gt;&lt;&#x2F;span&gt;Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">Next&lt;span&gt;&lt;&#x2F;span&gt;</a>
@@ -1393,7 +1382,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>23</sup></a></li>
 			
 		
 			
