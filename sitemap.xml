@@ -374,6 +374,13 @@
   </url>
   
   <url>
+    <loc>https://yuanrui.github.io/tags/Oracle/</loc>
+    <lastmod>2023-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://yuanrui.github.io/tags/Asp-Net/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -403,13 +410,6 @@
   
   <url>
     <loc>https://yuanrui.github.io/tags/Sql/</loc>
-    <lastmod>2023-05-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://yuanrui.github.io/tags/Oracle/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -453,6 +453,13 @@
 
   
   <url>
+    <loc>https://yuanrui.github.io/categories/Oracle/</loc>
+    <lastmod>2023-05-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://yuanrui.github.io/categories/Net/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -474,14 +481,14 @@
   </url>
   
   <url>
-    <loc>https://yuanrui.github.io/categories/Net/Asp-Net/</loc>
+    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/</loc>
+    <loc>https://yuanrui.github.io/categories/Net/Asp-Net/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -495,13 +502,6 @@
   </url>
   
   <url>
-    <loc>https://yuanrui.github.io/categories/Oracle/</loc>
-    <lastmod>2023-05-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://yuanrui.github.io/categories/Python/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
@@ -509,14 +509,14 @@
   </url>
   
   <url>
-    <loc>https://yuanrui.github.io/categories/Hexo/</loc>
+    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/MySql/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://yuanrui.github.io/categories/Net/Ado-Net/MySql/</loc>
+    <loc>https://yuanrui.github.io/categories/Hexo/</loc>
     <lastmod>2023-05-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
