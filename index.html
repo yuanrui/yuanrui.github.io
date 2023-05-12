@@ -83,6 +83,86 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2023/05/12/Oracle-bulk-deletes-stored-procedures-and-functions-of-empty-tables/" title="Oracle批量删除空表的存储过程和函数" itemprop="url">Oracle批量删除空表的存储过程和函数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2023-05-12T03:00:00.000Z" itemprop="datePublished"> Published 2023-05-12</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <hr>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>项目上配置建表语句的程序有误时，创建了大量的未使用的分表，需要执行sql循环删除空表。这里的空表指的数据表行数为空，保险起见数据表存在记录时不删除该表。</p>
+<h4 id="定义存储过程"><a href="#定义存储过程" class="headerlink" title="定义存储过程"></a>定义存储过程</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除空表的存储过程</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">procedure</span> SP_DROP_EMPTY_TABLE(owner varchar2, tableName varchar2)</span><br><span class="line"><span class="keyword">is</span></span><br><span class="line">  v_cnt number;</span><br><span class="line">  v_index number :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  v_owner <span class="type">varchar</span>(<span class="number">100</span>) :<span class="operator">=</span> owner;</span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> tableName;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_output.enable(buffer_size <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">null</span>);</span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_index :<span class="operator">=</span> v_index <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_index <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist.&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+<h4 id="执行存储过程"><a href="#执行存储过程" class="headerlink" title="执行存储过程"></a>执行存储过程</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">call</span> SP_DROP_EMPTY_TABLE(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;t_table_xxx&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除空表的函数</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">function</span> FUN_DROP_EMPTY_TABLE(owner  VARCHAR2, tableName  VARCHAR2)</span><br><span class="line"><span class="keyword">return</span> <span class="type">clob</span></span><br><span class="line"><span class="keyword">as</span></span><br><span class="line">  v_result <span class="type">clob</span> :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  v_cnt number;  </span><br><span class="line">  v_owner varchar2(<span class="number">100</span>) :<span class="operator">=</span> owner;</span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> tableName;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        v_result :<span class="operator">=</span> v_result <span class="operator">||</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span> <span class="operator">||</span> chr(<span class="number">13</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        v_result :<span class="operator">=</span> v_result <span class="operator">||</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt <span class="operator">||</span> chr(<span class="number">13</span>);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_result <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> v_result <span class="keyword">is</span> <span class="keyword">null</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist&#x27;</span>;</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> v_result;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+<p>编写删除空表的函数版踩了多个坑。函数执行一般执行使用select FUN_DROP_EMPTY_TABLE(‘test’, ‘t_table_xxx’) from dual，由于存在DDL操作，不能使用select语句，否则会出现如下提示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; ORA-14552: cannot perform a DDL, commit or rollback inside a query or DML </span><br><span class="line">ORA-06512: at &quot;TEST.FUN_DROP_EMPTY_TABLE&quot;, line 19</span><br></pre></td></tr></table></figure>
+<p>一度以为函数不可用的时候，发现可以使用begin end包裹语句，在内部调用dbms_output.put_line显示执行结果。<br>但是又引出另外一个坑，Oracle 12c以前的版本，函数需要返回值。最开始编写这个函数时，把表的删除结果拼接后返回类型为varchar2，当数据表过多时函数执行后会抛出缓冲区过小异常。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; ORA-06502: PL/SQL: numeric or value error: character string buffer too small</span><br><span class="line">ORA-06512: at &quot;TEST.FUN_DROP_EMPTY_TABLE&quot;, line 20</span><br><span class="line">ORA-06512: at line 3</span><br></pre></td></tr></table></figure>
+<p>要解决缓冲区问题要么减少返回值，要么将返回类型修改为clob. 函数返回字符串过长时，有可能导致dbms_output.put_line输出异常或不输出…<br>最后，最好使用存储过程。</p>
+<h4 id="执行函数"><a href="#执行函数" class="headerlink" title="执行函数"></a>执行函数</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- dbms_output.enable(buffer_size =&gt; null);</span></span><br><span class="line">dbms_output.put_line(FUN_DROP_EMPTY_TABLE(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;t_table_xxx&#x27;</span>));</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="直接执行sql"><a href="#直接执行sql" class="headerlink" title="直接执行sql"></a>直接执行sql</h4><p>考虑到部分账户可能没有执行存储过程和函数的权限，这里给出个直接执行sql的版本。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 直接执行语句</span></span><br><span class="line"><span class="keyword">declare</span></span><br><span class="line">  v_owner <span class="type">varchar</span>(<span class="number">100</span>) :<span class="operator">=</span> <span class="string">&#x27;admin&#x27;</span>; <span class="comment">-- 必须输入项: 账户, 即拥有者</span></span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> <span class="string">&#x27;T_XXX_YYMMDD&#x27;</span>; <span class="comment">-- 必须输入项: 表名或表名前缀</span></span><br><span class="line">  v_cnt number;</span><br><span class="line">  v_index number :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_output.enable(buffer_size <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">null</span>);</span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_index :<span class="operator">=</span> v_index <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_index <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist.&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2021/09/05/Avoid-the-impact-of-set-system-time-on-program-timeout-logic/" title="避免系统校时对程序超时判断逻辑的影响" itemprop="url">避免系统校时对程序超时判断逻辑的影响</a>
   </h1>
   <p class="article-author">By
@@ -8923,217 +9003,6 @@
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/2020/02/13/Multi-table-union-query-sql-demo/" title="一个多表联合查询需求" itemprop="url">一个多表联合查询需求</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
-		
-  <p class="article-time">
-    <time datetime="2020-02-13T14:10:00.000Z" itemprop="datePublished"> Published 2020-02-13</time>
-    
-  </p>
-</header>
-    <div class="article-content">
-        
-        <p>朋友做一个项目，遇到一个多表联合查询的需求。</p>
-<ul>
-<li>A表SYSTEM_ID和B表SYSTEM_ID关联；</li>
-<li>C表中ROLE_LIST字段，存储多个B表中的ROLE_ID值；</li>
-</ul>
-<p>需要一个sql，当A表中SYSTEM_ID值为123时，找到B表和C表的关联，当B表满足SYSTEM_ID值为123时，包含其中的ROLE_ID数据，显示C表中NAME数据。例如查询结果为：james、lucy.</p>
-<p>T_TABLE_A表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>SYSTEM_ID</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>123</code></td>
-</tr>
-<tr>
-<td>2</td>
-<td>234</td>
-</tr>
-</tbody>
-</table>
-<p>T_TABLE_B表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>SYSTEM_ID</th>
-<th>ROLE_ID</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>222</td>
-<td>667</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>123</code></td>
-<td><code>555</code></td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>123</code></td>
-<td><code>777</code></td>
-</tr>
-<tr>
-<td>4</td>
-<td>234</td>
-<td>567</td>
-</tr>
-<tr>
-<td>5</td>
-<td>234</td>
-<td>231</td>
-</tr>
-</tbody>
-</table>
-<p>T_TABLE_C表</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>NAME</th>
-<th>ROLE_LIST</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>james</code></td>
-<td>667,<code>777</code></td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>lucy</code></td>
-<td>223,<code>555</code>,823</td>
-</tr>
-<tr>
-<td>3</td>
-<td>tom</td>
-<td>253,231</td>
-</tr>
-<tr>
-<td>4</td>
-<td>max</td>
-<td>123,712</td>
-</tr>
-<tr>
-<td>5</td>
-<td>min</td>
-<td>123,567</td>
-</tr>
-</tbody>
-</table>
-<p>最终提供的sql如下：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name <span class="keyword">from</span> t_table_c c</span><br><span class="line"><span class="keyword">where</span> <span class="keyword">exists</span> (</span><br><span class="line">	<span class="keyword">select</span> <span class="number">1</span> <span class="keyword">from</span> t_table_a a</span><br><span class="line">	<span class="keyword">inner</span> <span class="keyword">join</span> t_table_b b <span class="keyword">on</span> a.system_id <span class="operator">=</span> b.system_id</span><br><span class="line">	<span class="keyword">where</span> a.system_id <span class="operator">=</span> <span class="number">123</span></span><br><span class="line">    <span class="keyword">and</span> c.role_list <span class="keyword">like</span> <span class="string">&#x27;%&#x27;</span> <span class="operator">||</span> b.role_id <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>上面的查询sql采用的exists子句的方式，采用连接的方式也能完成相同的功能，具体实现见文末附录Sql.</p>
-<p>从给的脱敏数据可以推测出各个表的功能。</p>
-<ul>
-<li>A表是权限（资源）表；</li>
-<li>B表是角色权限（资源）表；</li>
-<li>C表用户表；</li>
-</ul>
-<p>一般使用单独的表来存储用户和角色的关联信息，这里很巧妙的采用以逗号分隔的方式存储多个角色编号。采用这种方式可以减少表连接，但处理存储和查询的复杂度更高。</p>
-<p>单纯从数据上来看，由于采用的模糊查询，有可能出现错误的查询结果。</p>
-<p>假设C表中存在以下数据。</p>
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>NAME</th>
-<th>ROLE_LIST</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>6</td>
-<td>kim</td>
-<td><code>1777</code>,2211</td>
-</tr>
-<tr>
-<td>7</td>
-<td>kenv</td>
-<td>220,<code>1555</code>,800</td>
-</tr>
-</tbody>
-</table>
-<p>重新执行sql，你会发现查询结果里面包含：kim和kenv. 造成这个结果的原因是，模糊查询可以匹配ROLE_LIST列中部分数据，1777和1555分别包含777和555. </p>
-<p>通过这个简单示例，可以发现存储多个值时确实包含一些局限性。我们既想一列存储多个数值，又想消除歧义，那么怎么解决这个问题呢？</p>
-<p>给存储的值添加一个前缀，也许是一个好办法，比如：r555,r777,r1777,r1555，前缀采用代表特定含义的单词或字母，加上实际的数值，可以构造出一个特殊的字符串。条件子语句：like ‘%r555’. 可以避免示例数据中的错误查询结果问题。</p>
-<p>等等，好像还是有点问题。如果字符串为：r55,r555,r1555，何解。</p>
-<p>当然如果存在这种情况，我们还有一个终极解决办法（适用于任何情况）：前缀+值+后缀</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">前缀+值+后缀</span><br><span class="line"></span><br><span class="line">列存储示例：[55],[555],[1555]</span><br><span class="line">条件子语句：like &#x27;%[55]%&#x27;，这里前缀=&#x27;[&#x27;、值=&#x27;55&#x27;、后缀=&#x27;]&#x27;</span><br></pre></td></tr></table></figure>
-<p>一般情况下，使用特定单词或字母作为特殊前缀加取值可以满级绝大多数情况，这种方式可读信更高。而需要严格意义上的避免误查询，可以采用：前缀+值+后缀。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">--附录Sql</span><br><span class="line"></span><br><span class="line">create table t_table_a</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_b</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    system_id int,</span><br><span class="line">    role_id int</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">create table t_table_c</span><br><span class="line">(</span><br><span class="line">    id int primary key,</span><br><span class="line">    name varchar2(20),</span><br><span class="line">    role_list varchar2(200)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">insert into t_table_a values(1, 123);</span><br><span class="line">insert into t_table_a values(2, 234);</span><br><span class="line">insert into t_table_a values(3, 100);</span><br><span class="line"></span><br><span class="line">insert into t_table_b values(1, 222, 667);</span><br><span class="line">insert into t_table_b values(2, 123, 555);</span><br><span class="line">insert into t_table_b values(3, 123, 777);</span><br><span class="line">insert into t_table_b values(4, 234, 567);</span><br><span class="line">insert into t_table_b values(5, 234, 231);</span><br><span class="line"></span><br><span class="line">insert into t_table_c values(1, &#x27;james&#x27;, &#x27;667,777&#x27;);</span><br><span class="line">insert into t_table_c values(2, &#x27;lucy&#x27;, &#x27;223,555,823&#x27;);</span><br><span class="line">insert into t_table_c values(3, &#x27;tom&#x27;, &#x27;253,231&#x27;);</span><br><span class="line">insert into t_table_c values(4, &#x27;max&#x27;, &#x27;123,712&#x27;);</span><br><span class="line">insert into t_table_c values(5, &#x27;min&#x27;, &#x27;123,567&#x27;);</span><br><span class="line">insert into t_table_c values(6, &#x27;kim&#x27;, &#x27;1777,2211&#x27;);</span><br><span class="line">insert into t_table_c values(7, &#x27;kenv&#x27;, &#x27;220,1555,800&#x27;);</span><br><span class="line"></span><br><span class="line">select name from t_table_c c</span><br><span class="line">where exists (</span><br><span class="line">	select 1 from t_table_a a</span><br><span class="line">	inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">	where a.system_id = 123</span><br><span class="line">    and c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like &#x27;%&#x27; || b.role_id || &#x27;%&#x27; </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
-<p>On more thing. </p>
-<p>这sql在Oracle中跑起来，没有任何问题。但是朋友拿去改造后在mysql中运行，出现的查询结果依旧不正常。排查了很长一段时间，才找到原因：在mysql中 ‘%’ || ‘S001’ || ‘%’ 显示打印为：1. 正确的方式是使用concat函数。所以如果你在mysql中运行，需要这样构造sql.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select c.name, b.id from t_table_a a</span><br><span class="line">inner join t_table_b b on a.system_id = b.system_id</span><br><span class="line">inner join t_table_c c on c.role_list like concat(&#x27;%&#x27;, b.role_id, &#x27;%&#x27;) </span><br><span class="line">where a.system_id = 123;</span><br></pre></td></tr></table></figure>
-
-<div id="gitalk-container"></div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-
-		<script>
-		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
-	    gitalkConfig.id = md5(location.pathname);
-		var gitalk = new Gitalk(gitalkConfig);
-	    gitalk.render("gitalk-container");
-	    </script>
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Sql/">Sql</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Sql/">Sql</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
 
   <nav id="page-nav" class="clearfix">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next&lt;span&gt;&lt;&#x2F;span&gt;</a>
@@ -9210,7 +9079,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>11</sup></a></li>
 		  
 		
 		  
@@ -9222,7 +9091,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>7</sup></a></li>
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>8</sup></a></li>
 		  
 		
 		  
@@ -9243,15 +9112,15 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>23</sup></a></li>
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Sql/" title="Sql">Sql<sup>11</sup></a></li>
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>12</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>10</sup></a></li>
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>11</sup></a></li>
 			
 		
 			

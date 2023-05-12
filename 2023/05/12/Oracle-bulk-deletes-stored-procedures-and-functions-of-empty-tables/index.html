@@ -1,0 +1,611 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Oracle批量删除空表的存储过程和函数 | 棠城夜雨</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+	<meta name="baidu-site-verification" content="codeva-IBHMIaEFI0" />
+	<meta name="msvalidate.01" content="48C767D897C30868097F1CF438A5B1C0" />	
+    
+    <meta name="author" content="Banana">
+    
+
+    
+    <meta name="description" content="前言项目上配置建表语句的程序有误时，创建了大量的未使用的分表，需要执行sql循环删除空表。这里的空表指的数据表行数为空，保险起见数据表存在记录时不删除该表。 定义存储过程123456789101112131415161718192021222324252627282930313233-- 删除空表的存储过程create or replace procedure SP_DROP_EMPTY_TAB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle批量删除空表的存储过程和函数">
+<meta property="og:url" content="https://yuanrui.github.io/2023/05/12/Oracle-bulk-deletes-stored-procedures-and-functions-of-empty-tables/index.html">
+<meta property="og:site_name" content="棠城夜雨">
+<meta property="og:description" content="前言项目上配置建表语句的程序有误时，创建了大量的未使用的分表，需要执行sql循环删除空表。这里的空表指的数据表行数为空，保险起见数据表存在记录时不删除该表。 定义存储过程123456789101112131415161718192021222324252627282930313233-- 删除空表的存储过程create or replace procedure SP_DROP_EMPTY_TAB">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-05-12T03:00:00.000Z">
+<meta property="article:modified_time" content="2023-05-12T03:24:49.614Z">
+<meta property="article:author" content="Banana">
+<meta property="article:tag" content="开发笔记">
+<meta property="article:tag" content="Sql">
+<meta property="article:tag" content="Oracle">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="棠城夜雨" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/Stark-icon.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/Stark-icon.png">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      <meta name="baidu-site-verification" content="code-EfPWjLU02X" />
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="棠城夜雨" title="棠城夜雨"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="棠城夜雨">棠城夜雨</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yuanrui.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2023/05/12/Oracle-bulk-deletes-stored-procedures-and-functions-of-empty-tables/" title="Oracle批量删除空表的存储过程和函数" itemprop="url">Oracle批量删除空表的存储过程和函数</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Banana" target="_blank" itemprop="author">Banana</a>
+		
+  <p class="article-time">
+    <time datetime="2023-05-12T03:00:00.000Z" itemprop="datePublished"> Published 2023-05-12</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">定义存储过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">执行存储过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">执行函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8Csql"><span class="toc-number">6.</span> <span class="toc-text">直接执行sql</span></a></li></ol>
+		
+		</div>
+		
+		<hr>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>项目上配置建表语句的程序有误时，创建了大量的未使用的分表，需要执行sql循环删除空表。这里的空表指的数据表行数为空，保险起见数据表存在记录时不删除该表。</p>
+<h4 id="定义存储过程"><a href="#定义存储过程" class="headerlink" title="定义存储过程"></a>定义存储过程</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除空表的存储过程</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">procedure</span> SP_DROP_EMPTY_TABLE(owner varchar2, tableName varchar2)</span><br><span class="line"><span class="keyword">is</span></span><br><span class="line">  v_cnt number;</span><br><span class="line">  v_index number :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  v_owner <span class="type">varchar</span>(<span class="number">100</span>) :<span class="operator">=</span> owner;</span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> tableName;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_output.enable(buffer_size <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">null</span>);</span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_index :<span class="operator">=</span> v_index <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_index <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist.&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+<h4 id="执行存储过程"><a href="#执行存储过程" class="headerlink" title="执行存储过程"></a>执行存储过程</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">call</span> SP_DROP_EMPTY_TABLE(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;t_table_xxx&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 删除空表的函数</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> replace <span class="keyword">function</span> FUN_DROP_EMPTY_TABLE(owner  VARCHAR2, tableName  VARCHAR2)</span><br><span class="line"><span class="keyword">return</span> <span class="type">clob</span></span><br><span class="line"><span class="keyword">as</span></span><br><span class="line">  v_result <span class="type">clob</span> :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  v_cnt number;  </span><br><span class="line">  v_owner varchar2(<span class="number">100</span>) :<span class="operator">=</span> owner;</span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> tableName;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        v_result :<span class="operator">=</span> v_result <span class="operator">||</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span> <span class="operator">||</span> chr(<span class="number">13</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        v_result :<span class="operator">=</span> v_result <span class="operator">||</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt <span class="operator">||</span> chr(<span class="number">13</span>);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_result <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">or</span> v_result <span class="keyword">is</span> <span class="keyword">null</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist&#x27;</span>;</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> v_result;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"><span class="operator">/</span></span><br></pre></td></tr></table></figure>
+<p>编写删除空表的函数版踩了多个坑。函数执行一般执行使用select FUN_DROP_EMPTY_TABLE(‘test’, ‘t_table_xxx’) from dual，由于存在DDL操作，不能使用select语句，否则会出现如下提示。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; ORA-14552: cannot perform a DDL, commit or rollback inside a query or DML </span><br><span class="line">ORA-06512: at &quot;TEST.FUN_DROP_EMPTY_TABLE&quot;, line 19</span><br></pre></td></tr></table></figure>
+<p>一度以为函数不可用的时候，发现可以使用begin end包裹语句，在内部调用dbms_output.put_line显示执行结果。<br>但是又引出另外一个坑，Oracle 12c以前的版本，函数需要返回值。最开始编写这个函数时，把表的删除结果拼接后返回类型为varchar2，当数据表过多时函数执行后会抛出缓冲区过小异常。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; ORA-06502: PL/SQL: numeric or value error: character string buffer too small</span><br><span class="line">ORA-06512: at &quot;TEST.FUN_DROP_EMPTY_TABLE&quot;, line 20</span><br><span class="line">ORA-06512: at line 3</span><br></pre></td></tr></table></figure>
+<p>要解决缓冲区问题要么减少返回值，要么将返回类型修改为clob. 函数返回字符串过长时，有可能导致dbms_output.put_line输出异常或不输出…<br>最后，最好使用存储过程。</p>
+<h4 id="执行函数"><a href="#执行函数" class="headerlink" title="执行函数"></a>执行函数</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span></span><br><span class="line"><span class="comment">-- dbms_output.enable(buffer_size =&gt; null);</span></span><br><span class="line">dbms_output.put_line(FUN_DROP_EMPTY_TABLE(<span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;t_table_xxx&#x27;</span>));</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="直接执行sql"><a href="#直接执行sql" class="headerlink" title="直接执行sql"></a>直接执行sql</h4><p>考虑到部分账户可能没有执行存储过程和函数的权限，这里给出个直接执行sql的版本。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 直接执行语句</span></span><br><span class="line"><span class="keyword">declare</span></span><br><span class="line">  v_owner <span class="type">varchar</span>(<span class="number">100</span>) :<span class="operator">=</span> <span class="string">&#x27;admin&#x27;</span>; <span class="comment">-- 必须输入项: 账户, 即拥有者</span></span><br><span class="line">  v_table varchar2(<span class="number">100</span>) :<span class="operator">=</span> <span class="string">&#x27;T_XXX_YYMMDD&#x27;</span>; <span class="comment">-- 必须输入项: 表名或表名前缀</span></span><br><span class="line">  v_cnt number;</span><br><span class="line">  v_index number :<span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">  v_sql varchar2(<span class="number">200</span>) :<span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">cursor</span> cur_tables(c_owner varchar2, c_tableName varchar2) <span class="keyword">is</span> <span class="keyword">select</span> TABLE_NAME <span class="keyword">from</span> all_tables <span class="keyword">where</span> OWNER <span class="operator">=</span> <span class="built_in">UPPER</span>(c_owner) <span class="keyword">and</span> TABLE_NAME <span class="keyword">like</span> <span class="built_in">UPPER</span>(c_tableName) <span class="operator">||</span> <span class="string">&#x27;%&#x27;</span> ;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_output.enable(buffer_size <span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">null</span>);</span><br><span class="line">  <span class="keyword">open</span> cur_tables(owner, tableName); <span class="comment">-- 打开游标</span></span><br><span class="line">  loop</span><br><span class="line">      <span class="keyword">fetch</span> cur_tables <span class="keyword">into</span> v_table; <span class="comment">-- 提取游标</span></span><br><span class="line">      exit <span class="keyword">when</span> cur_tables<span class="operator">%</span>notfound;</span><br><span class="line">      v_index :<span class="operator">=</span> v_index <span class="operator">+</span> <span class="number">1</span>;</span><br><span class="line">      v_sql :<span class="operator">=</span> <span class="string">&#x27;select count(*) from &#x27;</span> <span class="operator">||</span> v_table;</span><br><span class="line">      <span class="keyword">execute</span> immediate v_sql <span class="keyword">into</span> v_cnt;</span><br><span class="line">      if v_cnt <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span> </span><br><span class="line">        v_sql :<span class="operator">=</span> <span class="string">&#x27;drop table &#x27;</span><span class="operator">||</span> v_table;</span><br><span class="line">        <span class="keyword">execute</span> immediate v_sql;</span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; is empty, drop success.&#x27;</span>);</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> v_table <span class="operator">||</span> <span class="string">&#x27; has records, drop fail. total count=&#x27;</span> <span class="operator">||</span> v_cnt);</span><br><span class="line">      <span class="keyword">end</span> if;</span><br><span class="line">  <span class="keyword">end</span> loop;</span><br><span class="line">  <span class="keyword">close</span> cur_tables; <span class="comment">-- 关闭游标</span></span><br><span class="line"></span><br><span class="line">  if v_index <span class="operator">=</span> <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    dbms_output.put_line(<span class="string">&#x27;table:&#x27;</span> <span class="operator">||</span> tableName <span class="operator">||</span> <span class="string">&#x27; does not exist.&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span> if;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+<div id="gitalk-container"></div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+		<script>
+		var gitalkConfig = {"clientID":"e6b75c64218ff017ed19","clientSecret":"bd6f2fb48b56274cc02080a5101296ec76990244","repo":"yuanrui.github.io","owner":"yuanrui","admin":["yuanrui"],"distractionFreeMode":false};
+	    gitalkConfig.id = md5(location.pathname);
+		var gitalk = new Gitalk(gitalkConfig);
+	    gitalk.render("gitalk-container");
+	    </script>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Oracle/">Oracle</a>►<a class="article-category-link" href="/categories/Oracle/Sql/">Sql</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/开发笔记/">开发笔记</a><a href="/tags/Sql/">Sql</a><a href="/tags/Oracle/">Oracle</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://yuanrui.github.io/2023/05/12/Oracle-bulk-deletes-stored-procedures-and-functions-of-empty-tables/" data-title="Oracle批量删除空表的存储过程和函数 | 棠城夜雨" data-tsina="undefined" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2021/09/05/Avoid-the-impact-of-set-system-time-on-program-timeout-logic/"  title="避免系统校时对程序超时判断逻辑的影响">
+ <strong>下一篇：</strong><br/> 
+ <span>避免系统校时对程序超时判断逻辑的影响
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">定义存储过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">执行存储过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0"><span class="toc-number">4.</span> <span class="toc-text">定义函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%87%BD%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">执行函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E6%89%A7%E8%A1%8Csql"><span class="toc-number">6.</span> <span class="toc-text">直接执行sql</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="yuanrui" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Net/" title=".Net">.Net<sup>5</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/" title=".Net">.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/Net/Asp-Net/" title="Asp.Net">Asp.Net<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Javascript/" title="Javascript">Javascript<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Mvc/" title="Mvc">Mvc<sup>3</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/MySql/" title="MySql">MySql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/" title="Oracle">Oracle<sup>11</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Python/" title="Python">Python<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Sql/" title="Sql">Sql<sup>2</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Oracle/Sql/" title="Sql">Sql<sup>8</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Net/Ado-Net/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/MySql/Sql/" title="Sql">Sql<sup>1</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/开发笔记/" title="开发笔记">开发笔记<sup>24</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Sql/" title="Sql">Sql<sup>12</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Oracle/" title="Oracle">Oracle<sup>11</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/读书笔记/" title="读书笔记">读书笔记<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySql/" title="MySql">MySql<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/学习笔记/" title="学习笔记">学习笔记<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Net/" title=".Net">.Net<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/资料文档/" title="资料文档">资料文档<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/系统设计/" title="系统设计">系统设计<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Asp-Net/" title="Asp.Net">Asp.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Ado-Net/" title="Ado.Net">Ado.Net<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Markdown/" title="Markdown">Markdown<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Spring/" title="Spring">Spring<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="https://about.me/yuanrui" target="_blank" title="About Me">About Me</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/yuanrui" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Banana">Banana</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e212bde22a7a15a68577c594adb72c6a";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+
+<!-- Default Statcounter code for github page https://yuanrui.github.io -->
+<script type="text/javascript">
+var sc_project=12878872; 
+var sc_invisible=1; 
+var sc_security="5ab5bef7"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js" async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/12878872/0/5ab5bef7/1/" alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
